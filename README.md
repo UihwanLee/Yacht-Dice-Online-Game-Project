@@ -8,14 +8,11 @@
  * Game Project : Unity 2020.3.12f1 (64-bit) / Microsoft Visual Studio 2019  
  * Game Object : Blender 3.2
  * Game UI : PhotoShop CC 2018
+ * Game Management : Jira Software
   
 > 개발 언어 : C#
   
 > 개발 기간 : 현재진행중
-  
-> 개발 관리
-  
-   * Game Management : Jira Software
   
 > 개발 동기  
 
