@@ -1,5 +1,5 @@
 # Yacht-Dice-Online-Game-Project
- making yacht-dice online game project
+### 보드 카드 게임 <Yacht-Dice> 온라인 게임프로젝트입니다.
 
 > 게임 이름 : 'Yacht-Dice' (Yact Dice 보드 게임)
 
