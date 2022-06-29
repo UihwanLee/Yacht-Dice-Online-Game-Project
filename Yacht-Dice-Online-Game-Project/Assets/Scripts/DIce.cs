@@ -14,11 +14,12 @@ public class DIce : MonoBehaviour
 
     public static Vector3 diceVelcoity;
 
+    private bool thrown;
+
  
     private void Start()
     {
-        initPosition = transform.position;
-        rb.useGravity = false;
+        thrown = false;
     }
 
     // Update is called once per frame
@@ -36,6 +37,10 @@ public class DIce : MonoBehaviour
 
     void RollDice()
     {
-        rb.AddTorque(Random.Range(0, 500), Random.Range(0, 500), Random.Range(0, 500));
+        if(!thrown)
+        {
+            thrown = true;
+            rb.AddTorque(Random.Range(0, 500), Random.Range(0, 500), Random.Range(0, 500));
+        }
     }
 }
