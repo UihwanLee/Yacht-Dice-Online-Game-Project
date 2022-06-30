@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DIce : MonoBehaviour
+public class Dice : MonoBehaviour
 {
     [SerializeField]
     private Rigidbody rb;
 
-    [SerializeField]
-    private Vector3 initPosition;
     [SerializeField]
     private int diceValue;
 
@@ -16,7 +14,7 @@ public class DIce : MonoBehaviour
 
     private bool thrown;
 
- 
+
     private void Start()
     {
         thrown = false;
@@ -25,22 +23,32 @@ public class DIce : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        diceVelcoity = rb.velocity;
-        /*
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (thrown)
         {
-            RollDice();
+            diceVelcoity = rb.velocity;
         }
-        */
-        RollDice();
+        //RollDice();
     }
 
-    void RollDice()
+    // 다이스 굴리기
+    public void RollDice()
     {
-        if(!thrown)
+        if (!thrown)
         {
             thrown = true;
             rb.AddTorque(Random.Range(0, 500), Random.Range(0, 500), Random.Range(0, 500));
         }
+    }
+
+    // 위치 이동
+    public void Teleport(Vector3 position)
+    {
+        transform.position = position;
+    }
+
+    // 오브젝트 삭제
+    public void Destory(float time)
+    {
+        Destroy(this.gameObject, time);
     }
 }

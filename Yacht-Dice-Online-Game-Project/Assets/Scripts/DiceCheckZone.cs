@@ -11,7 +11,7 @@ public class DiceCheckZone : MonoBehaviour
 
     private void FixedUpdate()
     {
-        diceVelocity = DIce.diceVelcoity;
+        diceVelocity = Dice.diceVelcoity;
     }
 
     private void OnTriggerStay(Collider other)

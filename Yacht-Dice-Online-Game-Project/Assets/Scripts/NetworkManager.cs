@@ -7,7 +7,18 @@ using UnityEngine.UI;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
-    [Header("DisconnectPanel")]
+    /*
+     * Photon NetWorkManager 스크립트
+     * 
+     * Title Panel 감독
+     * Lobby Panel 감독
+     * Room Panel 감독
+     * 
+    */
+
+    [Header("TitlePanel")]
+    [SerializeField]
+    private GameObject titlePanel;
     [SerializeField]
     private InputField nickNameInput;
 
@@ -77,6 +88,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
+    // 룸 리스트 업데이트
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         int roomCount = roomList.Count;
@@ -107,8 +119,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
+        // Panel 정리
+        titlePanel.SetActive(false);
         lobbyPanel.SetActive(true);
         roomPanel.SetActive(false);
+
+        // 플레이어 닉네임 설정
         PhotonNetwork.LocalPlayer.NickName = nickNameInput.text;
         welcomeText.text = PhotonNetwork.LocalPlayer.NickName + "님 환영합니다";
         myList.Clear();
@@ -118,8 +134,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        if(lobbyPanel != null && roomPanel != null)
+        if(titlePanel != null && lobbyPanel != null && roomPanel != null)
         {
+            titlePanel.SetActive(true);
             lobbyPanel.SetActive(false);
             roomPanel.SetActive(false);
         }
