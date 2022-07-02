@@ -64,19 +64,6 @@ public class TitlePanel : MonoBehaviour
 
     }
 
-    private void Update()
-    {
-        /*
-        // 15초 간격으로 다이스 소환
-        spawnTimer -= Time.deltaTime;
-        if(spawnTimer <= 0f)
-        {
-            fallingDice.SpawnYachtDices(12f);
-            spawnTimer = 15f;
-        }
-        */
-    }
-
     // 게임 시작 시 초기화
     private void Init()
     {
