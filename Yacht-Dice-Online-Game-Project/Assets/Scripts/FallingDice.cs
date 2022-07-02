@@ -25,6 +25,20 @@ public class FallingDice : MonoBehaviour
     [SerializeField]
     private GameObject dicePrefab;
 
+    // private Vector3 spawnPos = new Vector3(2f, 20f, 0f);
+    private float spawnTimer = 1f;
+
+    private void Update()
+    {
+        // 15초 간격으로 다이스 소환
+        spawnTimer -= Time.deltaTime;
+        if (spawnTimer <= 0f)
+        {
+            SpawnYachtDices(12f);
+            spawnTimer = 15f;
+        }
+    }
+
     // SpawnPos 설정
     public void SetSpawnPos(Vector3 _spawnPos)
     {

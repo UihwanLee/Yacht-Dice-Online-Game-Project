@@ -59,6 +59,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     int currentPage = 1, maxPage, multiple;
 
 
+    #region 패널 초기화
+    private void Start()
+    {
+        titlePanel.SetActive(true);
+        lobbyPanel.SetActive(false);
+        roomPanel.SetActive(false);
+
+    }
+    #endregion
+
     #region 방리스트 갱신
     // ◀버튼 -2 , ▶버튼 -1 , 셀 숫자
     public void MyListClick(int num)
@@ -107,7 +117,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     #region 서버연결
 
-    void Update()
+    private void Update()
     {
         statusText.text = PhotonNetwork.NetworkClientState.ToString();
         lobbyInfoText.text = (PhotonNetwork.CountOfPlayers - PhotonNetwork.CountOfPlayersInRooms) + "로비 / " + PhotonNetwork.CountOfPlayers + "접속";
@@ -134,18 +144,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        if(titlePanel != null && lobbyPanel != null && roomPanel != null)
-        {
-            titlePanel.SetActive(true);
-            lobbyPanel.SetActive(false);
-            roomPanel.SetActive(false);
-        }
+        lobbyPanel.SetActive(false);
+        roomPanel.SetActive(false);
     }
     #endregion
 
     #region 방
 
-    public void CreateRoom() => PhotonNetwork.CreateRoom(roomInput.text == "" ? "Room" + Random.Range(0, 100) : roomInput.text, new RoomOptions { MaxPlayers = 2 });
+    public void CreateRoom() => PhotonNetwork.CreateRoom(roomInput.text == "" ? "Room" + Random.Range(0, 100) : roomInput.text, new RoomOptions { MaxPlayers = 4 });
 
     public void JoinRandomRoom() => PhotonNetwork.JoinRandomRoom();
 
