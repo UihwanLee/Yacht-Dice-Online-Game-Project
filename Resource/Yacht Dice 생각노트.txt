@@ -5,21 +5,20 @@
 (*선택) : 필수적인 내용이 아니라 조건에 따라 선택
 (*추가) : 초반에 구현하는 것이 아니라 프로그램 완성 후 추가
 
-01. 타이틀 패널
-  - Touch Scree UI
-  - Game Start UI
-  - Sever Enter UI
+01. 메인 페이지 
+  - 타이틀 패널
+  - 서버 접속 패널
 
 <function>
-- <START Panel> => <Title Panel> => <Sever Enter Panel>
+- "Touch Screen" => <Title Panel> => <Sever Enter Panel>
 - FallingDice() 함수로 이용한 주사위 효과 구현
 - "Yatch" "Dice" Text 애니메이션 효과 넣기(크고 작아짐)["Touch Screen"을 눌르때도 발동]
 - 타이틀 패널 -> 서버 접속 패널 이동시 CinemaCamera Animation 구현 (*추가)
 - 서버 접속 패널에서는 "Name"을 적어야 서버 접속 가능
 
-02. 로비 패널
-  - Lobby UI
-  - Create Room UI
+02. 로비 페이지
+  - 로비 패널
+  - 방 생성 패널
 
 <function>
 - 로비 패널은 기본적으로 [서버인원] [내정보]를 보여줌
@@ -28,8 +27,8 @@
   2) "방 제목"을 자율적으로 생성
   3) 비밀번호 기능 구현 (*추가)
 
-03. 룸 패널
-  - Room UI
+03. 룸 페이지
+  - 룸 페널
 
 04. 로딩 화면 페이지
 
@@ -40,11 +39,6 @@
 (* 씬 로딩으로 이루어지는 로딩이 아니기 때문에 로딩 시간 고정)
 (* 로딩동안 인 게임 페이지 활성화 및 전반적인 게임 준비)
 
-05. 인게임 페이지   
-   - Setting UI
-   - Score Board UI
-   - Player UI
-   - InGame Button UI
-   - Chat UI
+05. 인게임 페이지  
 
-<function>
+function
