@@ -20,7 +20,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField]
     private GameObject titlePanel;
     [SerializeField]
-    private InputField nickNameInput;
+    private InputField nickNameInputField;
 
     [Header("LobbyPanel")]
     [SerializeField]
@@ -46,29 +46,39 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField]
     private Text roomInfoText;
     [SerializeField]
+    private Transform playerParent;
+    [SerializeField]
     private Text[] chatText;
     [SerializeField]
     private InputField chatInput;
+
+    [Header("Effect")]
+    [SerializeField]
+    private DiceController diceController;
 
     [Header("ETC")]
     [SerializeField]
     private Text statusText;
     public PhotonView PV;
 
+    [Header("List")]
     List<RoomInfo> myList = new List<RoomInfo>();
     int currentPage = 1, maxPage, multiple;
+    [SerializeField]
+    private List<PlayerController> playerList = new List<PlayerController>();
 
 
     #region 패널 초기화
     private void Awake()
     {
-        titlePanel.SetActive(true);
-        lobbyPanel.SetActive(false);
-        roomPanel.SetActive(false);
-
+        // 네트워크 설정
         PhotonNetwork.SendRate = 60;
         PhotonNetwork.SerializationRate = 30;
 
+        // 패널 정리
+        titlePanel.SetActive(true);
+        lobbyPanel.SetActive(false);
+        roomPanel.SetActive(false);
     }
     #endregion
 
@@ -80,7 +90,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         lobbyInfoText.text = (PhotonNetwork.CountOfPlayers - PhotonNetwork.CountOfPlayersInRooms) + "로비 / " + PhotonNetwork.CountOfPlayers + "접속";
     }
 
-    public void Connect() => PhotonNetwork.ConnectUsingSettings();
+    public void Connect()
+    {
+        if(nickNameInputField.text != "")
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
+        else
+        {
+            nickNameInputField.GetComponent<Animator>().SetTrigger("on");
+        }
+    }
 
     public override void OnConnectedToMaster() => PhotonNetwork.JoinLobby();
 
@@ -91,8 +111,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         lobbyPanel.SetActive(true);
         roomPanel.SetActive(false);
 
+        // 떨어지는 주사위 효과 끄기
+        diceController.FallingDice(false);
+
         // 플레이어 닉네임 설정
-        PhotonNetwork.LocalPlayer.NickName = nickNameInput.text;
+        PhotonNetwork.LocalPlayer.NickName = nickNameInputField.text;
+
         welcomeText.text = PhotonNetwork.LocalPlayer.NickName + "님 환영합니다";
         myList.Clear();
     }
@@ -201,7 +225,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             chatText[i].text = "";
         }
-        
+
+
+        // 플레이어 생성
+        GameObject myPlayer = PhotonNetwork.Instantiate("PlayerPrefab", Vector3.zero, Quaternion.identity);
+        //PV.RPC("SetRoomPlayerRPC", RpcTarget.AllBuffered, myPlayer);
+
     }
 
     // Player가 방 입장 시 Player 변수 사용 함수
@@ -261,6 +290,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             for (int i = 1; i < chatText.Length; i++) chatText[i - 1].text = chatText[i].text;
             chatText[chatText.Length - 1].text = msg;
         }
+    }
+
+    #endregion
+
+    #region 플레이어
+
+    // RoomPlayer 정보 동기화
+    [PunRPC]
+    public void SetRoomPlayerRPC(GameObject player)
+    {
+        player.transform.SetParent(playerParent);
     }
 
     #endregion

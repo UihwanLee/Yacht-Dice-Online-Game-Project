@@ -14,18 +14,19 @@ public class TitlePanel : MonoBehaviour
      * 
     */
 
+    [Header("Animator")]
     [SerializeField]
     private Animator titleAnimator;
 
+    [Header("Game UI")]
     [SerializeField]
     private GameObject touchScreenUI;
-
     [SerializeField]
     private GameObject gameStartUI;
-
     [SerializeField]
     private GameObject severEnterUI;
 
+    [Header("Main Camera")]
     [SerializeField]
     private Camera mainCamera;
 
@@ -37,9 +38,6 @@ public class TitlePanel : MonoBehaviour
     private Vector3 mainCameraMovePosition;
     private Vector3 mainCameraMoveRoatation;
 
-    [SerializeField]
-    private FallingDice fallingDice;
-
 
     // 게임 시작 체크 변수
     private bool isMoved;
@@ -48,9 +46,7 @@ public class TitlePanel : MonoBehaviour
     // 이동 속도
     private float duration = 3f;
 
-
-    // 2.52 / 4.65 / -13.53
-    // -19 / 0 / 0
+    #region Main Menu 초기화 작업
 
     private void Awake()
     {
@@ -83,6 +79,10 @@ public class TitlePanel : MonoBehaviour
         isMoved = false;
         isMoving = false;
     }
+
+    #endregion
+
+    #region Main Camera 이동
 
     public void MovingCamera()
     {
@@ -137,4 +137,6 @@ public class TitlePanel : MonoBehaviour
             else gameStartUI.SetActive(true);
         }
     }
+
+    #endregion
 }

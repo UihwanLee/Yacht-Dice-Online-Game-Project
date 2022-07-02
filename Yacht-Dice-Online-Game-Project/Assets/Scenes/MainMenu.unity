@@ -186,7 +186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   titlePanel: {fileID: 1984779269}
-  nickNameInput: {fileID: 1866006899}
+  nickNameInputField: {fileID: 1866006899}
   lobbyPanel: {fileID: 1834156873}
   roomInput: {fileID: 195662424}
   welcomeText: {fileID: 2124602566}
@@ -201,6 +201,7 @@ MonoBehaviour:
   roomPanel: {fileID: 1326554762}
   listText: {fileID: 1515551675}
   roomInfoText: {fileID: 490189164}
+  playerParent: {fileID: 1731223643}
   chatText:
   - {fileID: 1285832242}
   - {fileID: 1183227266}
@@ -212,8 +213,10 @@ MonoBehaviour:
   - {fileID: 498238512}
   - {fileID: 329335606}
   chatInput: {fileID: 182628926}
+  diceController: {fileID: 181031642}
   statusText: {fileID: 1929290946}
   PV: {fileID: 14926757}
+  playerList: []
 --- !u!4 &14926756
 Transform:
   m_ObjectHideFlags: 0
@@ -585,7 +588,7 @@ GameObject:
   - component: {fileID: 181031643}
   - component: {fileID: 181031642}
   m_Layer: 0
-  m_Name: Falling Dice
+  m_Name: DiceController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -605,7 +608,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPos: {x: 2, y: 20, z: 0}
   spawnDistance: 2
-  dicePrefab: {fileID: 8577325888911142995, guid: dd711e19c497f1f40b4e0c02806cd189, type: 3}
+  dicePrefab: {fileID: 8577325888911142995, guid: a1c44b6b7296350448ca100566f98c36, type: 3}
 --- !u!4 &181031643
 Transform:
   m_ObjectHideFlags: 0
@@ -1785,11 +1788,11 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 433707679}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.05, y: 8, z: 1}
   m_Children: []
-  m_Father: {fileID: 1975403025}
+  m_Father: {fileID: 1502225992}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -4339,11 +4342,11 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1089509104}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 9, y: 0.05, z: 1}
   m_Children: []
-  m_Father: {fileID: 1975403025}
+  m_Father: {fileID: 1502225992}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -6042,6 +6045,43 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1457662257}
   m_CullTransparentMesh: 1
+--- !u!1 &1502225991
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1502225992}
+  m_Layer: 5
+  m_Name: Boundary
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1502225992
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1502225991}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 433707680}
+  - {fileID: 1089509105}
+  m_Father: {fileID: 1975403025}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1510147820
 GameObject:
   m_ObjectHideFlags: 0
@@ -7009,6 +7049,66 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1693813826}
   m_CullTransparentMesh: 1
+--- !u!1 &1731223642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1731223643}
+  - component: {fileID: 1731223644}
+  m_Layer: 5
+  m_Name: RoomPlayersContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1731223643
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731223642}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1975403025}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -1, y: -0.7}
+  m_SizeDelta: {x: 700, y: 700}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1731223644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731223642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 250, y: 250}
+  m_Spacing: {x: 200, y: 150}
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!1 &1748098505 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6733177361254619370, guid: e02910154b73555419f5bdbeedc7bb0d, type: 3}
@@ -7513,8 +7613,9 @@ GameObject:
   - component: {fileID: 1866006901}
   - component: {fileID: 1866006900}
   - component: {fileID: 1866006899}
+  - component: {fileID: 1866006902}
   m_Layer: 5
-  m_Name: InputField
+  m_Name: NicknameInputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7644,6 +7745,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1866006897}
   m_CullTransparentMesh: 1
+--- !u!95 &1866006902
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1866006897}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a4fd17349526f964a964db237b870769, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1882417674
 GameObject:
   m_ObjectHideFlags: 0
@@ -8139,7 +8259,7 @@ GameObject:
   - component: {fileID: 1975403027}
   - component: {fileID: 1975403026}
   m_Layer: 5
-  m_Name: RoomPlayerInfo
+  m_Name: RoomPlayersInfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8156,8 +8276,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 433707680}
-  - {fileID: 1089509105}
+  - {fileID: 1502225992}
+  - {fileID: 1731223643}
   m_Father: {fileID: 1326554763}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8340,7 +8460,6 @@ MonoBehaviour:
   gameStartUI: {fileID: 1686217378}
   severEnterUI: {fileID: 1536060184}
   mainCamera: {fileID: 963194227}
-  fallingDice: {fileID: 181031642}
 --- !u!1 &1994024428 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6733177361254619370, guid: e02910154b73555419f5bdbeedc7bb0d, type: 3}
