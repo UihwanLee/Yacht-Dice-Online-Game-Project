@@ -3,10 +3,12 @@ ScriptsOnlyBuild:
     Assembly-CSharp.dll:
     - Dice
     - DiceCheckZone
-    - FallingDice
+    - DiceController
     - FixedDisplay
     - NetworkManager
+    - PlayerController
     - TitlePanel
+    - UIManager
     PhotonUnityNetworking.Demos.dll:
     - Photon.Pun.Demo.Asteroids.Asteroid
     - Photon.Pun.Demo.Asteroids.Bullet
@@ -47,6 +49,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.Image
     - UnityEngine.UI.InputField
     - UnityEngine.UI.Mask
+    - UnityEngine.UI.Outline
     - UnityEngine.UI.ScrollRect
     - UnityEngine.UI.Scrollbar
     - UnityEngine.UI.Shadow
@@ -122,51 +125,55 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 2640}
     - Class: 114
-      Script: {instanceID: 2684}
+      Script: {instanceID: 2656}
     - Class: 114
-      Script: {instanceID: 2838}
+      Script: {instanceID: 2686}
     - Class: 114
-      Script: {instanceID: 2846}
+      Script: {instanceID: 2840}
     - Class: 114
       Script: {instanceID: 2848}
     - Class: 114
       Script: {instanceID: 2850}
     - Class: 114
-      Script: {instanceID: 2932}
+      Script: {instanceID: 2852}
     - Class: 114
-      Script: {instanceID: 3100}
+      Script: {instanceID: 2934}
     - Class: 114
-      Script: {instanceID: 3210}
+      Script: {instanceID: 3102}
     - Class: 114
-      Script: {instanceID: 3344}
+      Script: {instanceID: 3148}
     - Class: 114
-      Script: {instanceID: 3350}
+      Script: {instanceID: 3212}
     - Class: 114
-      Script: {instanceID: 3640}
+      Script: {instanceID: 3346}
+    - Class: 114
+      Script: {instanceID: 3352}
+    - Class: 114
+      Script: {instanceID: 3402}
     - Class: 114
       Script: {instanceID: 3644}
     - Class: 114
-      Script: {instanceID: 3690}
+      Script: {instanceID: 3648}
     - Class: 114
-      Script: {instanceID: 3804}
+      Script: {instanceID: 3694}
     - Class: 114
-      Script: {instanceID: 3842}
+      Script: {instanceID: 3808}
     - Class: 114
       Script: {instanceID: 3846}
     - Class: 114
-      Script: {instanceID: 4212}
+      Script: {instanceID: 3850}
     - Class: 114
-      Script: {instanceID: 4258}
+      Script: {instanceID: 4216}
     - Class: 114
-      Script: {instanceID: 4356}
+      Script: {instanceID: 4262}
     - Class: 114
-      Script: {instanceID: 4452}
+      Script: {instanceID: 4360}
     - Class: 114
-      Script: {instanceID: 4656}
+      Script: {instanceID: 4456}
     - Class: 114
-      Script: {instanceID: 17630}
+      Script: {instanceID: 4660}
     - Class: 114
-      Script: {instanceID: 33518}
+      Script: {instanceID: 104178}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -247,7 +254,7 @@ ScriptsOnlyBuild:
       Hash: 25e49feedf8d7399dc501f14e0d61bf8
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: FallingDice
+    className: DiceController
   - hash:
       serializedVersion: 2
       Hash: ab039a385ef4459756519a3fe91dccc6
@@ -652,7 +659,7 @@ ScriptsOnlyBuild:
     className: PhotonRigidbody2DView
   - hash:
       serializedVersion: 2
-      Hash: ec4a1859b7610d925dce10b11e5cb6a7
+      Hash: 3d147f9a9b03d638b664162e2d6c9a6e
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: NetworkManager
@@ -680,6 +687,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: GraphicRaycaster
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: FixedDisplay
   - hash:
       serializedVersion: 2
       Hash: d7f7bc402888d42a0dbb080693e6863c
@@ -1010,6 +1023,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: AudioPlayableAsset
+  - hash:
+      serializedVersion: 2
+      Hash: adb7da9bb6333e78b78a2b697f90e875
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: PlayerController
   - hash:
       serializedVersion: 2
       Hash: e7f4e9cb5468a346609dfdb36da26dcc
@@ -1378,7 +1397,7 @@ ScriptsOnlyBuild:
     className: ToggleExpand
   - hash:
       serializedVersion: 2
-      Hash: 55e6fe9bdf5caf1c7f262670c2b8ab9f
+      Hash: 14f8e4d523c095cc0c635ab2eeab22ce
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: TitlePanel
@@ -1540,10 +1559,10 @@ ScriptsOnlyBuild:
     className: UserIdUiForm
   - hash:
       serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+      Hash: c68d0e6037d7a84a3583a4e89e28892d
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: FixedDisplay
+    className: UIManager
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainMenu.unity

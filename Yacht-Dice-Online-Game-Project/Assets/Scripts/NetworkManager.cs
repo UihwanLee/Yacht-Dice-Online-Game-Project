@@ -10,9 +10,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     /*
      * Photon NetWorkManager 스크립트
      * 
-     * Title Panel 감독
-     * Lobby NetWorkManager 감독
-     * Room NetWorkManager 감독
+     * Title Network 감독
+     * Lobby Network 감독
+     * Room Network 감독
      * 
     */
 
@@ -46,7 +46,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField]
     private Text roomInfoText;
     [SerializeField]
-    private Transform playerParent;
+    private List<Button> roomPlayers = new List<Button>();
     [SerializeField]
     private Text[] chatText;
     [SerializeField]
@@ -64,23 +64,31 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [Header("List")]
     List<RoomInfo> myList = new List<RoomInfo>();
     int currentPage = 1, maxPage, multiple;
-    [SerializeField]
-    private List<PlayerController> playerList = new List<PlayerController>();
+
+    [Header("Player")]
+    public PlayerController MyPlayer;
+    public List<PlayerController> RoomPlayers = new List<PlayerController>();
+
+    public static NetworkManager NM;
 
 
-    #region 패널 초기화
+    #region 네트워크 설정
     private void Awake()
     {
-        // 네트워크 설정
-        PhotonNetwork.SendRate = 60;
-        PhotonNetwork.SerializationRate = 30;
+        // 네트워크 변수 설정
+        NM = this;
 
-        // 패널 정리
-        titlePanel.SetActive(true);
-        lobbyPanel.SetActive(false);
-        roomPanel.SetActive(false);
+        // 네트워크 설정
+        //PhotonNetwork.SendRate = 60;
+        //PhotonNetwork.SerializationRate = 30;
+    }
+
+    private void Start()
+    {
+        PV = photonView;
     }
     #endregion
+
 
     #region 서버연결
 
@@ -125,8 +133,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        lobbyPanel.SetActive(false);
-        roomPanel.SetActive(false);
+        if(lobbyPanel && roomPanel)
+        {
+            lobbyPanel.SetActive(false);
+            roomPanel.SetActive(false);
+        }
     }
     #endregion
 
@@ -226,10 +237,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             chatText[i].text = "";
         }
 
-
         // 플레이어 생성
-        GameObject myPlayer = PhotonNetwork.Instantiate("PlayerPrefab", Vector3.zero, Quaternion.identity);
-        //PV.RPC("SetRoomPlayerRPC", RpcTarget.AllBuffered, myPlayer);
+        MyPlayer = PhotonNetwork.Instantiate("PlayerPrefab", Vector3.zero, Quaternion.identity).GetComponent<PlayerController>();
+
+
+        // 플레이어 무작위 아이콘 추가
+        SetRandPlayerIcon();
+
+        // 플레이어 룸 배치
+        SetRoomPlayer();
 
     }
 
@@ -261,6 +277,46 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     #endregion
 
+    #region 플레이어 설정
+
+    // 플레이어 리스트 정렬
+    public void SortPlayers()
+    {
+        RoomPlayers.Sort((p1, p2) => p1.GetPlayerActor().CompareTo(p2.GetPlayerActor()));
+    }
+
+    // 무작위 플레이어 아이콘 설정
+    public void SetRandPlayerIcon()
+    {
+        List<int> PlayerIcons = new List<int>();
+
+        for (int i = 0; i < RoomPlayers.Count; i++)
+        {
+            PlayerIcons.Add(RoomPlayers[i].GetPlayerIconIndex());
+        }
+
+        while (true)
+        {
+            int randIndex = Random.Range(0, 8);
+
+            if (!PlayerIcons.Contains(randIndex))
+            {
+                MyPlayer.GetComponent<PhotonView>().RPC("SetIconRPC", RpcTarget.AllBuffered, randIndex);
+                break;
+            }
+        }
+    }
+
+    // 플레이어 방 배치
+    public void SetRoomPlayer()
+    {
+        string playerNickName = MyPlayer.GetComponent<PhotonView>().Owner.NickName;
+        MyPlayer.GetComponent<PhotonView>().RPC("SetRoomRPC", RpcTarget.AllBuffered, playerNickName);
+    }
+
+    #endregion
+
+
     #region 채팅
 
     // 채팅 보내기
@@ -290,17 +346,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             for (int i = 1; i < chatText.Length; i++) chatText[i - 1].text = chatText[i].text;
             chatText[chatText.Length - 1].text = msg;
         }
-    }
-
-    #endregion
-
-    #region 플레이어
-
-    // RoomPlayer 정보 동기화
-    [PunRPC]
-    public void SetRoomPlayerRPC(GameObject player)
-    {
-        player.transform.SetParent(playerParent);
     }
 
     #endregion

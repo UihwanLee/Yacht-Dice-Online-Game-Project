@@ -41,6 +41,12 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - SetRoomPlayerRPC
+  - SetParent
+  - SetRoomPlayer
+  - SetRoomPlayerInfoByPrefab
+  - SetIcon
+  - SetIconRPC
+  - SetRoomRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
