@@ -5,10 +5,10 @@ ScriptsOnlyBuild:
     - DiceCheckZone
     - DiceController
     - FixedDisplay
+    - InGameNetWorkManager
     - NetworkManager
     - PlayerController
     - TitlePanel
-    - UIManager
     PhotonUnityNetworking.Demos.dll:
     - Photon.Pun.Demo.Asteroids.Asteroid
     - Photon.Pun.Demo.Asteroids.Bullet
@@ -113,67 +113,67 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1702}
     - Class: 114
-      Script: {instanceID: 2140}
+      Script: {instanceID: 1762}
     - Class: 114
-      Script: {instanceID: 2188}
+      Script: {instanceID: 2142}
     - Class: 114
-      Script: {instanceID: 2370}
+      Script: {instanceID: 2190}
     - Class: 114
-      Script: {instanceID: 2480}
+      Script: {instanceID: 2372}
     - Class: 114
-      Script: {instanceID: 2574}
+      Script: {instanceID: 2482}
     - Class: 114
-      Script: {instanceID: 2640}
+      Script: {instanceID: 2576}
     - Class: 114
-      Script: {instanceID: 2656}
+      Script: {instanceID: 2642}
     - Class: 114
-      Script: {instanceID: 2686}
+      Script: {instanceID: 2658}
     - Class: 114
-      Script: {instanceID: 2840}
+      Script: {instanceID: 2688}
     - Class: 114
-      Script: {instanceID: 2848}
+      Script: {instanceID: 2842}
     - Class: 114
       Script: {instanceID: 2850}
     - Class: 114
       Script: {instanceID: 2852}
     - Class: 114
-      Script: {instanceID: 2934}
+      Script: {instanceID: 2854}
     - Class: 114
-      Script: {instanceID: 3102}
+      Script: {instanceID: 2936}
     - Class: 114
-      Script: {instanceID: 3148}
+      Script: {instanceID: 3104}
     - Class: 114
-      Script: {instanceID: 3212}
+      Script: {instanceID: 3150}
     - Class: 114
-      Script: {instanceID: 3346}
+      Script: {instanceID: 3214}
     - Class: 114
-      Script: {instanceID: 3352}
+      Script: {instanceID: 3348}
     - Class: 114
-      Script: {instanceID: 3402}
+      Script: {instanceID: 3354}
     - Class: 114
-      Script: {instanceID: 3644}
+      Script: {instanceID: 3404}
     - Class: 114
-      Script: {instanceID: 3648}
+      Script: {instanceID: 3646}
     - Class: 114
-      Script: {instanceID: 3694}
+      Script: {instanceID: 3650}
     - Class: 114
-      Script: {instanceID: 3808}
+      Script: {instanceID: 3696}
     - Class: 114
-      Script: {instanceID: 3846}
+      Script: {instanceID: 3810}
     - Class: 114
-      Script: {instanceID: 3850}
+      Script: {instanceID: 3848}
     - Class: 114
-      Script: {instanceID: 4216}
+      Script: {instanceID: 3852}
     - Class: 114
-      Script: {instanceID: 4262}
+      Script: {instanceID: 4218}
     - Class: 114
-      Script: {instanceID: 4360}
+      Script: {instanceID: 4264}
     - Class: 114
-      Script: {instanceID: 4456}
+      Script: {instanceID: 4362}
     - Class: 114
-      Script: {instanceID: 4660}
+      Script: {instanceID: 4458}
     - Class: 114
-      Script: {instanceID: 104178}
+      Script: {instanceID: 4662}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -381,6 +381,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
     className: TMP_FontAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 1bf8dd8c74c1e92a31f149e5a7bfb500
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: InGameNetWorkManager
   - hash:
       serializedVersion: 2
       Hash: 3f600ad0f750f59238a91f7513b927c1
@@ -659,7 +665,7 @@ ScriptsOnlyBuild:
     className: PhotonRigidbody2DView
   - hash:
       serializedVersion: 2
-      Hash: 3d147f9a9b03d638b664162e2d6c9a6e
+      Hash: a2493a795b3d5e0b983744e070ce7dc7
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: NetworkManager
@@ -1557,12 +1563,6 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Cockpit.Forms
     className: UserIdUiForm
-  - hash:
-      serializedVersion: 2
-      Hash: c68d0e6037d7a84a3583a4e89e28892d
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: UIManager
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainMenu.unity

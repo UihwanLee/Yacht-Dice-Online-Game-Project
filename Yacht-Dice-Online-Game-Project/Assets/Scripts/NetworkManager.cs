@@ -28,8 +28,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField]
     private InputField roomInput;
     [SerializeField]
-    private Text welcomeText;
-    [SerializeField]
     private Text lobbyInfoText;
     [SerializeField]
     private Button[] roomList;
@@ -46,11 +44,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField]
     private Text roomInfoText;
     [SerializeField]
-    private List<Button> roomPlayers = new List<Button>();
+    private GameObject chatUI;
+    private bool isChat = false;
     [SerializeField]
     private Text[] chatText;
     [SerializeField]
     private InputField chatInput;
+    [SerializeField]
+    private GameObject gameStartButton;
+    [SerializeField]
+    private GameObject exitRoomButton;
 
     [Header("Effect")]
     [SerializeField]
@@ -79,8 +82,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         NM = this;
 
         // 네트워크 설정
-        //PhotonNetwork.SendRate = 60;
-        //PhotonNetwork.SerializationRate = 30;
+        PhotonNetwork.SendRate = 60;
+        PhotonNetwork.SerializationRate = 30;
+
+        // 패널 초기화 
+        titlePanel.SetActive(true);
+        lobbyPanel.SetActive(false);
+        roomPanel.SetActive(false);
     }
 
     private void Start()
@@ -124,8 +132,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         // 플레이어 닉네임 설정
         PhotonNetwork.LocalPlayer.NickName = nickNameInputField.text;
+        nickNameInputField.text = "";
 
-        welcomeText.text = PhotonNetwork.LocalPlayer.NickName + "님 환영합니다";
         myList.Clear();
     }
 
@@ -133,10 +141,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        if(lobbyPanel && roomPanel)
+        if(roomPanel)
+        {
+            roomPanel.SetActive(false);
+        }
+        if(lobbyPanel)
         {
             lobbyPanel.SetActive(false);
-            roomPanel.SetActive(false);
+        }
+        if(titlePanel)
+        {
+            titlePanel.SetActive(true);
         }
     }
     #endregion
@@ -148,18 +163,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     // 방 생성 : 방 제목 Input이 비었을 시 랜덤으로 생성
     public void CreateRoom() => PhotonNetwork.CreateRoom(roomInput.text == "" ? "Room" + Random.Range(0, 100) : roomInput.text, new RoomOptions { MaxPlayers = 4 });
 
-    // 빠른 매칭
-    public void JoinRandomRoom() => PhotonNetwork.JoinRandomRoom();
-
     // 방 생성 실패 시 랜덤 방제목으로 방 생성
     public override void OnCreateRoomFailed(short returnCode, string message)
-    {
-        //roomInfoText.text = "";
-        CreateRoom();
-    }
-
-    // 빠른 매칭 실패 시 방 생성
-    public override void OnJoinRandomFailed(short returnCode, string message)
     {
         //roomInfoText.text = "";
         CreateRoom();
@@ -223,19 +228,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     #region 방
 
-    // 방 나가기
-    public void LeaveRoom() => PhotonNetwork.LeaveRoom();
-
     // 방 입장시 발생하는 함수
     public override void OnJoinedRoom()
     {
-        roomPanel.SetActive(true);
         RoomRenewal();
-        chatInput.text = "";
-        for(int i=0; i<chatText.Length; i++)
-        {
-            chatText[i].text = "";
-        }
+
+        lobbyPanel.SetActive(false);
+        roomPanel.SetActive(true);
+
+        // 채팅 UI 초기화
+        OnClckChatUI();
+        ResetChat();
 
         // 플레이어 생성
         MyPlayer = PhotonNetwork.Instantiate("PlayerPrefab", Vector3.zero, Quaternion.identity).GetComponent<PlayerController>();
@@ -256,6 +259,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         ChatRPC("<color=yellow>" + newPlayer.NickName + "님이 참가하셨습니다</color>");
     }
 
+    // 방 나가기
+    public void LeaveRoom() => PhotonNetwork.LeaveRoom();
+
+    public override void OnLeftRoom()
+    {
+        roomPanel.SetActive(false);
+        lobbyPanel.SetActive(true);
+    }
+
     // Player가 방 나갈 시 Player 변수 사용 함수
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
@@ -267,7 +279,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     // 방 리뉴얼
     void RoomRenewal()
     {
-        listText.text = "";
+        listText.text = "방 인원 목록: ";
         for(int i=0; i<PhotonNetwork.PlayerList.Length; i++)
         {
             listText.text += PhotonNetwork.PlayerList[i].NickName + ((i + 1 == PhotonNetwork.PlayerList.Length) ? "" : ",");
@@ -319,6 +331,34 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     #region 채팅
 
+    // 채팅 UI
+    public void OnClckChatUI()
+    {
+        if (isChat)
+        {
+            chatUI.transform.localPosition = new Vector3(-120, 12f, 0f);
+        }
+        else
+        {
+            chatUI.transform.localPosition = new Vector3(-950f, 12f, 0f);
+        }
+
+        gameStartButton.SetActive(!isChat);
+        exitRoomButton.SetActive(!isChat);
+
+        isChat = !isChat;
+    }
+
+    // 채팅 초기화
+    public void ResetChat()
+    {
+        chatInput.text = "";
+        for (int i = 0; i < chatText.Length; i++)
+        {
+            chatText[i].text = "";
+        }
+    }
+
     // 채팅 보내기
     public void Send()
     {
@@ -349,6 +389,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
     #endregion
+
+    #endregion
+
+    #region 인게임
+
+    // pos -180.5 16.45 -1.15
+    // rot 81.464 0 0
+
 
     #endregion
 }

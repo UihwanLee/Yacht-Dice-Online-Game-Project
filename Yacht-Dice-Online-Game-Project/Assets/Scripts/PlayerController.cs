@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using static NetworkManager;
-using static UIManager;
+using static InGameNetWorkManager;
 
 public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 {
@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     public void SetIconRPC(int _iconIndex)
     {
-        playerIcon.sprite = UM.GetPlayerIconByIndex(_iconIndex);
+        playerIcon.sprite = IN.GetPlayerIconByIndex(_iconIndex);
         playerIconIndex = _iconIndex;
     }
 
@@ -77,7 +77,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     public void SetRoomRPC(string _playerNickName)
     {
         Sprite _playerIcon = playerIcon.sprite;
-        UIManager.UM.SetRoomPlayer(_playerIcon, _playerNickName);
+        IN.SetRoomPlayer(_playerIcon, _playerNickName);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
