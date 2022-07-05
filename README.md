@@ -8,7 +8,7 @@
  * Game Project : Unity 2020.3.12f1 (64-bit) / Microsoft Visual Studio 2019  
  * Game Object : Blender 3.2
  * Game UI : PhotoShop CC 2018
- * Game Management : Jira Software / https://luh5063014.atlassian.net/jira/software/projects/LUH/boards/1/roadmap
+ * Game Management : Jira Software / https://luh5063014.atlassian.net/jira/software/projects/LUH/boards/1/roadmap / https://luh5063014.atlassian.net/jira/software/projects/LUH/boards/1/roadmap?shared=&atlOrigin=eyJpIjoiNjZiYjNkYjhmYWNkNDdkYWI0ZjQ5YzNhNGJlMjY5YWYiLCJwIjoiaiJ9
   
 > 개발 언어 : C#
   
