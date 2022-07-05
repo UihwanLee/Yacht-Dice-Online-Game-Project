@@ -231,6 +231,7 @@ MonoBehaviour:
   playerNickName: {fileID: 6995746189693962918}
   playerIcon: {fileID: 6995746190248548332}
   playerIconIndex: 0
+  playerSequence: 0
 --- !u!114 &1610335426
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -19,8 +19,6 @@ ScriptsOnlyBuild:
     - Photon.Pun.Demo.PunBasics.PlayerUI
     - Photon.Pun.Demo.SlotRacer.PlayerControl
     - Photon.Pun.Demo.SlotRacer.Utils.SplineWalker
-    PhotonUnityNetworking.Editor.dll:
-    - Photon.Pun.PunSceneSettings
     PhotonUnityNetworking.dll:
     - Photon.Pun.PhotonAnimatorView
     - Photon.Pun.PhotonRigidbodyView
@@ -46,6 +44,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.ContentSizeFitter
     - UnityEngine.UI.GraphicRaycaster
+    - UnityEngine.UI.GridLayoutGroup
     - UnityEngine.UI.HorizontalLayoutGroup
     - UnityEngine.UI.Image
     - UnityEngine.UI.InputField
@@ -175,6 +174,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 4362}
     - Class: 114
       Script: {instanceID: 4458}
+    - Class: 114
+      Script: {instanceID: 4590}
     - Class: 114
       Script: {instanceID: 4662}
     - Class: 115
@@ -386,7 +387,7 @@ ScriptsOnlyBuild:
     className: TMP_FontAsset
   - hash:
       serializedVersion: 2
-      Hash: f398e1746b7dabd5141faa4e77551f1b
+      Hash: 92234e434e13b4d150b77026e3e4be5c
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: InGameNetWorkManager
@@ -1034,7 +1035,7 @@ ScriptsOnlyBuild:
     className: AudioPlayableAsset
   - hash:
       serializedVersion: 2
-      Hash: adb7da9bb6333e78b78a2b697f90e875
+      Hash: 4b367361c6c94711ba40f8a305387b77
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController

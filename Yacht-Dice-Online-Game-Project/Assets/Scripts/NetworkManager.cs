@@ -113,7 +113,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         titlePanel.SetActive(true);
         lobbyPanel.SetActive(false);
         roomPanel.SetActive(false);
-        inGamePanel.SetActive(false);
     }
 
     private void Start()
@@ -284,8 +283,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         // 플레이어 무작위 아이콘 추가
         SetRandPlayerIcon();
 
-        // 플레이어 이름 설정
-        SetPlayerNickName();
+        // 플레이어 설정
+        SetPlayer();
 
         // 플레이어 룸 배치
         SetRoomPlayer();
@@ -297,15 +296,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         RoomRenewal();
         ChatRPC("<color=yellow>" + newPlayer.NickName + "님이 참가하셨습니다</color>");
-    }
-
-    public override void OnLeftRoom()
-    {
-        if (roomPanel) roomPanel.SetActive(false);
-        if(lobbyPanel) lobbyPanel.SetActive(true);
-
-        Debug.Log(GetRoomSlotIndex());
- 
     }
 
     // Player가 방 나갈 시 Player 변수 사용 함수
@@ -331,16 +321,22 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     #region 플레이어 설정
 
-    // 플레이어 리스트 정렬
+    // 플레이어 리스트 정렬(방 접속기준)
     public void SortPlayers()
     {
         Players.Sort((p1, p2) => p1.GetPlayerActor().CompareTo(p2.GetPlayerActor()));
     }
 
-    // 플레이어 이름 설정
-    public void SetPlayerNickName()
+    // 플레이어 리스트 정렬(플레이어 순서 기준)
+    public void SortPlayersBySequence()
     {
-        MyPlayer.GetComponent<PhotonView>().RPC("SetPlayerNickNameRPC", RpcTarget.AllBuffered);
+        Players.Sort((p1, p2) => p1.GetPlayerSequence().CompareTo(p2.GetPlayerSequence()));
+    }
+
+    // 플레이어 이름 설정
+    public void SetPlayer()
+    {
+        MyPlayer.GetComponent<PhotonView>().RPC("SetPlayerRPC", RpcTarget.AllBuffered);
     }
 
     // 무작위 플레이어 아이콘 설정
@@ -365,6 +361,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
+
+    // 플레이어 방 배치
+    public void SetRoomPlayer()
+    {
+        string playerNickName = MyPlayer.GetComponent<PhotonView>().Owner.NickName;
+        MyPlayer.GetComponent<PhotonView>().RPC("SetRoomRPC", RpcTarget.AllBuffered);
+    }
+
     // RoomPlayerList에 플레이어 배치
     public void SetRoomPlayerByRPC(Sprite playerIcon, string playerNickName)
     {
@@ -373,6 +377,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         roomPlayers[roomSlotIndex].SetActive(true);
         roomPlayers[roomSlotIndex].transform.GetChild(0).GetComponent<Image>().sprite = playerIcon;
         roomPlayers[roomSlotIndex++].transform.GetChild(1).GetComponent<Text>().text = playerNickName;
+
+        //플레이어 순서 입력
     }
 
     public int GetRoomSlotIndex()
@@ -384,13 +390,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void ResetRoom()
     {
         roomSlotIndex = 0;
-    }
-
-    // 플레이어 방 배치
-    public void SetRoomPlayer()
-    {
-        string playerNickName = MyPlayer.GetComponent<PhotonView>().Owner.NickName;
-        MyPlayer.GetComponent<PhotonView>().RPC("SetRoomRPC", RpcTarget.AllBuffered);
     }
 
     #endregion
@@ -466,8 +465,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void OnClickGameStartButton()
     {
-        // 인게임 플레이어 정보 주기
-        IN.SetInGamePlayer(Players);
 
         // 인게임 플레이어 세팅
         IN.PV.RPC("SetAllInGamePlayerRPC", RpcTarget.All);

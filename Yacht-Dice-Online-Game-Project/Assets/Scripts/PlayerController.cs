@@ -25,6 +25,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField]
     private int playerIconIndex; // 플레이어 아이콘 인덱스
 
+    // 인게임 정보
+    [SerializeField]
+    private int playerSequence; // 플레이어 순서
+
     private void Start()
     {
         // 플레이어 변수 설정
@@ -48,20 +52,20 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     // 플레이어 리스트 삭제
     public void OnDestroy()
     {
-        if(NM.Players.Contains(this))
+        if (NM.Players.Contains(this))
         {
             NM.MyPlayerNickName = playerNickName.text;
-            Debug.Log("My Player NickName(PlayerController)" + NM.MyPlayerNickName);
             NM.Players.Remove(this);
             NM.SortPlayers();
         }
     }
 
 
-    // 플레이어 닉네임 설정
+    // 플레이어 설정
     [PunRPC]
-    public void SetPlayerNickNameRPC()
+    public void SetPlayerRPC()
     {
+        // 플레이어 닉네임 설정
         playerNickName.text = PV.IsMine ? PhotonNetwork.NickName : PV.Owner.NickName;
     }
 
@@ -73,6 +77,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         playerIconIndex = _iconIndex;
     }
 
+
     // 방에 플레이어 배치
     [PunRPC]
     public void SetRoomRPC()
@@ -82,6 +87,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         NM.SetRoomPlayerByRPC(_playerIcon, _playerNickName);
     }
 
+
+
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         
@@ -90,5 +98,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     // 변수 가져오는 리턴 함수
     public int GetPlayerActor() { return playerActor; }
     public string GetPlayerNickName() { return playerNickName.text; }
+    public Sprite GetPlayerIcon() { return playerIcon.sprite; }
     public int GetPlayerIconIndex() { return playerIconIndex; }
+    public int GetPlayerSequence() { return playerSequence; }
 }
