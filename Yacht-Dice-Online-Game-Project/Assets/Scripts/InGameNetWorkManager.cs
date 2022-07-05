@@ -15,19 +15,13 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
      * 
     */
 
-    [Header("TitlePanel")]
-    [SerializeField]
-    private GameObject titlePanel;
-
-    [Header("LobbyPanel")]
-    [SerializeField]
-    private GameObject lobbyPanel;
-
     [Header("RoomPanel")]
     [SerializeField]
     private GameObject roomPanel;
+
+    [Header("InGamePanel")]
     [SerializeField]
-    private List<GameObject> roomPlayers = new List<GameObject>();
+    private GameObject inGamePanel;
 
     [Header("Effect")]
     [SerializeField]
@@ -37,10 +31,16 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField]
     private List<Sprite> playerIcons = new List<Sprite>();
 
+    [Header("Main Camera")]
+    [SerializeField]
+    private Camera mainCamera;
+
     [Header("PV")]
     public PhotonView PV;
 
-    private int roomSlotIndex;
+    [Header("Player")]
+    // NetworkManager 스크립트에서 받게 될 플레이어 정보
+    public List<PlayerController> Players = new List<PlayerController>(); 
 
     public static InGameNetWorkManager IN;
 
@@ -48,38 +48,41 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         // 인스턴스 초기화
         IN = this;
-
-        // UI 오브젝트 초기화
-        for (int i = 0; i < roomPlayers.Count; i++)
-        {
-            roomPlayers[i].SetActive(false);
-        }
     }
 
     private void Start()
     {
         PV = photonView;
-
-        roomSlotIndex = 0;
     }
 
-    #region 카메라 설정
+    public void SetInGamePlayer(List<PlayerController> _Players)
+    {
+        if (_Players != null) Players = _Players;
+        else Debug.Log("There is no Players List!");
+    }
 
+    #region 인게임 세팅 설정
 
+    [PunRPC]
+    public void SetAllInGamePlayerRPC()
+    {
+        // 떨어지는 주사위 효과 끄기
+        diceController.FallingDice(false);
+
+        // 패널 정리
+        roomPanel.SetActive(false);
+        inGamePanel.SetActive(true);
+
+        // 카메라 설정
+        mainCamera.transform.position = new Vector3(-180.5f, 16.45f, -1.15f);
+        mainCamera.transform.rotation = Quaternion.Euler(new Vector3(81.464f, 0f, 0f));
+
+        // 플레이어 버튼 세팅
+    }
 
     #endregion
 
     #region Room 설정
-
-    // RoomPlayerList에 플레이어 배치
-    public void SetRoomPlayer(Sprite playerIcon, string playerNickName)
-    {
-        // 플레이어 정보 입력
-        Debug.Log("자신이 들어갈 인덱스: " + roomSlotIndex + " 플레이어 이름: " + playerNickName);
-        roomPlayers[roomSlotIndex].SetActive(true);
-        roomPlayers[roomSlotIndex].transform.GetChild(0).GetComponent<Image>().sprite = playerIcon;
-        roomPlayers[roomSlotIndex++].transform.GetChild(1).GetComponent<Text>().text = playerNickName;
-    }
 
 
     public Sprite GetPlayerIconByIndex(int index)

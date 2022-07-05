@@ -46,6 +46,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.ContentSizeFitter
     - UnityEngine.UI.GraphicRaycaster
+    - UnityEngine.UI.HorizontalLayoutGroup
     - UnityEngine.UI.Image
     - UnityEngine.UI.InputField
     - UnityEngine.UI.Mask
@@ -108,6 +109,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 1548}
     - Class: 114
       Script: {instanceID: 1672}
+    - Class: 114
+      Script: {instanceID: 1682}
     - Class: 114
       Script: {instanceID: 1698}
     - Class: 114
@@ -383,7 +386,7 @@ ScriptsOnlyBuild:
     className: TMP_FontAsset
   - hash:
       serializedVersion: 2
-      Hash: 1bf8dd8c74c1e92a31f149e5a7bfb500
+      Hash: f398e1746b7dabd5141faa4e77551f1b
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: InGameNetWorkManager
@@ -665,7 +668,7 @@ ScriptsOnlyBuild:
     className: PhotonRigidbody2DView
   - hash:
       serializedVersion: 2
-      Hash: a2493a795b3d5e0b983744e070ce7dc7
+      Hash: bebd52ec8bf47084a1bde99ec2c3842b
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: NetworkManager

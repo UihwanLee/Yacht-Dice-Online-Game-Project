@@ -33,10 +33,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         playerNickName.text = PV.Owner.NickName;
         playerIconIndex = -1;
 
-        SetPlayerNickName();
-
         // Player List 추가
-        NM.RoomPlayers.Add(this);
+        NM.Players.Add(this);
         NM.SortPlayers();
 
         Debug.Log(this.GetPlayerNickName() + "님이 방에 입장하였습니다.");
@@ -47,21 +45,24 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         if (PV.IsMine) return;
     }
 
-
-    // 플레이어 변수 설정
-    public void SetPlayerNickName()
-    {
-        playerNickName.text = PV.IsMine ? PhotonNetwork.NickName : PV.Owner.NickName;
-    }
-
     // 플레이어 리스트 삭제
     public void OnDestroy()
     {
-        if(NM.RoomPlayers.Contains(this))
+        if(NM.Players.Contains(this))
         {
-            NM.RoomPlayers.Remove(this);
+            NM.MyPlayerNickName = playerNickName.text;
+            Debug.Log("My Player NickName(PlayerController)" + NM.MyPlayerNickName);
+            NM.Players.Remove(this);
             NM.SortPlayers();
         }
+    }
+
+
+    // 플레이어 닉네임 설정
+    [PunRPC]
+    public void SetPlayerNickNameRPC()
+    {
+        playerNickName.text = PV.IsMine ? PhotonNetwork.NickName : PV.Owner.NickName;
     }
 
     // 플레이어 아이콘 설정
@@ -74,10 +75,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     // 방에 플레이어 배치
     [PunRPC]
-    public void SetRoomRPC(string _playerNickName)
+    public void SetRoomRPC()
     {
         Sprite _playerIcon = playerIcon.sprite;
-        IN.SetRoomPlayer(_playerIcon, _playerNickName);
+        string _playerNickName = playerNickName.text;
+        NM.SetRoomPlayerByRPC(_playerIcon, _playerNickName);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

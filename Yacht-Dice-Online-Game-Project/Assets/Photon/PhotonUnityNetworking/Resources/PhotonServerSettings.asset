@@ -47,6 +47,8 @@ MonoBehaviour:
   - SetIcon
   - SetIconRPC
   - SetRoomRPC
+  - SetPlayerNickNameRPC
+  - SetAllInGamePlayerRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
+using static InGameNetWorkManager;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -54,6 +55,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     private GameObject gameStartButton;
     [SerializeField]
     private GameObject exitRoomButton;
+    [SerializeField]
+    private List<GameObject> roomPlayers = new List<GameObject>();
+    private int roomSlotIndex;
+
+    [Header("InGamePanel")]
+    [SerializeField]
+    private GameObject inGamePanel;
+
+    [Header("Main Camera")]
+    [SerializeField]
+    private Camera mainCamera;
 
     [Header("Effect")]
     [SerializeField]
@@ -69,8 +81,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     int currentPage = 1, maxPage, multiple;
 
     [Header("Player")]
+    public string MyPlayerNickName;
     public PlayerController MyPlayer;
-    public List<PlayerController> RoomPlayers = new List<PlayerController>();
+    public List<PlayerController> Players = new List<PlayerController>();
 
     public static NetworkManager NM;
 
@@ -85,15 +98,29 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.SendRate = 60;
         PhotonNetwork.SerializationRate = 30;
 
+        // 메인 카메라 위치 설정
+        mainCamera.transform.position = new Vector3(2.52f, 16.1f, -3.5f);
+        mainCamera.transform.rotation = Quaternion.Euler(new Vector3(69.19f, 0f, 0f));
+
+        // UI 오브젝트 초기화
+        roomPanel.SetActive(true);
+        for (int i = 0; i < roomPlayers.Count; i++)
+        {
+           if(roomPlayers[i]) roomPlayers[i].SetActive(false);
+        }
+
         // 패널 초기화 
         titlePanel.SetActive(true);
         lobbyPanel.SetActive(false);
         roomPanel.SetActive(false);
+        inGamePanel.SetActive(false);
     }
 
     private void Start()
     {
         PV = photonView;
+
+        roomSlotIndex = 0;
     }
     #endregion
 
@@ -127,11 +154,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         lobbyPanel.SetActive(true);
         roomPanel.SetActive(false);
 
-        // 떨어지는 주사위 효과 끄기
-        diceController.FallingDice(false);
-
         // 플레이어 닉네임 설정
         PhotonNetwork.LocalPlayer.NickName = nickNameInputField.text;
+        MyPlayerNickName = nickNameInputField.text;
         nickNameInputField.text = "";
 
         myList.Clear();
@@ -141,8 +166,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
+        if (inGamePanel)
+        {
+            inGamePanel.SetActive(false);
+        }
         if(roomPanel)
         {
+            isChat = false;
+            ResetRoom();
             roomPanel.SetActive(false);
         }
         if(lobbyPanel)
@@ -161,7 +192,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     #region 방
 
     // 방 생성 : 방 제목 Input이 비었을 시 랜덤으로 생성
-    public void CreateRoom() => PhotonNetwork.CreateRoom(roomInput.text == "" ? "Room" + Random.Range(0, 100) : roomInput.text, new RoomOptions { MaxPlayers = 4 });
+    public void CreateRoom()
+    {
+        PhotonNetwork.CreateRoom(roomInput.text == "" ? "Room" + Random.Range(0, 100) : roomInput.text, new RoomOptions { MaxPlayers = 4 });
+    }
 
     // 방 생성 실패 시 랜덤 방제목으로 방 생성
     public override void OnCreateRoomFailed(short returnCode, string message)
@@ -180,7 +214,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         if (num == -2) --currentPage;
         else if (num == -1) ++currentPage;
-        else PhotonNetwork.JoinRoom(myList[multiple + num].Name);
+        else
+        {
+            PhotonNetwork.JoinRoom(myList[multiple + num].Name);
+        }
         MyListRenewal();
     }
 
@@ -247,6 +284,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         // 플레이어 무작위 아이콘 추가
         SetRandPlayerIcon();
 
+        // 플레이어 이름 설정
+        SetPlayerNickName();
+
         // 플레이어 룸 배치
         SetRoomPlayer();
 
@@ -259,13 +299,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         ChatRPC("<color=yellow>" + newPlayer.NickName + "님이 참가하셨습니다</color>");
     }
 
-    // 방 나가기
-    public void LeaveRoom() => PhotonNetwork.LeaveRoom();
-
     public override void OnLeftRoom()
     {
-        roomPanel.SetActive(false);
-        lobbyPanel.SetActive(true);
+        if (roomPanel) roomPanel.SetActive(false);
+        if(lobbyPanel) lobbyPanel.SetActive(true);
+
+        Debug.Log(GetRoomSlotIndex());
+ 
     }
 
     // Player가 방 나갈 시 Player 변수 사용 함수
@@ -294,7 +334,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     // 플레이어 리스트 정렬
     public void SortPlayers()
     {
-        RoomPlayers.Sort((p1, p2) => p1.GetPlayerActor().CompareTo(p2.GetPlayerActor()));
+        Players.Sort((p1, p2) => p1.GetPlayerActor().CompareTo(p2.GetPlayerActor()));
+    }
+
+    // 플레이어 이름 설정
+    public void SetPlayerNickName()
+    {
+        MyPlayer.GetComponent<PhotonView>().RPC("SetPlayerNickNameRPC", RpcTarget.AllBuffered);
     }
 
     // 무작위 플레이어 아이콘 설정
@@ -302,9 +348,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         List<int> PlayerIcons = new List<int>();
 
-        for (int i = 0; i < RoomPlayers.Count; i++)
+        for (int i = 0; i < Players.Count; i++)
         {
-            PlayerIcons.Add(RoomPlayers[i].GetPlayerIconIndex());
+            PlayerIcons.Add(Players[i].GetPlayerIconIndex());
         }
 
         while (true)
@@ -319,11 +365,32 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
+    // RoomPlayerList에 플레이어 배치
+    public void SetRoomPlayerByRPC(Sprite playerIcon, string playerNickName)
+    {
+        // 플레이어 정보 입력
+        Debug.Log("자신이 들어갈 인덱스: " + roomSlotIndex + " 플레이어 이름: " + playerNickName);
+        roomPlayers[roomSlotIndex].SetActive(true);
+        roomPlayers[roomSlotIndex].transform.GetChild(0).GetComponent<Image>().sprite = playerIcon;
+        roomPlayers[roomSlotIndex++].transform.GetChild(1).GetComponent<Text>().text = playerNickName;
+    }
+
+    public int GetRoomSlotIndex()
+    {
+        return roomSlotIndex;
+    }
+
+    // Room Slot Index 리셋
+    public void ResetRoom()
+    {
+        roomSlotIndex = 0;
+    }
+
     // 플레이어 방 배치
     public void SetRoomPlayer()
     {
         string playerNickName = MyPlayer.GetComponent<PhotonView>().Owner.NickName;
-        MyPlayer.GetComponent<PhotonView>().RPC("SetRoomRPC", RpcTarget.AllBuffered, playerNickName);
+        MyPlayer.GetComponent<PhotonView>().RPC("SetRoomRPC", RpcTarget.AllBuffered);
     }
 
     #endregion
@@ -396,6 +463,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     // pos -180.5 16.45 -1.15
     // rot 81.464 0 0
+
+    public void OnClickGameStartButton()
+    {
+        // 인게임 플레이어 정보 주기
+        IN.SetInGamePlayer(Players);
+
+        // 인게임 플레이어 세팅
+        IN.PV.RPC("SetAllInGamePlayerRPC", RpcTarget.All);
+    }
 
 
     #endregion
