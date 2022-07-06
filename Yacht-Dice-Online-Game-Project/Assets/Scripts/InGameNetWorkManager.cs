@@ -28,6 +28,9 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField]
     private List<GameObject> inGamePlayers = new List<GameObject>();
     private int inGamePlayerIndex;
+    [SerializeField]
+    private GameObject emoticonContainer;
+    private bool isEmoticonContainer;
 
     [Header("Controller")]
     [SerializeField]
@@ -40,6 +43,8 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     [Header("Player")]
     [SerializeField]
     private List<Sprite> playerIcons = new List<Sprite>();
+    // 현재 플레이어 순서 : 이 변수에 따라 플레이어 플레이를 순서대로 할 수 있게한다.
+    private int currentPlayerSequence; 
 
     [Header("Main Camera")]
     [SerializeField]
@@ -67,10 +72,14 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         }
         diceBottle.transform.localPosition = new Vector3(-178.39f, 1.51f, 5.8f);
 
+        emoticonContainer.SetActive(false);
+        isEmoticonContainer = false;
+
         // 패널 정리
         inGamePanel.SetActive(false);
 
         Players.Clear();
+        currentPlayerSequence = 0;
     }
 
     private void Start()
@@ -122,6 +131,9 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
             inGamePlayers[i].transform.GetChild(0).GetComponent<Image>().sprite = Players[i].GetPlayerIcon();
             inGamePlayers[i].transform.GetChild(1).GetComponent<Text>().text = Players[i].GetPlayerNickName();
         }
+
+        // 첫번째 플레이어 소개하는 애니메이션 이후 첫번째 플레이어 순서를 설정한다.
+        SetPlayerPlaying();
     }
 
     // Player Container 포지션 설정
@@ -131,16 +143,16 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         switch(count)
         {
             case 1:
-                playerContainer.transform.localPosition = new Vector3(-65f, 860f, 0);
+                playerContainer.transform.localPosition = new Vector3(370f, 0f, 0f);
                 break;
             case 2:
-                playerContainer.transform.localPosition = new Vector3(-180f, 860f, 0);
+                playerContainer.transform.localPosition = new Vector3(246f, 0f, 0f);
                 break;
             case 3:
-                playerContainer.transform.localPosition = new Vector3(-300f, 860f, 0);
+                playerContainer.transform.localPosition = new Vector3(123f, 0f, 0f);
                 break;
             case 4:
-                playerContainer.transform.localPosition = new Vector3(-440f, 860f, 0);
+                playerContainer.transform.localPosition = new Vector3(0f, 0f, 0f);
                 break;
             default:
                 Debug.Log("[ERROR]No match!");
@@ -153,6 +165,15 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
 
     #region 인게임 플레이
 
+    // 플레이어 순서 설정
+    public void SetPlayerPlaying()
+    {
+        // 현재 플레이어 아이콘 수정(localPosition이 아닌 position으로 수정)
+        Vector3 movePos = inGamePlayers[currentPlayerSequence].transform.localPosition;
+        movePos.y = 740f;
+        inGamePlayers[currentPlayerSequence].transform.localPosition = movePos;
+    }
+
     // 다이스 설정
     public void SetDice()
     {
@@ -160,6 +181,31 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         diceBottle.transform.localPosition = new Vector3(-180.27f, 6.07f, 0.16f);
     }
 
+
+    #endregion
+
+    #region 이모티콘
+
+    public void OnClickEmoticonButton()
+    {
+        if(!isEmoticonContainer)
+        {
+            emoticonContainer.SetActive(true);
+            emoticonContainer.GetComponent<Animator>().SetTrigger("on");
+        }
+        else
+        {
+            emoticonContainer.GetComponent<Animator>().SetTrigger("off");
+            /*
+            if(!emoticonContainer.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Anim_EmoticonsUnscroll"))
+            {
+                emoticonContainer.SetActive(false);
+            }
+            */
+        }
+
+        isEmoticonContainer = !isEmoticonContainer;
+    }
 
     #endregion
 

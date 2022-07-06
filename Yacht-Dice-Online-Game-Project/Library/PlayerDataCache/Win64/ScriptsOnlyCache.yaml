@@ -1,6 +1,7 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - ChatManager
     - Dice
     - DiceCheckZone
     - DiceController
@@ -19,6 +20,8 @@ ScriptsOnlyBuild:
     - Photon.Pun.Demo.PunBasics.PlayerUI
     - Photon.Pun.Demo.SlotRacer.PlayerControl
     - Photon.Pun.Demo.SlotRacer.Utils.SplineWalker
+    PhotonUnityNetworking.Editor.dll:
+    - Photon.Pun.PunSceneSettings
     PhotonUnityNetworking.dll:
     - Photon.Pun.PhotonAnimatorView
     - Photon.Pun.PhotonRigidbodyView
@@ -30,8 +33,10 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -44,8 +49,6 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.ContentSizeFitter
     - UnityEngine.UI.GraphicRaycaster
-    - UnityEngine.UI.GridLayoutGroup
-    - UnityEngine.UI.HorizontalLayoutGroup
     - UnityEngine.UI.Image
     - UnityEngine.UI.InputField
     - UnityEngine.UI.Mask
@@ -108,8 +111,6 @@ ScriptsOnlyBuild:
       Script: {instanceID: 1548}
     - Class: 114
       Script: {instanceID: 1672}
-    - Class: 114
-      Script: {instanceID: 1682}
     - Class: 114
       Script: {instanceID: 1698}
     - Class: 114
@@ -175,9 +176,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 4458}
     - Class: 114
-      Script: {instanceID: 4590}
-    - Class: 114
       Script: {instanceID: 4662}
+    - Class: 114
+      Script: {instanceID: 18032}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -387,7 +388,7 @@ ScriptsOnlyBuild:
     className: TMP_FontAsset
   - hash:
       serializedVersion: 2
-      Hash: 92234e434e13b4d150b77026e3e4be5c
+      Hash: 5065c00833b0283780c53d2b20def145
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: InGameNetWorkManager
@@ -1567,6 +1568,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Cockpit.Forms
     className: UserIdUiForm
+  - hash:
+      serializedVersion: 2
+      Hash: d639ad11cd69159eb0eb3c286a048523
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ChatManager
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainMenu.unity

@@ -5,6 +5,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
 using static InGameNetWorkManager;
+using static ChatManager;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -273,8 +274,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         roomPanel.SetActive(true);
 
         // 채팅 UI 초기화
-        OnClckChatUI();
-        ResetChat();
+        CM.ResetChat();
+        CM.OnClckChatButton();
 
         // 플레이어 생성
         MyPlayer = PhotonNetwork.Instantiate("PlayerPrefab", Vector3.zero, Quaternion.identity).GetComponent<PlayerController>();
@@ -295,14 +296,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         RoomRenewal();
-        ChatRPC("<color=yellow>" + newPlayer.NickName + "님이 참가하셨습니다</color>");
+        CM.PV.RPC("ChatRPC", RpcTarget.AllBuffered, ("<color=yellow>" + newPlayer.NickName + "님이 참가하셨습니다</color>"));
     }
 
     // Player가 방 나갈 시 Player 변수 사용 함수
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         RoomRenewal();
-        ChatRPC("<color=yellow>" + otherPlayer.NickName + "님이 퇴장하셨습니다</color>");
+        CM.PV.RPC("ChatRPC", RpcTarget.AllBuffered, ("<color=yellow>" + otherPlayer.NickName + "님이 퇴장하셨습니다</color>"));
+        CM.ResetChatText();
         roomPanel.SetActive(false);
     }
 
@@ -392,69 +394,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         roomSlotIndex = 0;
     }
 
-    #endregion
-
-
-    #region 채팅
-
-    // 채팅 UI
-    public void OnClckChatUI()
+    // Game Start / Exit Button 세팅
+    public void SetStartExitButton(bool isChat)
     {
-        if (isChat)
-        {
-            chatUI.transform.localPosition = new Vector3(-120, 12f, 0f);
-        }
-        else
-        {
-            chatUI.transform.localPosition = new Vector3(-950f, 12f, 0f);
-        }
-
-        gameStartButton.SetActive(!isChat);
-        exitRoomButton.SetActive(!isChat);
-
-        isChat = !isChat;
-    }
-
-    // 채팅 초기화
-    public void ResetChat()
-    {
-        chatInput.text = "";
-        for (int i = 0; i < chatText.Length; i++)
-        {
-            chatText[i].text = "";
-        }
-    }
-
-    // 채팅 보내기
-    public void Send()
-    {
-        PV.RPC("ChatRPC", RpcTarget.All, PhotonNetwork.NickName + " : " + chatInput.text);
-        chatInput.text = "";
-    }
-
-    [PunRPC] // RPC는 플레이어가 속해있는 방 모든 인원에게 전달한다
-    public void ChatRPC(string msg)
-    {
-        bool isInput = false;
-
-        // 비어있는 채팅 오브젝트를 찾고 msg 삽입
-        for (int i = 0; i < chatText.Length; i++)
-            if (chatText[i].text == "")
-            {
-                isInput = true;
-                chatText[i].text = msg;
-                break;
-            }
-
-        // 꽉차면 한칸씩 위로 올림
-        if (!isInput)
-        {
-            for (int i = 1; i < chatText.Length; i++) chatText[i - 1].text = chatText[i].text;
-            chatText[chatText.Length - 1].text = msg;
-        }
+        gameStartButton.SetActive(isChat);
+        exitRoomButton.SetActive(isChat);
     }
 
     #endregion
+
 
     #endregion
 
@@ -470,6 +418,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         IN.PV.RPC("SetAllInGamePlayerRPC", RpcTarget.All);
     }
 
+
+    #endregion
+
+    #region 반환 함수
+
+    public bool GetActiveRoomPanel() { return roomPanel.activeSelf; }
+    public bool GetAcitveInGamePanel() { return inGamePanel.activeSelf; }
 
     #endregion
 }
