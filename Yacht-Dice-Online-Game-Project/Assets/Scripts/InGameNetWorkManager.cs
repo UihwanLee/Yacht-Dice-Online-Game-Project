@@ -32,15 +32,16 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     private GameObject emoticonContainer;
     private bool isEmoticonContainer;
     [SerializeField]
-    private GameObject rollButton;
+    private GameObject rollDiceButton;
+
+    // DiceButton 3가지 설정버튼
+    private string SET = "Set";
+    private string ROLL = "Roll";
+    private string REROLL = "Reroll";
 
     [Header("Controller")]
     [SerializeField]
     private DiceController diceController;
-
-    [Header("Objects")]
-    [SerializeField]
-    private GameObject diceBottle;
 
     [Header("Player")]
     [SerializeField]
@@ -73,7 +74,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             if (inGamePlayers[i]) inGamePlayers[i].SetActive(false);
         }
-        diceBottle.transform.localPosition = new Vector3(-178.39f, 1.51f, 5.8f);
+        diceController.SetBottleInitPos();
 
         emoticonContainer.SetActive(false);
         isEmoticonContainer = false;
@@ -180,10 +181,6 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         // 첫번째 플레이어 소개하는 애니메이션 이후 첫번째 플레이어 순서를 설정한다.
         PV.RPC("SetPlayerPlayingRPC", RpcTarget.All);
-
-
-        // 다이스 소환
-        SpawnDiceInGame();
     }
 
     [PunRPC]
@@ -197,31 +194,82 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
 
         // 모든 플레이어 Roll Button interactable 비활성화 / 현재 플레이어만 Roll Button Interactable 활성화
         bool isCurrentPlayer = (Players[currentPlayerSequence].GetPlayerNickName() == MyPlayer.GetPlayerNickName()) ? true : false;
-        rollButton.GetComponent<Button>().interactable = isCurrentPlayer;
+        rollDiceButton.GetComponent<Button>().interactable = isCurrentPlayer;
 
+        // Roll -> Set 으로 설정
+        rollDiceButton.transform.GetChild(0).GetComponent<Text>().text = SET;
 
-        SetDice();
     }
 
-    // 다이스 설정
     public void SetDice()
     {
+        if(rollDiceButton.transform.GetChild(0).GetComponent<Text>().text == SET)
+        {
+            // 다이스 Bottle Set
+            PV.RPC("SetDiceRPC", RpcTarget.All);
+
+            // 다이스 소환
+            StartCoroutine(SpawnDiceInGameCorutine());
+        }
+    }
+    
+
+    [PunRPC]
+    // 다이스 설정 RPC
+    public void SetDiceRPC()
+    {
+        // Set -> Roll로 설정
+        rollDiceButton.transform.GetChild(0).GetComponent<Text>().text = ROLL;
+
         // 다이스 병 위치 이동
-        diceBottle.transform.localPosition = new Vector3(-180.27f, 6.07f, 0.16f);
+        diceController.SetBottlePlayingPos();
 
         // 다이스 소환
         // pos -180.27 12.2 0.16
         diceController.SetSpawnPos(new Vector3(-180.27f, 7.2f, 0.16f));
     }
 
-    public void SpawnDiceInGame()
+    // 다이스 소환
+    IEnumerator SpawnDiceInGameCorutine()
     {
+        yield return new WaitForSeconds(2f);
         diceController.SpawnYachtDicesInGame(1);
     }
 
-    public void SetInGameRollButton(bool isInteract)
+    // Dice Roll 시도
+    public void TryRollButtonPointerDown()
     {
-        rollButton.GetComponent<Button>().interactable = isInteract;
+        if(rollDiceButton.activeSelf)
+        {
+            if(rollDiceButton.GetComponent<Button>().interactable)
+            {
+                RollButtonPointerDown();
+            }
+        }
+    }
+
+    // Roll Button 누르고 있을 시 계속 Dice 병 흔들기
+    public void RollButtonPointerDown()
+    {
+        diceController.ShakingBottle();
+    }
+
+    // Dice Roll 시도
+    public void TryRollButtonPointerUp()
+    {
+        if (rollDiceButton.activeSelf)
+        {
+            if (rollDiceButton.GetComponent<Button>().interactable)
+            {
+                RollButtonPointerUp();
+            }
+        }
+    }
+
+    // Roll Button 누르고 땔 시 Dice Bottle 던지기
+    public void RollButtonPointerUp()
+    {
+        diceController.ThrowBottle();
     }
 
 

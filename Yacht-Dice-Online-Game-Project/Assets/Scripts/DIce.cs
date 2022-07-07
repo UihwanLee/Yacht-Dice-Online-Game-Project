@@ -40,6 +40,12 @@ public class Dice : MonoBehaviour
         }
     }
 
+    // 다이스 Rolling
+    public void Rolling()
+    {
+
+    }
+
     // 위치 이동
     public void Teleport(Vector3 position)
     {

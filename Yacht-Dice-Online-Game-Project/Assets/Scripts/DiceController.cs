@@ -14,7 +14,7 @@ public class DiceController : MonoBehaviourPunCallbacks
      * 
     */
 
-
+    [Header("Dice")]
     // 소환될 포지션 : 높이만 동일 / 위치는 랜덤
     [SerializeField]
     private Vector3 spawnPos;
@@ -28,10 +28,18 @@ public class DiceController : MonoBehaviourPunCallbacks
     private GameObject dicePrefab;
 
     // 주사위 이펙트 관리 변수
-    private bool isThrown;
+    private bool isThrown; 
 
     // private Vector3 spawnPos = new Vector3(2f, 20f, 0f);
     private float spawnTimer = 1f;
+
+    [Header("Dice Bottle")]
+    [SerializeField]
+    private GameObject diceBottle;
+
+    // 흔들림 세기
+    [SerializeField]
+    private float shakeAmt;
 
     private void Start()
     {
@@ -51,6 +59,8 @@ public class DiceController : MonoBehaviourPunCallbacks
             }
         }
     }
+
+    #region Dice Manager
 
     // 주사위 떨어지는 이펙트 실행 / 중단
     public void FallingDice(bool _isThrown)
@@ -117,4 +127,36 @@ public class DiceController : MonoBehaviourPunCallbacks
     {
         Destroy(_dice, 5f);
     }
+
+    #endregion
+
+    #region Dice Bottle Manager
+
+    public void SetBottleInitPos()
+    {
+        // Init Bottle Anim으로 초기화
+        diceBottle.transform.localPosition = new Vector3(-178.39f, 1.51f, 5.8f);
+    }
+
+    public void SetBottlePlayingPos()
+    {
+        // set Bottle Anim으로 초기화
+        diceBottle.GetComponent<Animator>().SetTrigger("set");
+    }
+
+
+    // 다이스 Bottle 흔들기
+    public void ShakingBottle()
+    {
+        diceBottle.GetComponent<Animator>().SetBool("isShake", true);
+    }
+
+    // 다이스 Bottle 던지기
+    public void ThrowBottle()
+    {
+        diceBottle.GetComponent<Animator>().SetBool("isShake", false);
+    }
+
+    #endregion
+
 }

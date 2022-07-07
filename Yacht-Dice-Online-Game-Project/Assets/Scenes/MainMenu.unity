@@ -1049,6 +1049,8 @@ MonoBehaviour:
   spawnPos: {x: 2, y: 20, z: 0}
   spawnDistance: 2
   dicePrefab: {fileID: 8577325888911142995, guid: a1c44b6b7296350448ca100566f98c36, type: 3}
+  diceBottle: {fileID: 1308795332}
+  shakeAmt: 15
 --- !u!4 &181031643
 Transform:
   m_ObjectHideFlags: 0
@@ -3918,7 +3920,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: e02910154b73555419f5bdbeedc7bb0d, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e02910154b73555419f5bdbeedc7bb0d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4424,9 +4426,8 @@ MonoBehaviour:
   - {fileID: 332622535}
   - {fileID: 1312610908}
   emoticonContainer: {fileID: 237961127}
-  rollButton: {fileID: 1517090984}
+  rollDiceButton: {fileID: 1517090984}
   diceController: {fileID: 181031642}
-  diceBottle: {fileID: 1308795332}
   playerIcons:
   - {fileID: 21300000, guid: a01524ee434426244865000e20ef6d55, type: 3}
   - {fileID: 21300000, guid: 831bfc65a4d3f8045adcc5c5d1239963, type: 3}
@@ -4439,6 +4440,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 4b8371be05529a844bab174ce04ad63d, type: 3}
   mainCamera: {fileID: 963194227}
   PV: {fileID: 701478499}
+  MyPlayer: {fileID: 0}
   Players: []
 --- !u!4 &701478498
 Transform:
@@ -6710,7 +6712,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: c74550c080128374296473043b1e8529, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c74550c080128374296473043b1e8529, type: 3}
       propertyPath: m_LocalScale.x
@@ -8580,6 +8582,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1222340248}
   m_CullTransparentMesh: 1
+--- !u!1 &1230466545 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 10505992670680718, guid: e02910154b73555419f5bdbeedc7bb0d, type: 3}
+  m_PrefabInstance: {fileID: 638464290}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &1230466546
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1230466545}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!64 &1230466549
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1230466545}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 3517720292181502892, guid: e02910154b73555419f5bdbeedc7bb0d, type: 3}
 --- !u!1 &1262902687
 GameObject:
   m_ObjectHideFlags: 0
@@ -9001,9 +9038,53 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 1308795333}
+  - {fileID: 1308795336}
   sceneViewId: 3
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!95 &1308795335
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1308795332}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fb7095804687d5f4ab00abaadbb6a812, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1308795336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1308795332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 1
+    Name: isShake
+  - Type: 9
+    SynchronizeType: 1
+    Name: set
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
 --- !u!1 &1309682850
 GameObject:
   m_ObjectHideFlags: 0
@@ -11068,6 +11149,7 @@ GameObject:
   - component: {fileID: 1517090988}
   - component: {fileID: 1517090987}
   - component: {fileID: 1517090986}
+  - component: {fileID: 1517090989}
   m_Layer: 5
   m_Name: Roll Button
   m_TagString: Untagged
@@ -11138,7 +11220,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1517090987}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 701478497}
+        m_TargetAssemblyTypeName: InGameNetWorkManager, Assembly-CSharp
+        m_MethodName: SetDice
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1517090987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11177,6 +11271,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1517090984}
   m_CullTransparentMesh: 1
+--- !u!114 &1517090989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517090984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 701478497}
+          m_TargetAssemblyTypeName: InGameNetWorkManager, Assembly-CSharp
+          m_MethodName: TryRollButtonPointerDown
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 701478497}
+          m_TargetAssemblyTypeName: InGameNetWorkManager, Assembly-CSharp
+          m_MethodName: TryRollButtonPointerUp
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1522437572
 GameObject:
   m_ObjectHideFlags: 0
@@ -12120,6 +12259,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1678330564}
   m_CullTransparentMesh: 1
+--- !u!1 &1684729979 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 264928105657413046, guid: e02910154b73555419f5bdbeedc7bb0d, type: 3}
+  m_PrefabInstance: {fileID: 638464290}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1684729983
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1684729979}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -7454929643288442450, guid: e02910154b73555419f5bdbeedc7bb0d, type: 3}
 --- !u!1 &1686217378
 GameObject:
   m_ObjectHideFlags: 0
@@ -13010,6 +13168,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1797548977}
   m_CullTransparentMesh: 1
+--- !u!1 &1799067285 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -5568371526223589888, guid: e02910154b73555419f5bdbeedc7bb0d, type: 3}
+  m_PrefabInstance: {fileID: 638464290}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1799067289
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1799067285}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2534964839176971238, guid: e02910154b73555419f5bdbeedc7bb0d, type: 3}
 --- !u!1 &1806896974 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8416272007918961125, guid: c74550c080128374296473043b1e8529, type: 3}

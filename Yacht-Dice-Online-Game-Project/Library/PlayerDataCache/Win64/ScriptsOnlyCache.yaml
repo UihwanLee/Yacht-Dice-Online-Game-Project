@@ -33,8 +33,10 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -42,6 +44,7 @@ ScriptsOnlyBuild:
     - UnityEditor.TestTools.TestRunner.TestRun.TestJobDataHolder
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
+    - UnityEngine.EventSystems.EventTrigger
     - UnityEngine.EventSystems.StandaloneInputModule
     - UnityEngine.UI.Button
     - UnityEngine.UI.CanvasScaler
@@ -156,6 +159,8 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 3406}
     - Class: 114
+      Script: {instanceID: 3486}
+    - Class: 114
       Script: {instanceID: 3648}
     - Class: 114
       Script: {instanceID: 3652}
@@ -254,7 +259,7 @@ ScriptsOnlyBuild:
     className: GameVersionProperty
   - hash:
       serializedVersion: 2
-      Hash: 25e49feedf8d7399dc501f14e0d61bf8
+      Hash: 5b445888cecf0033e78ebd772f982215
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: DiceController
@@ -392,7 +397,7 @@ ScriptsOnlyBuild:
     className: TMP_FontAsset
   - hash:
       serializedVersion: 2
-      Hash: a2dd5e521f955cf0d87240efab417ed5
+      Hash: 725facc59a392a3a95a2bd8e4fce41f7
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: InGameNetWorkManager
