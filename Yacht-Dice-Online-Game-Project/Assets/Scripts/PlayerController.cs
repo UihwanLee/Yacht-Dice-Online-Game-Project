@@ -87,6 +87,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         NM.SetRoomPlayerByRPC(_playerIcon, _playerNickName);
     }
 
+    // Roll Button interactable 활성화 : 개인 화면에만 보임
+    public void SetRollButtonActive(bool isInteract)
+    {
+        IN.SetInGameRollButton(isInteract);
+    }
+
 
 
 

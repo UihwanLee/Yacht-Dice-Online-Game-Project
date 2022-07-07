@@ -31,6 +31,8 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField]
     private GameObject emoticonContainer;
     private bool isEmoticonContainer;
+    [SerializeField]
+    private GameObject rollButton;
 
     [Header("Controller")]
     [SerializeField]
@@ -54,6 +56,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     public PhotonView PV;
 
     [Header("Player")]
+    public PlayerController MyPlayer;
     // NetworkManager 스크립트에서 받게 될 플레이어 정보
     public List<PlayerController> Players = new List<PlayerController>(); 
 
@@ -101,6 +104,14 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     #region 인게임 세팅 설정
 
 
+    // 인게임 플레이어 세팅
+    public void SetSetAllInGamePlayer()
+    {
+        PV.RPC("SetAllInGamePlayerRPC", RpcTarget.All);
+
+        // 첫번째 플레이어 바로 플레이
+        SetPlayerPlaying();
+    }
 
     [PunRPC]
     public void SetAllInGamePlayerRPC()
@@ -119,6 +130,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
 
         // 플레이어 정보 얻기
         Players = NM.Players;
+        MyPlayer = NM.MyPlayer;
 
         // 플레이어 컨테이너 위치 세팅
         SetPlayerContainerPos(Players.Count);
@@ -132,8 +144,6 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
             inGamePlayers[i].transform.GetChild(1).GetComponent<Text>().text = Players[i].GetPlayerNickName();
         }
 
-        // 첫번째 플레이어 소개하는 애니메이션 이후 첫번째 플레이어 순서를 설정한다.
-        SetPlayerPlaying();
     }
 
     // Player Container 포지션 설정
@@ -165,13 +175,32 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
 
     #region 인게임 플레이
 
-    // 플레이어 순서 설정
+    // 플레이어 플레이 설정
     public void SetPlayerPlaying()
+    {
+        // 첫번째 플레이어 소개하는 애니메이션 이후 첫번째 플레이어 순서를 설정한다.
+        PV.RPC("SetPlayerPlayingRPC", RpcTarget.All);
+
+
+        // 다이스 소환
+        SpawnDiceInGame();
+    }
+
+    [PunRPC]
+    // 플레이어 순서 설정
+    public void SetPlayerPlayingRPC()
     {
         // 현재 플레이어 아이콘 수정(localPosition이 아닌 position으로 수정)
         Vector3 movePos = inGamePlayers[currentPlayerSequence].transform.localPosition;
         movePos.y = 740f;
         inGamePlayers[currentPlayerSequence].transform.localPosition = movePos;
+
+        // 모든 플레이어 Roll Button interactable 비활성화 / 현재 플레이어만 Roll Button Interactable 활성화
+        bool isCurrentPlayer = (Players[currentPlayerSequence].GetPlayerNickName() == MyPlayer.GetPlayerNickName()) ? true : false;
+        rollButton.GetComponent<Button>().interactable = isCurrentPlayer;
+
+
+        SetDice();
     }
 
     // 다이스 설정
@@ -179,6 +208,20 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         // 다이스 병 위치 이동
         diceBottle.transform.localPosition = new Vector3(-180.27f, 6.07f, 0.16f);
+
+        // 다이스 소환
+        // pos -180.27 12.2 0.16
+        diceController.SetSpawnPos(new Vector3(-180.27f, 7.2f, 0.16f));
+    }
+
+    public void SpawnDiceInGame()
+    {
+        diceController.SpawnYachtDicesInGame(1);
+    }
+
+    public void SetInGameRollButton(bool isInteract)
+    {
+        rollButton.GetComponent<Button>().interactable = isInteract;
     }
 
 

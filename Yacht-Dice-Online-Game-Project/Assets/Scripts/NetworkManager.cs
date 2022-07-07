@@ -415,7 +415,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
 
         // 인게임 플레이어 세팅
-        IN.PV.RPC("SetAllInGamePlayerRPC", RpcTarget.All);
+        IN.SetSetAllInGamePlayer();
     }
 
 

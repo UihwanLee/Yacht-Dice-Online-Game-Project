@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class DiceController : MonoBehaviour
+public class DiceController : MonoBehaviourPunCallbacks
 {
     /* Yacht Dice Controller 스크립트
      * 
@@ -79,6 +81,23 @@ public class DiceController : MonoBehaviour
 
             // 일정 시간 이후 오브젝트 삭제
             dice.Destory(time);
+        }
+    }
+
+    // 인게임 다이스 소환
+    public void SpawnYachtDicesInGame(float _spawnDistance)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            var dice = PhotonNetwork.Instantiate("DicePrefab", spawnPos, Quaternion.identity).GetComponent<Dice>();
+
+            // 원으로 배치하여 소환
+            float radian = (3f * Mathf.PI) / 5;
+            radian *= i;
+            dice.Teleport(spawnPos + (new Vector3(Mathf.Cos(radian), Mathf.Sin(radian), 0f) * _spawnDistance));
+
+            // 주사위 굴리기
+            dice.RollDice();
         }
     }
 
