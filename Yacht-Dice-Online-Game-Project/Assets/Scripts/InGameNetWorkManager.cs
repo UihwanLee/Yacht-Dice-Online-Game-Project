@@ -275,31 +275,6 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
 
     #endregion
 
-    #region 이모티콘
-
-    public void OnClickEmoticonButton()
-    {
-        if(!isEmoticonContainer)
-        {
-            emoticonContainer.SetActive(true);
-            emoticonContainer.GetComponent<Animator>().SetTrigger("on");
-        }
-        else
-        {
-            emoticonContainer.GetComponent<Animator>().SetTrigger("off");
-            /*
-            if(!emoticonContainer.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Anim_EmoticonsUnscroll"))
-            {
-                emoticonContainer.SetActive(false);
-            }
-            */
-        }
-
-        isEmoticonContainer = !isEmoticonContainer;
-    }
-
-    #endregion
-
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         

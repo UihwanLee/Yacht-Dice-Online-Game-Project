@@ -8,6 +8,16 @@ using static NetworkManager;
 
 public class ChatManager : MonoBehaviourPunCallbacks
 {
+
+    /*
+     * ChatManager 스크립트
+     *
+     * Chatting System 감독
+     * Emoticon System 감독
+     * 
+    */
+
+    [Header("Chat")]
     [SerializeField]
     private GameObject chatUI;
     [SerializeField]
@@ -17,6 +27,11 @@ public class ChatManager : MonoBehaviourPunCallbacks
     private Text[] chatText;
     [SerializeField]
     private InputField chatInput;
+
+    [Header("Emoticon")]
+    [SerializeField]
+    private GameObject emoticonContainer;
+    private bool isEmoticonContainer;
 
     public PhotonView PV;
 
@@ -31,6 +46,10 @@ public class ChatManager : MonoBehaviourPunCallbacks
         isChat = false;
 
         chatUI.SetActive(false);
+
+        // 이모티콘 변수 초기화
+        emoticonContainer.SetActive(false);
+        isEmoticonContainer = false;
     }
 
     #region  채팅
@@ -98,6 +117,31 @@ public class ChatManager : MonoBehaviourPunCallbacks
             for (int i = 1; i < chatText.Length; i++) chatText[i - 1].text = chatText[i].text;
             chatText[chatText.Length - 1].text = msg;
         }
+    }
+
+    #endregion
+
+    #region 이모티콘
+
+    public void OnClickEmoticonButton()
+    {
+        if (!isEmoticonContainer)
+        {
+            emoticonContainer.SetActive(true);
+            emoticonContainer.GetComponent<Animator>().SetTrigger("on");
+        }
+        else
+        {
+            emoticonContainer.GetComponent<Animator>().SetTrigger("off");
+            /*
+            if(!emoticonContainer.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Anim_EmoticonsUnscroll"))
+            {
+                emoticonContainer.SetActive(false);
+            }
+            */
+        }
+
+        isEmoticonContainer = !isEmoticonContainer;
     }
 
     #endregion

@@ -14080,8 +14080,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 701478497}
-        m_TargetAssemblyTypeName: InGameNetWorkManager, Assembly-CSharp
+      - m_Target: {fileID: 2124222254}
+        m_TargetAssemblyTypeName: ChatManager, Assembly-CSharp
         m_MethodName: OnClickEmoticonButton
         m_Mode: 1
         m_Arguments:
@@ -15742,6 +15742,7 @@ MonoBehaviour:
   - {fileID: 498238512}
   - {fileID: 329335606}
   chatInput: {fileID: 182628926}
+  emoticonContainer: {fileID: 237961127}
   PV: {fileID: 2124222255}
 --- !u!114 &2124222255
 MonoBehaviour:
