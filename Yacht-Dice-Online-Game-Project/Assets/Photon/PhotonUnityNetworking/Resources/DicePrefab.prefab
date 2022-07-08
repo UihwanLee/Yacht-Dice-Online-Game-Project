@@ -707,6 +707,7 @@ MonoBehaviour:
   rb: {fileID: 4780170264142969557}
   score: 0
   isSelect: 0
+  isMoving: 0
   sides:
   - {fileID: 4780170264140109605}
   - {fileID: 4780170263391513704}

@@ -203,6 +203,9 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         if(rollDiceButton.transform.GetChild(0).GetComponent<Text>().text == SET || rollDiceButton.transform.GetChild(0).GetComponent<Text>().text == REROLL)
         {
+            // 플레이어가 다이스 처음 돌릴 경우 isSelect 초기화
+            if (rollDiceButton.transform.GetChild(0).GetComponent<Text>().text == SET) DC.ResetDiceSelect();
+
             // 다이스 Bottle Set
             PV.RPC("SetDiceRPC", RpcTarget.All);
 

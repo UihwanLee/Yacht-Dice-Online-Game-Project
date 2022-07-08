@@ -18,6 +18,9 @@ public class Dice : MonoBehaviour
     // select 되었는지 확인 하는 변수
     public bool isSelect;
 
+    // 주사위가 현재 움직이고 있는 체크하는 변수
+    public bool isMoving;
+
     // 6개의 사이드 콜라이더 
     [SerializeField]
     private List<GameObject> sides = new List<GameObject>();
@@ -31,6 +34,7 @@ public class Dice : MonoBehaviour
 
         score = 0;
         isSelect = false;
+        isMoving = false;
 
         thrown = false;
 
@@ -92,5 +96,39 @@ public class Dice : MonoBehaviour
     public void SetScore(int _score)
     {
         score = _score;
+    }
+
+    // 주사위 눈에 따라 Rot값 반환
+    public Vector3 GetRot(int score)
+    {
+        Vector3 rot;
+
+        switch(score)
+        {
+            case 1:
+                rot = new Vector3(0f, 0f, 0f);
+                break;
+            case 2:
+                rot = new Vector3(0f, 0f, 90f);
+                break;
+            case 3:
+                rot = new Vector3(90f, 0f, 0f);
+                break;
+            case 4:
+                rot = new Vector3(270f, 0f, 0f);
+                break;
+            case 5:
+                rot = new Vector3(0f, 0f, 270f);
+                break;
+            case 6:
+                rot = new Vector3(180f, 0f, 0f);
+                break;
+            default:
+                rot = new Vector3(0f, 0f, 0f);
+                Debug.Log("[ERROR] 맞는 score가 없습니다!");
+                break;
+        }
+
+        return rot;
     }
 }

@@ -5,6 +5,8 @@ ScriptsOnlyBuild:
     - Dice
     - DiceCheckZone
     - DiceController
+    - DiceSelect
+    - DiceSelectManager
     - FixedDisplay
     - InGameNetWorkManager
     - NetworkManager
@@ -33,10 +35,8 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -125,63 +125,67 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 2192}
     - Class: 114
-      Script: {instanceID: 2374}
+      Script: {instanceID: 2202}
     - Class: 114
-      Script: {instanceID: 2484}
+      Script: {instanceID: 2376}
+    - Class: 114
+      Script: {instanceID: 2486}
     - Class: 114
       Script: {instanceID: 2578}
     - Class: 114
-      Script: {instanceID: 2644}
+      Script: {instanceID: 2582}
     - Class: 114
-      Script: {instanceID: 2660}
+      Script: {instanceID: 2648}
     - Class: 114
-      Script: {instanceID: 2690}
+      Script: {instanceID: 2664}
     - Class: 114
-      Script: {instanceID: 2844}
+      Script: {instanceID: 2694}
     - Class: 114
-      Script: {instanceID: 2852}
-    - Class: 114
-      Script: {instanceID: 2854}
+      Script: {instanceID: 2848}
     - Class: 114
       Script: {instanceID: 2856}
     - Class: 114
-      Script: {instanceID: 2938}
+      Script: {instanceID: 2858}
     - Class: 114
-      Script: {instanceID: 3106}
+      Script: {instanceID: 2860}
     - Class: 114
-      Script: {instanceID: 3152}
+      Script: {instanceID: 2942}
     - Class: 114
-      Script: {instanceID: 3216}
+      Script: {instanceID: 3110}
     - Class: 114
-      Script: {instanceID: 3350}
+      Script: {instanceID: 3156}
     - Class: 114
-      Script: {instanceID: 3356}
+      Script: {instanceID: 3220}
     - Class: 114
-      Script: {instanceID: 3406}
+      Script: {instanceID: 3354}
     - Class: 114
-      Script: {instanceID: 3486}
+      Script: {instanceID: 3360}
     - Class: 114
-      Script: {instanceID: 3648}
+      Script: {instanceID: 3410}
+    - Class: 114
+      Script: {instanceID: 3490}
     - Class: 114
       Script: {instanceID: 3652}
     - Class: 114
-      Script: {instanceID: 3698}
+      Script: {instanceID: 3656}
     - Class: 114
-      Script: {instanceID: 3812}
+      Script: {instanceID: 3702}
     - Class: 114
-      Script: {instanceID: 3850}
+      Script: {instanceID: 3816}
     - Class: 114
       Script: {instanceID: 3854}
     - Class: 114
-      Script: {instanceID: 4220}
+      Script: {instanceID: 3858}
     - Class: 114
-      Script: {instanceID: 4266}
+      Script: {instanceID: 4224}
     - Class: 114
-      Script: {instanceID: 4364}
+      Script: {instanceID: 4270}
     - Class: 114
-      Script: {instanceID: 4460}
+      Script: {instanceID: 4368}
     - Class: 114
-      Script: {instanceID: 4664}
+      Script: {instanceID: 4464}
+    - Class: 114
+      Script: {instanceID: 4668}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -259,7 +263,7 @@ ScriptsOnlyBuild:
     className: GameVersionProperty
   - hash:
       serializedVersion: 2
-      Hash: 5b445888cecf0033e78ebd772f982215
+      Hash: d1d5f5b118a9c41b0beff5c341b9fd34
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: DiceController
@@ -373,7 +377,7 @@ ScriptsOnlyBuild:
     className: Shadow
   - hash:
       serializedVersion: 2
-      Hash: d639ad11cd69159eb0eb3c286a048523
+      Hash: 6c376a51ae595d135f86b1554b62bc22
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ChatManager
@@ -397,7 +401,7 @@ ScriptsOnlyBuild:
     className: TMP_FontAsset
   - hash:
       serializedVersion: 2
-      Hash: 725facc59a392a3a95a2bd8e4fce41f7
+      Hash: e1c41c1ed5412db609a1d0f6e021498b
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: InGameNetWorkManager
@@ -541,6 +545,12 @@ ScriptsOnlyBuild:
     className: SplineWalker
   - hash:
       serializedVersion: 2
+      Hash: bfdf060b2603148594c3c06838d1c1db
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: DiceSelect
+  - hash:
+      serializedVersion: 2
       Hash: c380fc5ce39348202e0a58fe3e243a74
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.PunBasics
@@ -677,6 +687,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.dll
     namespaceName: Photon.Pun
     className: PhotonRigidbody2DView
+  - hash:
+      serializedVersion: 2
+      Hash: c6387477928389726ff65feac7ad1ac5
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: DiceSelectManager
   - hash:
       serializedVersion: 2
       Hash: bebd52ec8bf47084a1bde99ec2c3842b
@@ -1471,7 +1487,7 @@ ScriptsOnlyBuild:
     className: ServerAddressProperty
   - hash:
       serializedVersion: 2
-      Hash: c99d771e3d838965dc6c9dd18d676506
+      Hash: 121208b5ba2b0611e0e4ef52d869b88d
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Dice

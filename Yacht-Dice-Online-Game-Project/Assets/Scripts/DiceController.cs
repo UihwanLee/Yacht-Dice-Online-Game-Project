@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using static InGameNetWorkManager;
+using static DiceSelectManager;
 
 public class DiceController : MonoBehaviourPunCallbacks
 {
@@ -37,6 +38,9 @@ public class DiceController : MonoBehaviourPunCallbacks
     // Dice 관리할 리스트
     public List<Dice> Dices = new List<Dice>();
 
+    // 돌릴 Dice 개수
+    public int remainDiceCount;
+
     [Header("Dice Bottle")]
     [SerializeField]
     private GameObject diceBottle;
@@ -45,7 +49,11 @@ public class DiceController : MonoBehaviourPunCallbacks
     [SerializeField]
     private float shakeAmt;
 
+    [Header("Scripts")]
+
     public static DiceController DC;
+    [SerializeField]
+    private DiceSelectManager diceSelectManager;
 
     private void Awake()
     {
@@ -55,6 +63,7 @@ public class DiceController : MonoBehaviourPunCallbacks
     private void Start()
     {
         isThrown = true;
+        remainDiceCount = 0;
     }
 
     private void Update()
@@ -105,6 +114,12 @@ public class DiceController : MonoBehaviourPunCallbacks
         }
     }
 
+    // 오브젝트 제거
+    public void DestoryDice(GameObject _dice)
+    {
+        Destroy(_dice, 5f);
+    }
+
     // 인게임 다이스 소환
     public void SpawnYachtDicesInGame(float _spawnDistance)
     {
@@ -125,9 +140,8 @@ public class DiceController : MonoBehaviourPunCallbacks
     // 인게임 다이스 리롤
     public void RerollYachtDices()
     {
-        // 돌릴 주사위 카운터 계산
-        int count = 0;
-        for (int i = 0; i < Dices.Count; i++) { if (!Dices[i].isSelect) count++; }
+        // 돌릴 주사위 개수 업데이트
+        UpdateRemainDiceCount();
 
 
         for (int i=0; i<Dices.Count; i++)
@@ -136,7 +150,7 @@ public class DiceController : MonoBehaviourPunCallbacks
             if(!Dices[i].isSelect)
             {
                 // 원으로 배치하여 소환
-                float radian = (3f * Mathf.PI) / count;
+                float radian = (3f * Mathf.PI) / remainDiceCount;
                 radian *= i;
                 float _spawnDistance = 1f;
                 Dices[i].Teleport(spawnPos + (new Vector3(Mathf.Cos(radian), Mathf.Sin(radian), 0f) * _spawnDistance));
@@ -145,12 +159,6 @@ public class DiceController : MonoBehaviourPunCallbacks
                 Dices[i].RollDice();
             }
         }
-    }
-
-    // 오브젝트 제거
-    public void DestoryDice(GameObject _dice)
-    {
-        Destroy(_dice, 5f);
     }
 
     // 주사위 눈 순서대로 정렬
@@ -162,7 +170,7 @@ public class DiceController : MonoBehaviourPunCallbacks
     // 주사위 콜라이더 켜기(주사위 눈 확인 함수)
     IEnumerator AcitveDiceColiderCourutine()
     {
-        yield return new WaitForSeconds(15f);
+        yield return new WaitForSeconds(8f);
         for (int i = 0; i < Dices.Count; i++)
         {
             if (!Dices[i].isSelect) Dices[i].SetSidesColider(true);
@@ -171,7 +179,7 @@ public class DiceController : MonoBehaviourPunCallbacks
         // Reroll로 돌리기
         IN.SetRollButtonReroll();
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         // '낙' 된 주사위가 / 주사위 눈이 배정이 안된 주사위 있을 시 다시 던지기
         if (CheckDicePos())
         {
@@ -180,10 +188,24 @@ public class DiceController : MonoBehaviourPunCallbacks
         }
         else
         {
-            // 주사위 선택: DiceSelectManager에게 주사위 점수 넘겨주기
+            // 주사위 선택:
+            // 1) 주사위 눈 순서대로 정렬
+            // 2) 돌릴 주사위에 따라 DiceSelect UI 선택
+            // 3) 선택한 DiceSelect UI 오브젝트 각각 점수 업데이트
+            // 4) 주사위 오브젝트 Select Pos List 선택
+            // 5) 주사위 눈 기준으로 정렬 후 DiceSelect Pos, Rot에 따라 오브젝트 이동(RPC)
+
+            SortDices();
+            UpdateRemainDiceCount();
+            diceSelectManager.SetSelectButtonUI(remainDiceCount);
+            diceSelectManager.UpdateSelectButtonScore();
+            diceSelectManager.SetSelectPosList(remainDiceCount);
+            diceSelectManager.PV.RPC("SetAllDicesToBeSelectMode", RpcTarget.AllBuffered);
+
         }
     }
 
+    // '낙'이 판정이 있는 주사위 확인
     public bool CheckDicePos()
     {
         for(int i=0; i<Dices.Count; i++)
@@ -195,6 +217,35 @@ public class DiceController : MonoBehaviourPunCallbacks
             }
         }
         return false;
+    }
+
+    // 돌릴 주사위 개수 업데이트
+    public void UpdateRemainDiceCount()
+    {
+        if(Dices.Count != 0)
+        {
+            int count = 0;
+            for (int i = 0; i < Dices.Count; i++)
+            {
+                if (!Dices[i].isSelect)
+                {
+                    count++;
+                }
+            }
+            remainDiceCount = count;
+        }
+    }
+
+    // Dice isSelect 초기화 (한 플레이어가 처음 돌릴때 적용)
+    public void ResetDiceSelect()
+    {
+        if (Dices.Count != 0)
+        {
+            for (int i = 0; i < Dices.Count; i++)
+            {
+                Dices[i].isSelect = false;
+            }
+        }
     }
 
     #endregion
