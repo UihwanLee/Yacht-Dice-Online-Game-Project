@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using static NetworkManager;
+using static DiceController;
 
 public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
 {
@@ -39,10 +40,6 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     private string ROLL = "Roll";
     private string REROLL = "Reroll";
 
-    [Header("Controller")]
-    [SerializeField]
-    private DiceController diceController;
-
     [Header("Player")]
     [SerializeField]
     private List<Sprite> playerIcons = new List<Sprite>();
@@ -61,6 +58,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     // NetworkManager 스크립트에서 받게 될 플레이어 정보
     public List<PlayerController> Players = new List<PlayerController>(); 
 
+
     public static InGameNetWorkManager IN;
 
     private void Awake()
@@ -74,7 +72,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             if (inGamePlayers[i]) inGamePlayers[i].SetActive(false);
         }
-        diceController.SetBottleInitPos();
+        DC.SetBottleInitPos();
 
         emoticonContainer.SetActive(false);
         isEmoticonContainer = false;
@@ -119,7 +117,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     {
 
         // 떨어지는 주사위 효과 끄기
-        diceController.FallingDice(false);
+        DC.FallingDice(false);
 
         // 패널 정리
         roomPanel.SetActive(false);
@@ -203,7 +201,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public void SetDice()
     {
-        if(rollDiceButton.transform.GetChild(0).GetComponent<Text>().text == SET)
+        if(rollDiceButton.transform.GetChild(0).GetComponent<Text>().text == SET || rollDiceButton.transform.GetChild(0).GetComponent<Text>().text == REROLL)
         {
             // 다이스 Bottle Set
             PV.RPC("SetDiceRPC", RpcTarget.All);
@@ -218,22 +216,29 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     // 다이스 설정 RPC
     public void SetDiceRPC()
     {
+        // 다이스 병 위치 이동(Anim으로 세팅)
+        if (rollDiceButton.transform.GetChild(0).GetComponent<Text>().text == SET) DC.SetBottlePlayingPos();
+        else DC.ReBottlePlayingPos();
+
         // Set -> Roll로 설정
         rollDiceButton.transform.GetChild(0).GetComponent<Text>().text = ROLL;
 
-        // 다이스 병 위치 이동
-        diceController.SetBottlePlayingPos();
-
         // 다이스 소환
         // pos -180.27 12.2 0.16
-        diceController.SetSpawnPos(new Vector3(-180.27f, 7.2f, 0.16f));
+        DC.SetSpawnPos(new Vector3(-180.27f, 7.2f, 0.16f));
     }
 
     // 다이스 소환
     IEnumerator SpawnDiceInGameCorutine()
     {
-        yield return new WaitForSeconds(2f);
-        diceController.SpawnYachtDicesInGame(1);
+        yield return new WaitForSeconds(1f);
+        // 이미 DicePrefab이 생성되어 있는 경우 Reroll만 작업
+        if (DC.Dices.Count == 0) DC.SpawnYachtDicesInGame(1);
+        else
+        {
+            Debug.Log("리롤 or 이미 생성됨");
+            DC.RerollYachtDices();
+        }
     }
 
     // Dice Roll 시도
@@ -243,7 +248,10 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             if(rollDiceButton.GetComponent<Button>().interactable)
             {
-                RollButtonPointerDown();
+                if (rollDiceButton.transform.GetChild(0).GetComponent<Text>().text == ROLL)
+                {
+                    RollButtonPointerDown();
+                }
             }
         }
     }
@@ -251,7 +259,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     // Roll Button 누르고 있을 시 계속 Dice 병 흔들기
     public void RollButtonPointerDown()
     {
-        diceController.ShakingBottle();
+        DC.ShakingBottle();
     }
 
     // Dice Roll 시도
@@ -261,7 +269,10 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             if (rollDiceButton.GetComponent<Button>().interactable)
             {
-                RollButtonPointerUp();
+                if (rollDiceButton.transform.GetChild(0).GetComponent<Text>().text == ROLL)
+                {
+                    RollButtonPointerUp();
+                }
             }
         }
     }
@@ -269,7 +280,13 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     // Roll Button 누르고 땔 시 Dice Bottle 던지기
     public void RollButtonPointerUp()
     {
-        diceController.ThrowBottle();
+        DC.ThrowBottle();
+    }
+
+    // RollButton REROLL로 바꾸기
+    public void SetRollButtonReroll()
+    {
+        rollDiceButton.transform.GetChild(0).GetComponent<Text>().text = REROLL;
     }
 
 

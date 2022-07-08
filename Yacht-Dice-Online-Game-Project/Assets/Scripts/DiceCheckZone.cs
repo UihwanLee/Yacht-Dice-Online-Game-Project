@@ -21,26 +21,26 @@ public class DiceCheckZone : MonoBehaviour
             switch(other.gameObject.name)
             {
                 case "Side1":
-                    diceNum = 1;
+                    diceNum = 6;
                     break;
                 case "Side2":
-                    diceNum = 2;
-                    break;
-                case "Side3":
-                    diceNum = 3;
-                    break;
-                case "Side4":
-                    diceNum = 4;
-                    break;
-                case "Side5":
                     diceNum = 5;
                     break;
+                case "Side3":
+                    diceNum = 4;
+                    break;
+                case "Side4":
+                    diceNum = 3;
+                    break;
+                case "Side5":
+                    diceNum = 2;
+                    break;
                 case "Side6":
-                    diceNum = 6;
+                    diceNum = 1;
                     break;
             }
 
-            Debug.Log(diceNum);
+            other.transform.parent.GetComponent<Dice>().SetScore(diceNum);
         }
     }
 }

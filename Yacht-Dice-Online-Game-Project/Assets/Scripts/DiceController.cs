@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using static InGameNetWorkManager;
 
 public class DiceController : MonoBehaviourPunCallbacks
 {
@@ -28,10 +29,13 @@ public class DiceController : MonoBehaviourPunCallbacks
     private GameObject dicePrefab;
 
     // 주사위 이펙트 관리 변수
-    private bool isThrown; 
+    public bool isThrown; 
 
     // private Vector3 spawnPos = new Vector3(2f, 20f, 0f);
     private float spawnTimer = 1f;
+
+    // Dice 관리할 리스트
+    public List<Dice> Dices = new List<Dice>();
 
     [Header("Dice Bottle")]
     [SerializeField]
@@ -40,6 +44,13 @@ public class DiceController : MonoBehaviourPunCallbacks
     // 흔들림 세기
     [SerializeField]
     private float shakeAmt;
+
+    public static DiceController DC;
+
+    private void Awake()
+    {
+        DC = this;
+    }
 
     private void Start()
     {
@@ -111,14 +122,28 @@ public class DiceController : MonoBehaviourPunCallbacks
         }
     }
 
-    // 다이스 위치 업데이트
-    public void AllocateDiceAround(Dice[] dices)
+    // 인게임 다이스 리롤
+    public void RerollYachtDices()
     {
-        for (int i = 0; i < dices.Length; i++)
+        // 돌릴 주사위 카운터 계산
+        int count = 0;
+        for (int i = 0; i < Dices.Count; i++) { if (!Dices[i].isSelect) count++; }
+
+
+        for (int i=0; i<Dices.Count; i++)
         {
-            float radian = (2f * Mathf.PI) / dices.Length;
-            radian *= i;
-            dices[i].Teleport(spawnPos + (new Vector3(Mathf.Cos(radian), Mathf.Sin(radian), 0f) * spawnDistance));
+            // 선택되지 않은 주사위들로만 리롤
+            if(!Dices[i].isSelect)
+            {
+                // 원으로 배치하여 소환
+                float radian = (3f * Mathf.PI) / count;
+                radian *= i;
+                float _spawnDistance = 1f;
+                Dices[i].Teleport(spawnPos + (new Vector3(Mathf.Cos(radian), Mathf.Sin(radian), 0f) * _spawnDistance));
+
+                // 주사위 굴리기
+                Dices[i].RollDice();
+            }
         }
     }
 
@@ -126,6 +151,50 @@ public class DiceController : MonoBehaviourPunCallbacks
     public void DestoryDice(GameObject _dice)
     {
         Destroy(_dice, 5f);
+    }
+
+    // 주사위 눈 순서대로 정렬
+    public void SortDices()
+    {
+        Dices.Sort((p1, p2) => p1.score.CompareTo(p2.score));
+    }
+
+    // 주사위 콜라이더 켜기(주사위 눈 확인 함수)
+    IEnumerator AcitveDiceColiderCourutine()
+    {
+        yield return new WaitForSeconds(15f);
+        for (int i = 0; i < Dices.Count; i++)
+        {
+            if (!Dices[i].isSelect) Dices[i].SetSidesColider(true);
+        }
+
+        // Reroll로 돌리기
+        IN.SetRollButtonReroll();
+
+        yield return new WaitForSeconds(1f);
+        // '낙' 된 주사위가 / 주사위 눈이 배정이 안된 주사위 있을 시 다시 던지기
+        if (CheckDicePos())
+        {
+            Debug.Log("낙");
+            IN.SetDice();
+        }
+        else
+        {
+            // 주사위 선택: DiceSelectManager에게 주사위 점수 넘겨주기
+        }
+    }
+
+    public bool CheckDicePos()
+    {
+        for(int i=0; i<Dices.Count; i++)
+        {
+            // 선택된 주사위는 제외
+            if(!Dices[i].isSelect)
+            {
+                if (Dices[i].transform.localPosition.y < 1.6f || Dices[i].transform.localPosition.y > 1.75f || Dices[i].score == 0) return true;
+            }
+        }
+        return false;
     }
 
     #endregion
@@ -155,6 +224,13 @@ public class DiceController : MonoBehaviourPunCallbacks
     public void ThrowBottle()
     {
         diceBottle.GetComponent<Animator>().SetBool("isShake", false);
+        StartCoroutine(AcitveDiceColiderCourutine());
+    }
+
+    // 다이스 Bottle 다시 세팅(Reroll)
+    public void ReBottlePlayingPos()
+    {
+        diceBottle.GetComponent<Animator>().SetTrigger("reroll");
     }
 
     #endregion
