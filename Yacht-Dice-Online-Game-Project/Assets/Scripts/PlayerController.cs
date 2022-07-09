@@ -32,6 +32,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private List<int> normalScoreList = new List<int>(); // 노멀 스코어 리스트
     [SerializeField]
     private List<int> challengeSocreList = new List<int>(); // 챌린지 스코어 리스트
+    public int bonusScore;
+    public int totalScore;
 
     private void Start()
     {
@@ -47,7 +49,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
         // 스코어 초기화
         for (int i = 0; i < 6; i++) normalScoreList.Add(0);
-        for (int i = 0; i < 6; i++) challengeSocreList.Add(0);
+        for (int i = 0; i < 6; i++) challengeSocreList.Add(-1);
+        bonusScore = 0;
+        totalScore = 0;
     }
 
     private void Update()

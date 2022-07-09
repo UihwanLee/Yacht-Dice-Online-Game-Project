@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class DiceCheckZone : MonoBehaviour
+public class DiceCheckZone : MonoBehaviourPunCallbacks
 {
     [SerializeField]
     Vector3 diceVelocity;
 
     private int diceNum = 0;
+
 
     private void FixedUpdate()
     {

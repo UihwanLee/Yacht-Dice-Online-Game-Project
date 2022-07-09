@@ -4,7 +4,6 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using static InGameNetWorkManager;
-using static DiceSelectManager;
 
 public class DiceController : MonoBehaviourPunCallbacks
 {
@@ -54,6 +53,8 @@ public class DiceController : MonoBehaviourPunCallbacks
     public static DiceController DC;
     [SerializeField]
     private DiceSelectManager diceSelectManager;
+    [SerializeField]
+    private ScoreBoardManager scoreBoardManager;
 
     private void Awake()
     {
@@ -196,15 +197,22 @@ public class DiceController : MonoBehaviourPunCallbacks
             // 5) 주사위 충돌 해제 (RPC)
             // 6) 주사위 눈 기준으로 정렬 후 DiceSelect Pos, Rot에 따라 오브젝트 이동
 
+            // 1) 플레이어 스코어 보드 가져오기
+            // 2) 나온 주사위 눈에 따라 스코어 보드 업데이트
+
             //diceSelectManager.PV.RPC("SetPlayerSelectDice", RpcTarget.AllBuffered, remainDiceCount);
 
             SortDices();
-            UpdateRemainDiceCount();
+            UpdateRemainDiceCount(); 
+
             diceSelectManager.SetSelectButtonUI(remainDiceCount);
             diceSelectManager.UpdateSelectButtonScore();
             diceSelectManager.SetSelectPosList(remainDiceCount);
             diceSelectManager.PV.RPC("SetDiceKinematicRPC", RpcTarget.AllBuffered, true);
             diceSelectManager.SetAllDicesToBeSelectMode();
+
+            scoreBoardManager.PV.RPC("SetActiveCurrentPlayerScoreBoard", RpcTarget.AllBuffered, true);
+            scoreBoardManager.PV.RPC("UpdateCurrentPlayerScoreBoardRPC", RpcTarget.AllBuffered);
 
         }
     }

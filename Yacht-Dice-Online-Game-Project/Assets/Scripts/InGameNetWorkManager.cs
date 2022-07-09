@@ -56,7 +56,11 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     [Header("Player")]
     public PlayerController MyPlayer;
     // NetworkManager 스크립트에서 받게 될 플레이어 정보
-    public List<PlayerController> Players = new List<PlayerController>(); 
+    public List<PlayerController> Players = new List<PlayerController>();
+
+    [Header("Scirpts")]
+    [SerializeField]
+    private ScoreBoardManager scoreBoardManager;
 
 
     public static InGameNetWorkManager IN;
@@ -179,6 +183,10 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         // 첫번째 플레이어 소개하는 애니메이션 이후 첫번째 플레이어 순서를 설정한다.
         PV.RPC("SetPlayerPlayingRPC", RpcTarget.All);
+
+        // 플레이어 스코어 보드 생성
+        scoreBoardManager.PV.RPC("SetCurrentPlayerScoreBoardRPC", RpcTarget.AllBuffered);
+        scoreBoardManager.PV.RPC("SetActiveCurrentPlayerScoreBoard", RpcTarget.AllBuffered, false); // 잠시 끄기
     }
 
     [PunRPC]

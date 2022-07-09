@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 using static DiceController;
 
-public class Dice : MonoBehaviour
+public class Dice : MonoBehaviourPunCallbacks
 {
     [SerializeField]
     private Rigidbody rb;
@@ -25,10 +27,13 @@ public class Dice : MonoBehaviour
     [SerializeField]
     private List<GameObject> sides = new List<GameObject>();
 
-
+    [Header("PV")]
+    public PhotonView PV;
 
     private void Start()
     {
+        PV = photonView;
+
         // 6개의 콜라이더 초기화
         SetSidesColider(false);
 
@@ -94,6 +99,13 @@ public class Dice : MonoBehaviour
 
     // socre 세팅
     public void SetScore(int _score)
+    {
+        PV.RPC("SetScoreRPC", RpcTarget.AllBuffered, _score);
+    }
+
+    [PunRPC]
+    // socreRPC 세팅
+    private void SetScoreRPC(int _score)
     {
         score = _score;
     }

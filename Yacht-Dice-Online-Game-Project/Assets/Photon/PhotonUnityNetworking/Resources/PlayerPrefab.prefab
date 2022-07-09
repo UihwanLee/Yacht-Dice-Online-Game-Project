@@ -232,6 +232,10 @@ MonoBehaviour:
   playerIcon: {fileID: 6995746190248548332}
   playerIconIndex: 0
   playerSequence: 0
+  normalScoreList: 
+  challengeSocreList: 
+  bonusScore: 0
+  totalScore: 0
 --- !u!114 &1610335426
 MonoBehaviour:
   m_ObjectHideFlags: 0

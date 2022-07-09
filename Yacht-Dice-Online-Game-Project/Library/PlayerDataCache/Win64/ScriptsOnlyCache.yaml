@@ -11,6 +11,8 @@ ScriptsOnlyBuild:
     - InGameNetWorkManager
     - NetworkManager
     - PlayerController
+    - ScoreBoardManager
+    - ScoreLogic
     - TitlePanel
     PhotonUnityNetworking.Demos.dll:
     - Photon.Pun.Demo.Asteroids.Asteroid
@@ -185,7 +187,11 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 4464}
     - Class: 114
-      Script: {instanceID: 4668}
+      Script: {instanceID: 4480}
+    - Class: 114
+      Script: {instanceID: 4670}
+    - Class: 114
+      Script: {instanceID: 58404}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -263,7 +269,7 @@ ScriptsOnlyBuild:
     className: GameVersionProperty
   - hash:
       serializedVersion: 2
-      Hash: d1d5f5b118a9c41b0beff5c341b9fd34
+      Hash: 5323bff2d502d9c93ff2f39f04399e34
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: DiceController
@@ -401,7 +407,7 @@ ScriptsOnlyBuild:
     className: TMP_FontAsset
   - hash:
       serializedVersion: 2
-      Hash: 820457b034f1ef55fbec2746c0dd26f5
+      Hash: 4b171253d77a4416de61f43f84bb2082
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: InGameNetWorkManager
@@ -1061,7 +1067,7 @@ ScriptsOnlyBuild:
     className: AudioPlayableAsset
   - hash:
       serializedVersion: 2
-      Hash: 4b367361c6c94711ba40f8a305387b77
+      Hash: 64cac515901acf26fe7d7dd93960afbf
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController
@@ -1487,7 +1493,7 @@ ScriptsOnlyBuild:
     className: ServerAddressProperty
   - hash:
       serializedVersion: 2
-      Hash: df1343ba84ecd682528bb865f8a35e36
+      Hash: 9f0db7ba0e14ec1b21b251094aecc42c
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Dice
@@ -1503,6 +1509,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: UnityStandardAssets.Characters.ThirdPerson.PunDemos
     className: ThirdPersonUserControl
+  - hash:
+      serializedVersion: 2
+      Hash: 81054c4be1f9a715954a2d972096ddf3
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ScoreBoardManager
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -1593,6 +1605,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Cockpit.Forms
     className: UserIdUiForm
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ScoreLogic
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainMenu.unity

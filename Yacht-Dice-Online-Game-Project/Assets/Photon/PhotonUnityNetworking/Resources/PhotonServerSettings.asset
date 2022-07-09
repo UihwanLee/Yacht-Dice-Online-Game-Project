@@ -57,6 +57,10 @@ MonoBehaviour:
   - SetPlayerSelectDice
   - SetDiceKinematicRPC
   - SetSelectUIRPC
+  - SetCurrentPlayerScoreBoardRPC
+  - SetActiveCurrentPlayerScoreBoard
+  - UpdateCurrentPlayerScoreBoardRPC
+  - SetScoreRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

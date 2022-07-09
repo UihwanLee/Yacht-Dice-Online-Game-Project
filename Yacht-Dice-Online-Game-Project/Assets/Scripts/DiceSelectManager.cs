@@ -99,7 +99,7 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
 
         // selectZonePos_1Dice 초기화
         selectZonePos_1Dice.Add(new Vector3(-180.5f, 9.71f, 0.05f));
- 
+
 
         // returnZonRot 초기화
         returnZoneRot = new Vector3(-14f, 0f, 0f);
@@ -119,18 +119,6 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
         // Select UI 비활성화
         selectZoneSelectUI.SetActive(false);
 
-    }
-
-    [PunRPC]
-    // 플레이어 다이스 선택 화면으로 조정
-    public void SetPlayerSelectDice(int diceCount)
-    {
-        DC.SortDices();
-        DC.UpdateRemainDiceCount();
-        SetSelectButtonUI(diceCount);
-        UpdateSelectButtonScore();
-        SetSelectPosList(diceCount);
-        SetAllDicesToBeSelectMode();
     }
 
 
