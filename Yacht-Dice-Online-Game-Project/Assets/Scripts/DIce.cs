@@ -27,6 +27,9 @@ public class Dice : MonoBehaviourPunCallbacks
     [SerializeField]
     private List<GameObject> sides = new List<GameObject>();
 
+    // Return Zone에 있을 시 내포된 인덱스
+    public int returnZoneIndex;
+
     [Header("PV")]
     public PhotonView PV;
 
@@ -43,7 +46,9 @@ public class Dice : MonoBehaviourPunCallbacks
 
         thrown = false;
 
-        if(!DC.isThrown)
+        returnZoneIndex = -1;
+
+        if (!DC.isThrown)
         {
             // Dices List 추가
             DC.Dices.Add(this);
@@ -108,6 +113,19 @@ public class Dice : MonoBehaviourPunCallbacks
     private void SetScoreRPC(int _score)
     {
         score = _score;
+    }
+
+    // 주사위 충돌 해제 
+    public void SetDiceKinematic(bool isActive)
+    {
+        PV.RPC("SetDiceKinematicRPC", RpcTarget.AllBuffered, isActive);
+    }
+
+    [PunRPC]
+    // 주사위 충돌 해제 RPC
+    public void SetDiceKinematicRPC(bool isActive)
+    {
+        this.gameObject.GetComponent<Rigidbody>().isKinematic = isActive;
     }
 
     // 주사위 눈에 따라 Rot값 반환

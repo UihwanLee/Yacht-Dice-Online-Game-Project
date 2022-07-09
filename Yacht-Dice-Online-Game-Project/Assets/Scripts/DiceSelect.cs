@@ -10,8 +10,11 @@ public class DiceSelect : MonoBehaviour, IPointerClickHandler
     * Select 될 Dice 정보를 담은 스크립트
     */
 
+
     // 담고 있는 주사위 눈
     public int score;
+    // 내포하고 있는 인덱스
+    public int index;
 
     // selectZone인지 returnZone인지 확인하는 변수
     public bool isSelectZone;
@@ -41,13 +44,37 @@ public class DiceSelect : MonoBehaviour, IPointerClickHandler
             if (isSelectZone)
             {
                 // Select UI 이동
-                diceSelectManager.SetSelectUI(true);
+                diceSelectManager.SetSelectZoneSelectUI(true);
+                diceSelectManager.SetReturnZoneSelectUI(false);
                 diceSelectManager.selectZoneSelectUI.transform.localPosition = new Vector3(this.transform.localPosition.x, 0f, 0f);
+            }
+            else
+            {
+                // ReturnZone 안에 주사위가 있을 경우만 활성화
+                if(score != 0)
+                {
+                    // Select UI 이동
+                    diceSelectManager.SetSelectZoneSelectUI(false);
+                    diceSelectManager.SetReturnZoneSelectUI(true);
+                    diceSelectManager.returnZoneSelectUI.transform.localPosition = new Vector3(this.transform.localPosition.x, 272f, 0f);
+                }
             }
         }
         else if (click >= 2)
         {
             Debug.Log("두번 이상 클릭");
+            if (isSelectZone)
+            {
+                diceSelectManager.SetSelectZoneSelectUI(false);
+                diceSelectManager.SetReturnZoneSelectUI(false);
+                diceSelectManager.SelectDice(this);
+            }
+            else
+            {
+                diceSelectManager.SetSelectZoneSelectUI(false);
+                diceSelectManager.SetReturnZoneSelectUI(false);
+                diceSelectManager.ReturnDice(this);
+            }
         }
     }
 

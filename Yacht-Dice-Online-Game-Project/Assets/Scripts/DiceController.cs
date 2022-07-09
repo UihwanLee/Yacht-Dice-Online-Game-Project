@@ -155,9 +155,6 @@ public class DiceController : MonoBehaviourPunCallbacks
                 radian *= i;
                 float _spawnDistance = 1f;
                 Dices[i].Teleport(spawnPos + (new Vector3(Mathf.Cos(radian), Mathf.Sin(radian), 0f) * _spawnDistance));
-
-                // 주사위 굴리기
-                Dices[i].RollDice();
             }
         }
     }
@@ -191,11 +188,12 @@ public class DiceController : MonoBehaviourPunCallbacks
         {
             // 주사위 선택:
             // 1) 주사위 눈 순서대로 정렬
-            // 2) 돌릴 주사위에 따라 DiceSelect UI 선택
-            // 3) 선택한 DiceSelect UI 오브젝트 각각 점수 업데이트
-            // 4) 주사위 오브젝트 Select Pos List 선택
-            // 5) 주사위 충돌 해제 (RPC)
-            // 6) 주사위 눈 기준으로 정렬 후 DiceSelect Pos, Rot에 따라 오브젝트 이동
+            // 2) ReturnZone 활성화
+            // 3) 돌릴 주사위에 따라 DiceSelect UI 선택
+            // 4) 선택한 DiceSelect UI 오브젝트 각각 점수 업데이트
+            // 5) 주사위 오브젝트 Select Pos List 선택
+            // 6) 주사위 충돌 해제 (RPC)
+            // 7) 주사위 눈 기준으로 정렬 후 DiceSelect Pos, Rot에 따라 오브젝트 이동
 
             // 1) 플레이어 스코어 보드 가져오기
             // 2) 나온 주사위 눈에 따라 스코어 보드 업데이트
@@ -203,17 +201,29 @@ public class DiceController : MonoBehaviourPunCallbacks
             //diceSelectManager.PV.RPC("SetPlayerSelectDice", RpcTarget.AllBuffered, remainDiceCount);
 
             SortDices();
-            UpdateRemainDiceCount(); 
+            UpdateRemainDiceCount();
 
-            diceSelectManager.SetSelectButtonUI(remainDiceCount);
-            diceSelectManager.UpdateSelectButtonScore();
-            diceSelectManager.SetSelectPosList(remainDiceCount);
-            diceSelectManager.PV.RPC("SetDiceKinematicRPC", RpcTarget.AllBuffered, true);
+            SetAllDiceKinematic(true);
+
+            diceSelectManager.SetReturnZoneAcitve(true);
+            diceSelectManager.UpdateSelectZone();
             diceSelectManager.SetAllDicesToBeSelectMode();
 
             scoreBoardManager.PV.RPC("SetActiveCurrentPlayerScoreBoard", RpcTarget.AllBuffered, true);
             scoreBoardManager.PV.RPC("UpdateCurrentPlayerScoreBoardRPC", RpcTarget.AllBuffered);
 
+        }
+    }
+
+    // 주사위 충돌 해제
+    public void SetAllDiceKinematic(bool isActive)
+    {
+        foreach (var dice in Dices)
+        {
+            if (!dice.isSelect)
+            {
+                dice.SetDiceKinematic(isActive);
+            }
         }
     }
 
@@ -225,7 +235,16 @@ public class DiceController : MonoBehaviourPunCallbacks
             // 선택된 주사위는 제외
             if(!Dices[i].isSelect)
             {
-                if (Dices[i].transform.localPosition.y < 1.6f || Dices[i].transform.localPosition.y > 1.75f || Dices[i].score == 0) return true;
+                if (Dices[i].transform.localPosition.y < 1.6f || Dices[i].transform.localPosition.y > 1.9f)
+                {
+                    Debug.Log("낙: 거리가 멀리 떨어짐");
+                    return true;
+                }
+                else if (Dices[i].score == 0)
+                {
+                    Debug.Log("낙: 점수가 집계가 안됨");
+                    return true;
+                }
             }
         }
         return false;

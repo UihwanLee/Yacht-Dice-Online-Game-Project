@@ -103,7 +103,7 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
         // Normal Score Board 업데이트 : 이미 적힌 score는 참조하지 않는다.
         foreach (var normalScore in normalScoreList)
         {
-            if(normalScore.transform.GetChild(2).GetComponent<Text>().text == "")
+            if(normalScore.transform.GetChild(2).GetComponent<Text>().text == "" || normalScore.transform.GetChild(2).GetComponent<Text>().color.a == 0.3f)
             {
                 normalScore.transform.GetChild(2).GetComponent<Text>().text = currentNormalScores[index].ToString();
                 index++;
@@ -115,12 +115,13 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
         // Challenge Score Board 업데이트 : 이미 적힌 score는 참조하지 않는다.
         foreach (var challengeScore in challengeScoreList)
         {
-            if (challengeScore.transform.GetChild(2).GetComponent<Text>().text == "")
+            if (challengeScore.transform.GetChild(2).GetComponent<Text>().text == "" || challengeScore.transform.GetChild(2).GetComponent<Text>().color.a == 0.3f)
             {
                 challengeScore.transform.GetChild(2).GetComponent<Text>().text = curretnChallengeScores[index].ToString();
                 index++;
             }
         }
 
+        Debug.Log("스코어 보드 업데이트!");
     }
 }

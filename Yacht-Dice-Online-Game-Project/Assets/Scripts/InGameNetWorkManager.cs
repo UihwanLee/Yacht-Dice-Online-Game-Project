@@ -61,6 +61,8 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     [Header("Scirpts")]
     [SerializeField]
     private ScoreBoardManager scoreBoardManager;
+    [SerializeField]
+    private DiceSelectManager diceSelectManager;
 
 
     public static InGameNetWorkManager IN;
@@ -214,6 +216,13 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
             // 플레이어가 다이스 처음 돌릴 경우 isSelect 초기화
             if (rollDiceButton.transform.GetChild(0).GetComponent<Text>().text == SET) DC.ResetDiceSelect();
 
+            // 스코어 보드 비활성화
+            scoreBoardManager.PV.RPC("SetActiveCurrentPlayerScoreBoard", RpcTarget.AllBuffered, false);
+
+            // Select UI 비활성화
+            diceSelectManager.SetSelectZoneSelectUI(false);
+            diceSelectManager.SetReturnZoneSelectUI(false);
+
             // 다이스 Bottle Set
             PV.RPC("SetDiceRPC", RpcTarget.All);
 
@@ -243,6 +252,8 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     IEnumerator SpawnDiceInGameCorutine()
     {
         yield return new WaitForSeconds(1f);
+        // 다이스 isKinematic 초기화
+        DC.SetAllDiceKinematic(false);
         // 이미 DicePrefab이 생성되어 있는 경우 Reroll만 작업
         if (DC.Dices.Count == 0) DC.SpawnYachtDicesInGame(1);
         else

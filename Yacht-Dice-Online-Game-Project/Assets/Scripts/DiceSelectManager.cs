@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
-using static DiceController;
 
 public class DiceSelectManager : MonoBehaviourPunCallbacks
 {
@@ -59,6 +58,11 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
     // Select UI
     [Header("Select UI")]
     public GameObject selectZoneSelectUI;
+    public GameObject returnZoneSelectUI;
+
+    [Header("Scripts")]
+    [SerializeField]
+    private DiceController diceController;
 
     [Header("PV")]
     public PhotonView PV;
@@ -118,33 +122,69 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
 
         // Select UI 비활성화
         selectZoneSelectUI.SetActive(false);
+        returnZoneSelectUI.SetActive(false);
 
     }
 
+    // ReturnZone UI 활성화/비활성화
+    public void SetReturnZoneAcitve(bool isActive)
+    {
+        for (int i = 0; i < returnZoneDice.Count; i++) returnZoneDice[i].SetActive(isActive);
+    }
+
+    // SelectZoneUI 업데이트
+    public void UpdateSelectZone()
+    {
+        // 현재 남아있는 주사위 개수에 맞는 SelectZone 설정 및 점수 갱신
+        SetSelectButtonUI(diceController.remainDiceCount);
+        UpdateSelectButtonScore();
+        // 현재 남아있는 주사위 개수에 맞는 SelectZonePos 설정
+        SetSelectPosList(diceController.remainDiceCount);
+    }
 
     // 돌릴 주사위 개수에 따라 SelectDiceUI 선택
-    public void SetSelectButtonUI(int diceCount)
+    private void SetSelectButtonUI(int diceCount)
     {
-        switch(diceCount)
+        switch (diceCount)
         {
             case 1:
                 dice1Container.SetActive(true);
+                dice2Container.SetActive(false);
+                dice3Container.SetActive(false);
+                dice4Container.SetActive(false);
+                dice5Container.SetActive(false);
                 currentSelectZoneList = dice1;
                 break;
             case 2:
                 dice2Container.SetActive(true);
+                dice1Container.SetActive(false);
+                dice3Container.SetActive(false);
+                dice4Container.SetActive(false);
+                dice5Container.SetActive(false);
                 currentSelectZoneList = dice2;
                 break;
             case 3:
                 dice3Container.SetActive(true);
+                dice1Container.SetActive(false);
+                dice2Container.SetActive(false);
+                dice4Container.SetActive(false);
+                dice5Container.SetActive(false);
                 currentSelectZoneList = dice3;
                 break;
             case 4:
                 dice4Container.SetActive(true);
+                dice1Container.SetActive(false);
+                dice2Container.SetActive(false);
+                dice3Container.SetActive(false);
+                dice5Container.SetActive(false);
                 currentSelectZoneList = dice4;
                 break;
             case 5:
                 dice5Container.SetActive(true);
+                dice1Container.SetActive(false);
+                dice2Container.SetActive(false);
+                dice3Container.SetActive(false);
+                dice4Container.SetActive(false);
                 currentSelectZoneList = dice5;
                 break;
             default:
@@ -155,10 +195,10 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
     }
 
     // 선택한 DiceSelect UI 오브젝트 각각 점수 업데이트
-    public void UpdateSelectButtonScore()
+    private void UpdateSelectButtonScore()
     {
         int index = 0;
-        foreach(var dice in DC.Dices)
+        foreach(var dice in diceController.Dices)
         {
             if(!dice.isSelect)
             {
@@ -169,7 +209,7 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
     }
 
     // Select Pos List 선택
-    public void SetSelectPosList(int diceCount)
+    private void SetSelectPosList(int diceCount)
     {
         switch (diceCount)
         {
@@ -195,35 +235,206 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
         }
     }
 
-    [PunRPC]
-    // 주사위 충돌 해제
-    public void SetDiceKinematicRPC(bool isActive)
-    {
-        foreach (var dice in DC.Dices)
-        {
-            if (!dice.isSelect)
-            {
-                dice.GetComponent<Rigidbody>().isKinematic = isActive;
-            }
-        }
-    }
-
     // 주사위 눈 기준으로 정렬 후 DiceSelect Pos, Rot에 따라 오브젝트 이동
     public void SetAllDicesToBeSelectMode()
     {
         int index = 0;
-        foreach(var dice in DC.Dices)
+        foreach(var dice in diceController.Dices)
         {
             if(!dice.isSelect)
             {
-                Debug.Log(dice.score + "번호 이동중!");
-                StartCoroutine(TeleportDice(dice, index, 0.5f));
+                StartCoroutine(TeleportDice(dice, index, 0.5f, true));
                 index++;
             }
         }
     }
 
-    IEnumerator TeleportDice(Dice dice, int index,float duration)
+    #region SelectZone에서 Dice 선택 시
+
+    // 주사위가 선택되어 Return Zone으로 돌아가고 SelectZone을 정렬하는 함수
+    // index : 선택된 주사위 인덱스
+    public void SelectDice(DiceSelect diceInfo)
+    {
+        List<Dice> dices = new List<Dice>();
+        dices = diceController.Dices;
+
+        Dice dice = TryFindDiceinSelectZone(dices, diceInfo.index);
+        if (dice == null) return;
+
+        int index = FindReturnZoneIndex(dice, diceInfo);
+
+        if (index == -1) return;
+
+        // 모든 조건이 괜찮을 시, 이동 시작
+        StartCoroutine(TeleportDice(dice, index, 0.25f, false));
+
+        // Return Zone에 모든 주사위가 모일 시 자동으로 점수 집계 및 진행
+
+        // 남은 주사위 정렬
+        SortSelectZoneDice();
+    }
+
+    // 주사위 매치 함수
+    private Dice TryFindDiceinSelectZone(List<Dice> dices, int findIndex)
+    {
+        int currentIndex = 0;
+        foreach(var dice in dices)
+        {
+            if(!dice.isSelect)
+            {
+                if (currentIndex == findIndex) return dice;
+                currentIndex++;
+            }
+        }
+        return null;
+    }
+
+    // Return Zone 매치 인덱스
+    private int FindReturnZoneIndex(Dice dice,DiceSelect diceInfo)
+    {
+        for(int i=0; i<returnZoneDice.Count; i++)
+        {
+            // 맞는 인덱스를 찾았을 시, 점수를 집어넣고 인덱스 반환
+            if(returnZoneDice[i].GetComponent<DiceSelect>().score == 0)
+            {
+                returnZoneDice[i].GetComponent<DiceSelect>().score = diceInfo.score;
+                diceController.remainDiceCount--; // 남아있는 주사위 개수 감소
+                dice.returnZoneIndex = i;
+                dice.isSelect = true; // isSelect 업데이트
+                diceInfo.score = 0;
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    // SelectZone Dice 정렬
+    private void SortSelectZoneDice()
+    {
+        UpdateSelectZone();
+        TeleportDiceinSelectZone();
+    }
+
+    // SelectZone에서는 바로 이동시킨다. 
+    public void TeleportDiceinSelectZone()
+    {
+        List<Dice> dices = new List<Dice>();
+        dices = diceController.Dices;
+
+        int index = 0;
+        foreach (var dice in dices)
+        {
+            if (!dice.isSelect)
+            {
+                dice.transform.localPosition = currentSelectPosList[index];
+                dice.transform.rotation = Quaternion.Euler(dice.GetRot(dice.score) + selectZoneRot);
+                index++;
+            }
+        }
+    }
+
+    #endregion
+
+    #region ReturnZone에서 Dice 선택 시
+
+    // 주사위가 선택되어 Select Zone으로 돌아가는 함수
+    // Select Zone으로 이동한 후 Return Zone이 아닌 Select Zone만 정렬한다.
+    // 따라서 Select Zone과 반대로 정렬 후 -> 이동
+    // index : 선택된 주사위 인덱스
+    public void ReturnDice(DiceSelect diceInfo)
+    {
+        List<Dice> dices = new List<Dice>();
+        dices = diceController.Dices;
+
+        Dice dice = TryFindDiceinReturnZone(dices, diceInfo.index, diceInfo);
+        if (dice == null) return;
+
+        // Select Zone UI 업데이트
+        UpdateSelectZone();
+
+        // 들어갈 인덱스를 찾는다.
+        int index = FindSelectZoneIndex(dice, diceInfo);
+
+        if (index == -1) return;
+
+        // 인덱스를 찾은 후 그 인덱스 자리를 빼고 이동시켜준다.
+        TeleportDiceinSelectZoneButReturnZoneIndex(index);
+
+        // 정렬 후 이동 시작
+        StartCoroutine(TeleportDice(dice, index, 0.25f, true));
+    }
+
+    // Return Zone 주사위 매치 함수
+    // Dice가 갖고 있는 returnZoneIndex를 이용하여 일치하는 주사위를 찾는다.
+    private Dice TryFindDiceinReturnZone(List<Dice> dices, int findIndex, DiceSelect diceinfo)
+    {
+        int currentIndex = 0;
+        foreach (var dice in dices)
+        {
+            if (dice.isSelect)
+            {
+                if (dice.returnZoneIndex == findIndex)
+                {
+                    diceController.remainDiceCount++;
+
+                    // Dice Select 정보 초기화
+                    diceinfo.score = 0;
+
+                    // dice returnZone  정보 초기화
+                    dice.isSelect = false;
+                    dice.returnZoneIndex = -1;
+
+                    return dice;
+                }
+                currentIndex++;
+            }
+        }
+        return null;
+    }
+
+    // Select Zone 매치 인덱스
+    // Select UI 업데이트 이후 찾아갈 인덱스를 찾는다.
+    private int FindSelectZoneIndex(Dice dice, DiceSelect diceInfo)
+    {
+        for (int i = 0; i < currentSelectZoneList.Count; i++)
+        {
+            // 자기 자신과 맞는 주사위 눈을 찾으면 그 인덱스를 반환
+            if(currentSelectZoneList[i].GetComponent<DiceSelect>().score == dice.score)
+            {
+                Debug.Log(i);
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    // SelectZone에서는 바로 이동시킨다. : 단, Return Zone에서 올라갈 인덱스를 자리는 비워놓는다.
+    // index : 비워두어야할 인덱스
+    public void TeleportDiceinSelectZoneButReturnZoneIndex(int avoidIndex)
+    {
+        List<Dice> dices = new List<Dice>();
+        dices = diceController.Dices;
+
+        int index = 0;
+        foreach (var dice in dices)
+        {
+            if (!dice.isSelect)
+            {
+                if(index != avoidIndex)
+                {
+                    dice.transform.localPosition = currentSelectPosList[index];
+                    dice.transform.rotation = Quaternion.Euler(dice.GetRot(dice.score) + selectZoneRot);
+                }
+                index++;
+            }
+        }
+    }
+
+
+    #endregion
+
+    // dice : 이동할 주사위 오브젝트, isSelectZone : 이동시킬 Zone 유형, index : 이동 시킬 Zone index, duration : 이동 시간
+    IEnumerator TeleportDice(Dice dice, int index, float duration, bool isSelectZone)
     {
         if (dice.isMoving)
         {
@@ -231,16 +442,14 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
         }
 
         dice.isMoving = true;
-        //dice.GetComponent<MeshCollider>().convex = false;
 
         // postion 설정
         Vector3 currentPos = dice.transform.position;
-        Vector3 movePos = currentSelectPosList[index];
-        Debug.Log(currentSelectPosList[index]);
+        Vector3 movePos = (isSelectZone) ? currentSelectPosList[index] : returnZonePos[index];
 
         // rotation 설정 : 주사위 눈에 따라 Rot 값 이동
         Quaternion currentRot = dice.transform.rotation;
-        Quaternion moveRot = Quaternion.Euler(dice.GetRot(dice.score) + selectZoneRot);
+        Quaternion moveRot = Quaternion.Euler(dice.GetRot(dice.score) + (isSelectZone ? selectZoneRot : returnZoneRot));
 
         float timer = 0f;
         while (timer < duration)
@@ -251,20 +460,38 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
             yield return null;
         }
 
-        //dice.GetComponent<MeshCollider>().convex = true;
 
         dice.isMoving = false;
     }
 
-    public void SetSelectUI(bool isActive)
+    #region Select UI 관련 함수
+
+    public void SetSelectZoneSelectUI(bool isActive)
     {
-        PV.RPC("SetSelectUIRPC", RpcTarget.AllBuffered, isActive);
+        PV.RPC("SetSelectZoneSelectUIRPC", RpcTarget.AllBuffered, isActive);
     }
 
     [PunRPC]
     // Select UI 활성화/비활성화
-    private void SetSelectUIRPC(bool isActive)
+    private void SetSelectZoneSelectUIRPC(bool isActive)
     {
         selectZoneSelectUI.SetActive(isActive);
     }
+
+    public void SetReturnZoneSelectUI(bool isActive)
+    {
+        PV.RPC("SetReturnZoneSelectUIRPC", RpcTarget.AllBuffered, isActive);
+    }
+
+    [PunRPC]
+    // Select UI 활성화/비활성화
+    private void SetReturnZoneSelectUIRPC(bool isActive)
+    {
+        returnZoneSelectUI.SetActive(isActive);
+    }
+
+    #endregion
+
+    // 플레이어 리롤턴 이 모두 끝날 시 : 남은 주사위들을 모두 ReturnZone에 보낸다.
+    // Return Zone에 모든 주사위가 모일 시 점수를 꼭 적게 만든다.
 }
