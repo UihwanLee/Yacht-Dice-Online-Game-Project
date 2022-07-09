@@ -56,6 +56,10 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
     // 선택된 SelectPosList
     private List<Vector3> currentSelectPosList = new List<Vector3>();
 
+    // Select UI
+    [Header("Select UI")]
+    public GameObject selectZoneSelectUI;
+
     [Header("PV")]
     public PhotonView PV;
 
@@ -112,9 +116,24 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
         dice2Container.SetActive(false);
         dice1Container.SetActive(false);
 
+        // Select UI 비활성화
+        selectZoneSelectUI.SetActive(false);
+
     }
 
-    
+    [PunRPC]
+    // 플레이어 다이스 선택 화면으로 조정
+    public void SetPlayerSelectDice(int diceCount)
+    {
+        DC.SortDices();
+        DC.UpdateRemainDiceCount();
+        SetSelectButtonUI(diceCount);
+        UpdateSelectButtonScore();
+        SetSelectPosList(diceCount);
+        SetAllDicesToBeSelectMode();
+    }
+
+
     // 돌릴 주사위 개수에 따라 SelectDiceUI 선택
     public void SetSelectButtonUI(int diceCount)
     {
@@ -189,6 +208,18 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
+    // 주사위 충돌 해제
+    public void SetDiceKinematicRPC(bool isActive)
+    {
+        foreach (var dice in DC.Dices)
+        {
+            if (!dice.isSelect)
+            {
+                dice.GetComponent<Rigidbody>().isKinematic = isActive;
+            }
+        }
+    }
+
     // 주사위 눈 기준으로 정렬 후 DiceSelect Pos, Rot에 따라 오브젝트 이동
     public void SetAllDicesToBeSelectMode()
     {
@@ -217,6 +248,7 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
         // postion 설정
         Vector3 currentPos = dice.transform.position;
         Vector3 movePos = currentSelectPosList[index];
+        Debug.Log(currentSelectPosList[index]);
 
         // rotation 설정 : 주사위 눈에 따라 Rot 값 이동
         Quaternion currentRot = dice.transform.rotation;
@@ -234,5 +266,17 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
         //dice.GetComponent<MeshCollider>().convex = true;
 
         dice.isMoving = false;
+    }
+
+    public void SetSelectUI(bool isActive)
+    {
+        PV.RPC("SetSelectUIRPC", RpcTarget.AllBuffered, isActive);
+    }
+
+    [PunRPC]
+    // Select UI 활성화/비활성화
+    private void SetSelectUIRPC(bool isActive)
+    {
+        selectZoneSelectUI.SetActive(isActive);
     }
 }

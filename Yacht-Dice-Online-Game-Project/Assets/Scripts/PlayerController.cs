@@ -28,6 +28,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     // 인게임 정보
     [SerializeField]
     private int playerSequence; // 플레이어 순서
+    [SerializeField]
+    private List<int> normalScoreList = new List<int>(); // 노멀 스코어 리스트
+    [SerializeField]
+    private List<int> challengeSocreList = new List<int>(); // 챌린지 스코어 리스트
 
     private void Start()
     {
@@ -41,7 +45,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         NM.Players.Add(this);
         NM.SortPlayers();
 
-        Debug.Log(this.GetPlayerNickName() + "님이 방에 입장하였습니다.");
+        // 스코어 초기화
+        for (int i = 0; i < 6; i++) normalScoreList.Add(0);
+        for (int i = 0; i < 6; i++) challengeSocreList.Add(0);
     }
 
     private void Update()
@@ -101,4 +107,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     public Sprite GetPlayerIcon() { return playerIcon.sprite; }
     public int GetPlayerIconIndex() { return playerIconIndex; }
     public int GetPlayerSequence() { return playerSequence; }
+
+    public List<int> GetNormalScoreList() { return normalScoreList; }
+    public List<int> GetChallangeScoreList() { return challengeSocreList; }
 }

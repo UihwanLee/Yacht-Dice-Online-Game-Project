@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static InGameNetWorkManager;
 
 public class DiceSelect : MonoBehaviour, IPointerClickHandler
 {
@@ -12,19 +13,50 @@ public class DiceSelect : MonoBehaviour, IPointerClickHandler
     // 담고 있는 주사위 눈
     public int score;
 
+    // selectZone인지 returnZone인지 확인하는 변수
+    public bool isSelectZone;
+
+    // DiceSelectManager 스크립트
+    [SerializeField]
+    private DiceSelectManager diceSelectManager;
+
+    // 활성화 될때마다 score 초기화 : score가 0일 경우 오브젝트가 담겨있지 않는 뜻이기에 클릭해도 반응을 안하는 예외처리 가능
+    private void OnEnable()
+    {
+        this.score = 0;
+    }
+
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        // 예외처리
+        if (!TryClick()) return;
+
         int click = eventData.clickCount;
 
-        if (click >= 1)
+        if (click == 1)
         {
-            Debug.Log("한번 이상 클릭");
+            Debug.Log("한번 클릭");
 
-            // Select Anim 재생 : transform position으로 이동
-
-
+            if (isSelectZone)
+            {
+                // Select UI 이동
+                diceSelectManager.SetSelectUI(true);
+                diceSelectManager.selectZoneSelectUI.transform.localPosition = new Vector3(this.transform.localPosition.x, 0f, 0f);
+            }
         }
-        else if (click >= 2) Debug.Log("두번 이상 클릭");
+        else if (click >= 2)
+        {
+            Debug.Log("두번 이상 클릭");
+        }
+    }
+
+    public bool TryClick()
+    {
+        // 현재 순서에 맞는 플레이어만 클릭 가능
+        if (IN.Players[IN.currentPlayerSequence].GetPlayerNickName() != IN.MyPlayer.GetPlayerNickName()) return false;
+        // 주사위가 존재하지 않을 경우 반응 없음
+        else if (this.score == 0) return false;
+        else return true;
     }
 }

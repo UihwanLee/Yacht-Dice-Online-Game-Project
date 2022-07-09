@@ -193,14 +193,18 @@ public class DiceController : MonoBehaviourPunCallbacks
             // 2) 돌릴 주사위에 따라 DiceSelect UI 선택
             // 3) 선택한 DiceSelect UI 오브젝트 각각 점수 업데이트
             // 4) 주사위 오브젝트 Select Pos List 선택
-            // 5) 주사위 눈 기준으로 정렬 후 DiceSelect Pos, Rot에 따라 오브젝트 이동(RPC)
+            // 5) 주사위 충돌 해제 (RPC)
+            // 6) 주사위 눈 기준으로 정렬 후 DiceSelect Pos, Rot에 따라 오브젝트 이동
+
+            //diceSelectManager.PV.RPC("SetPlayerSelectDice", RpcTarget.AllBuffered, remainDiceCount);
 
             SortDices();
             UpdateRemainDiceCount();
             diceSelectManager.SetSelectButtonUI(remainDiceCount);
             diceSelectManager.UpdateSelectButtonScore();
             diceSelectManager.SetSelectPosList(remainDiceCount);
-            diceSelectManager.PV.RPC("SetAllDicesToBeSelectMode", RpcTarget.AllBuffered);
+            diceSelectManager.PV.RPC("SetDiceKinematicRPC", RpcTarget.AllBuffered, true);
+            diceSelectManager.SetAllDicesToBeSelectMode();
 
         }
     }

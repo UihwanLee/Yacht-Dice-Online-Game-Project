@@ -401,7 +401,7 @@ ScriptsOnlyBuild:
     className: TMP_FontAsset
   - hash:
       serializedVersion: 2
-      Hash: e1c41c1ed5412db609a1d0f6e021498b
+      Hash: 820457b034f1ef55fbec2746c0dd26f5
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: InGameNetWorkManager
@@ -545,7 +545,7 @@ ScriptsOnlyBuild:
     className: SplineWalker
   - hash:
       serializedVersion: 2
-      Hash: bfdf060b2603148594c3c06838d1c1db
+      Hash: 83cc57f9cd90e5c83a5e6458b90825d5
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: DiceSelect
@@ -689,7 +689,7 @@ ScriptsOnlyBuild:
     className: PhotonRigidbody2DView
   - hash:
       serializedVersion: 2
-      Hash: c6387477928389726ff65feac7ad1ac5
+      Hash: eed049b9699885f9986aae9e2f27ea57
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: DiceSelectManager
@@ -1487,7 +1487,7 @@ ScriptsOnlyBuild:
     className: ServerAddressProperty
   - hash:
       serializedVersion: 2
-      Hash: 121208b5ba2b0611e0e4ef52d869b88d
+      Hash: df1343ba84ecd682528bb865f8a35e36
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Dice

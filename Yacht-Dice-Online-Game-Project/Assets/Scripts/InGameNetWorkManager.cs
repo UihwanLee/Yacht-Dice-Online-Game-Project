@@ -44,7 +44,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField]
     private List<Sprite> playerIcons = new List<Sprite>();
     // 현재 플레이어 순서 : 이 변수에 따라 플레이어 플레이를 순서대로 할 수 있게한다.
-    private int currentPlayerSequence; 
+    public int currentPlayerSequence; 
 
     [Header("Main Camera")]
     [SerializeField]
