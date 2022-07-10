@@ -149,25 +149,58 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
         selectScoreUI.SetActive(isActive);
     }
 
-    // 플레이어가 선택한 SelectScore 업데이트
-    public void ChangeColorSelectScore(int index)
+    #region 점수 선택
+
+    // Select Score 점수 세팅
+    public void SetAllSelectScore()
     {
-        PV.RPC("ChangeColorSelectScoreRPC", RpcTarget.AllBuffered, index);
+        // Normal Score Board : SelectScore 업데이트 
+        foreach (var normalScore in normalScoreList) normalScore.GetComponent<SelectDice>().score = int.Parse(normalScore.transform.GetChild(2).GetComponent<Text>().text);
+        // Challenge Score Board : SelectScore 업데이트
+        foreach (var challengeScore in challengeScoreList) challengeScore.GetComponent<SelectDice>().score = int.Parse(challengeScore.transform.GetChild(2).GetComponent<Text>().text);
+
+    }
+
+    // 플레이어가 선택한 SelectScore 업데이트
+    public void ChangeSelectScore(int index, bool isSelect)
+    {
+        PV.RPC("ChangeSelectScoreRPC", RpcTarget.AllBuffered, index, isSelect);
     }
 
     [PunRPC]
     // RPC로 SelectScore 스크립트를 받을 수 없으므로 index로 찾을 수 있도록 한다.
-    private void ChangeColorSelectScoreRPC(int index)
+    private void ChangeSelectScoreRPC(int index, bool isSelect)
     {
         // 모든 SelectUI Color 초기화
         foreach (var normalScore in normalScoreList) normalScore.transform.GetChild(0).GetComponent<Image>().color = Color.white;
         foreach (var challengeScore in challengeScoreList) challengeScore.transform.GetChild(0).GetComponent<Image>().color = Color.white;
 
 
-        // index 값에 따라 맞는 Select Score 색깔 변화 : index = -1 일 시 제와
+        // index 값에 따라 맞는 Select Score 색깔 변화 : index = -1 일 시 제외(클릭 시: 노랑 / 선택 시: 주황)
         if (index == -1) return;
-        if (index < 6) normalScoreList[index].transform.GetChild(0).GetComponent<Image>().color = Color.yellow;
-        else challengeScoreList[(index % 6)].transform.GetChild(0).GetComponent<Image>().color = Color.yellow;
+
+        if(isSelect)
+        {
+            if (index < 6)
+            {
+                normalScoreList[index].transform.GetChild(0).GetComponent<Image>().color = new Color(0.9960784f, 0.3137255f, 0f);
+                normalScoreList[index].transform.GetChild(2).GetComponent<Text>().color = Color.black;
+
+            }
+            else
+            {
+                challengeScoreList[(index % 6)].transform.GetChild(0).GetComponent<Image>().color = new Color(0.9960784f, 0.3137255f, 0f);
+                challengeScoreList[(index % 6)].transform.GetChild(2).GetComponent<Text>().color = Color.black;
+            }
+
+        }
+        else
+        {
+            if (index < 6) normalScoreList[index].transform.GetChild(0).GetComponent<Image>().color = Color.yellow;
+            else challengeScoreList[(index % 6)].transform.GetChild(0).GetComponent<Image>().color = Color.yellow;
+        }
     
     }
+
+    #endregion
 }

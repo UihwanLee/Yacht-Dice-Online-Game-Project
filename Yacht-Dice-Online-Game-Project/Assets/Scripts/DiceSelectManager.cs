@@ -147,6 +147,14 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
     {
         switch (diceCount)
         {
+            case 0:
+                dice1Container.SetActive(false);
+                dice2Container.SetActive(false);
+                dice3Container.SetActive(false);
+                dice4Container.SetActive(false);
+                dice5Container.SetActive(false);
+                currentSelectZoneList = null;
+                break;
             case 1:
                 dice1Container.SetActive(true);
                 dice2Container.SetActive(false);
@@ -197,6 +205,8 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
     // 선택한 DiceSelect UI 오브젝트 각각 점수 업데이트
     private void UpdateSelectButtonScore()
     {
+        if (currentSelectZoneList == null) return;
+
         int index = 0;
         foreach(var dice in diceController.Dices)
         {
@@ -213,6 +223,9 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
     {
         switch (diceCount)
         {
+            case 0:
+                currentSelectZoneList = null;
+                break;
             case 1:
                 currentSelectPosList = selectZonePos_1Dice;
                 break;
@@ -468,6 +481,19 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
         dice.isMoving = false;
     }
 
+    // 플레이어 리롤턴 이 모두 끝날 시 : 남은 주사위들을 모두 ReturnZone에 보낸다.
+    // Return Zone에 모든 주사위가 모일 시 점수를 꼭 적게 만든다.
+    public void MoveAllDicesReturnZone()
+    {
+       while(true)
+       {
+            if (currentSelectZoneList == null) break;
+            SelectDice dice = currentSelectZoneList[0].GetComponent<SelectDice>();
+            if (dice == null) break;
+            SelectDiceUI(dice);
+       }
+    }
+
     #region Select UI 관련 함수
 
     public void SetSelectZoneSelectUI(bool isActive)
@@ -496,6 +522,5 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
 
     #endregion
 
-    // 플레이어 리롤턴 이 모두 끝날 시 : 남은 주사위들을 모두 ReturnZone에 보낸다.
-    // Return Zone에 모든 주사위가 모일 시 점수를 꼭 적게 만든다.
+  
 }

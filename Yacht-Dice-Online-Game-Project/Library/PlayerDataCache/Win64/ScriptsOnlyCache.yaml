@@ -38,8 +38,10 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -180,21 +182,21 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 3856}
     - Class: 114
-      Script: {instanceID: 3860}
+      Script: {instanceID: 3858}
     - Class: 114
-      Script: {instanceID: 4226}
+      Script: {instanceID: 3862}
     - Class: 114
-      Script: {instanceID: 4272}
+      Script: {instanceID: 4228}
     - Class: 114
-      Script: {instanceID: 4370}
+      Script: {instanceID: 4274}
     - Class: 114
-      Script: {instanceID: 4466}
+      Script: {instanceID: 4372}
     - Class: 114
-      Script: {instanceID: 4482}
+      Script: {instanceID: 4468}
     - Class: 114
-      Script: {instanceID: 4672}
+      Script: {instanceID: 4484}
     - Class: 114
-      Script: {instanceID: 69794}
+      Script: {instanceID: 4674}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -386,7 +388,7 @@ ScriptsOnlyBuild:
     className: Shadow
   - hash:
       serializedVersion: 2
-      Hash: 6c376a51ae595d135f86b1554b62bc22
+      Hash: 67d243fc57338f24045d4c9b33cb090f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ChatManager
@@ -1310,6 +1312,12 @@ ScriptsOnlyBuild:
     className: PlayerListView
   - hash:
       serializedVersion: 2
+      Hash: d13c372a491f078af3ffe8c9f3cc98cf
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: SelectScore
+  - hash:
+      serializedVersion: 2
       Hash: 0927e41b46e1bd11671f9b5adda4b832
     assemblyName: PhotonUnityNetworking.dll
     namespaceName: Photon.Pun
@@ -1614,12 +1622,6 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Cockpit.Forms
     className: UserIdUiForm
-  - hash:
-      serializedVersion: 2
-      Hash: d13c372a491f078af3ffe8c9f3cc98cf
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: SelectScore
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainMenu.unity

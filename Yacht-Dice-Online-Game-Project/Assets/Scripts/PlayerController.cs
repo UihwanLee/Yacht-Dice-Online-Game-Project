@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     // 인게임 정보
     [SerializeField]
     private int playerSequence; // 플레이어 순서
+    public int rerollCount; // 리롤 남은 횟수
     [SerializeField]
     private List<int> normalScoreList = new List<int>(); // 노멀 스코어 리스트
     [SerializeField]
@@ -46,6 +47,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         // Player List 추가
         NM.Players.Add(this);
         NM.SortPlayers();
+
+        // 플레이어 인게임 변수
+        rerollCount = 2;
 
         // 스코어 초기화
         for (int i = 0; i < 6; i++) normalScoreList.Add(0);
@@ -97,7 +101,43 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         NM.SetRoomPlayerByRPC(_playerIcon, _playerNickName);
     }
 
+    // 플레이어 순서 배치
+    public void SetPlayerSequence(int sequence)
+    {
+        this.playerSequence = sequence;
+    }
 
+    // 플레이어 세팅 리셋 : 리셋해야 하는 변수들을 리셋할 수 있도록 한다.
+    public void ResetInGameSetting()
+    {
+        // 리롤 횟수 채우기
+        rerollCount = 2;
+    }
+
+    // 점수 세팅
+    public void SetScore(int score, int index, bool isChallenge)
+    {
+        PV.RPC("SetScoreRPC", RpcTarget.AllBuffered, score, index, isChallenge);
+    }
+
+    [PunRPC]
+    private void SetScoreRPC(int score, int index, bool isChallenge)
+    {
+        if (!isChallenge) normalScoreList[index] = score;
+        else challengeSocreList[(index % 6)] = score;
+
+        CaculatePlayerScore();
+    }
+
+    // 점수 확정 후, 보너스/총합 계산하여 저장한다.
+    private void CaculatePlayerScore()
+    {
+        int bonus = 0; int total = 0;
+        foreach(var score in normalScoreList) { bonus += score; total += score; }
+        foreach (var score in challengeSocreList) total += score;
+
+        this.bonusScore = bonus; this.totalScore = total;
+    }
 
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

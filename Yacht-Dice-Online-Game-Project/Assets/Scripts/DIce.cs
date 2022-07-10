@@ -70,7 +70,6 @@ public class Dice : MonoBehaviourPunCallbacks
         if (DC.Dices.Contains(this))
         {
             DC.Dices.Remove(this);
-            
         }
     }
 

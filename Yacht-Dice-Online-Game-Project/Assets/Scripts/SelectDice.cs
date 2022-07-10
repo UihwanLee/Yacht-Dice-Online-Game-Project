@@ -48,7 +48,7 @@ public class SelectDice : MonoBehaviour, IPointerClickHandler
                 diceSelectManager.SetSelectZoneSelectUI(true);
                 diceSelectManager.SetReturnZoneSelectUI(false);
                 scoreBoardManager.SetSelectScoreUI(false);
-                scoreBoardManager.ChangeColorSelectScore(-1);
+                scoreBoardManager.ChangeSelectScore(-1, false);
                 diceSelectManager.selectZoneSelectUI.transform.localPosition = new Vector3(this.transform.localPosition.x, 0f, 0f);
             }
             else
@@ -60,7 +60,7 @@ public class SelectDice : MonoBehaviour, IPointerClickHandler
                     diceSelectManager.SetSelectZoneSelectUI(false);
                     diceSelectManager.SetReturnZoneSelectUI(true);
                     scoreBoardManager.SetSelectScoreUI(false);
-                    scoreBoardManager.ChangeColorSelectScore(-1);
+                    scoreBoardManager.ChangeSelectScore(-1, false);
                     diceSelectManager.returnZoneSelectUI.transform.localPosition = new Vector3(this.transform.localPosition.x, 272f, 0f);
                 }
             }
@@ -79,7 +79,7 @@ public class SelectDice : MonoBehaviour, IPointerClickHandler
                 diceSelectManager.SetSelectZoneSelectUI(false);
                 diceSelectManager.SetReturnZoneSelectUI(false);
                 scoreBoardManager.SetSelectScoreUI(false);
-                scoreBoardManager.ChangeColorSelectScore(-1);
+                scoreBoardManager.ChangeSelectScore(-1, false);
                 diceSelectManager.ReturnDiceUI(this);
             }
         }

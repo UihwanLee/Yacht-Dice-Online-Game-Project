@@ -42,18 +42,21 @@ public class SelectScore : MonoBehaviour, IPointerClickHandler
             scoreBoardManager.selectScoreUI.transform.localPosition = (isChallengeScore) ? new Vector3(this.transform.localPosition.x, -450f, 0f) : new Vector3(this.transform.localPosition.x, -280f, 0f);
 
             // 색깔 변화 : (ScoreBoardManager)를 이용하여 index를 통해 색깔을 변화시킨다.
-            scoreBoardManager.ChangeColorSelectScore(this.index);
+            scoreBoardManager.ChangeSelectScore(this.index, false);
 
         }
         else if (click >= 2)
         {
             // Select UI 이동
-            diceSelectManager.SetSelectZoneSelectUI(true);
+            diceSelectManager.SetSelectZoneSelectUI(false);
             diceSelectManager.SetReturnZoneSelectUI(false);
             scoreBoardManager.SetSelectScoreUI(false);
             diceSelectManager.selectZoneSelectUI.transform.localPosition = new Vector3(this.transform.localPosition.x, 0f, 0f);
 
             // 점수가 확정이 되며 해당 플레이어에게 정보 전달 후, 다음 플레이어 개시
+            scoreBoardManager.ChangeSelectScore(this.index, true);
+            IN.Players[IN.currentPlayerSequence].SetScore(this.score, this.index, this.isChallengeScore);
+            IN.NextPlayer();
         }
     }
 

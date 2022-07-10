@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using static NetworkManager;
+using static InGameNetWorkManager;
 
 public class ChatManager : MonoBehaviourPunCallbacks
 {
@@ -32,6 +33,8 @@ public class ChatManager : MonoBehaviourPunCallbacks
     [SerializeField]
     private GameObject emoticonContainer;
     private bool isEmoticonContainer;
+    [SerializeField]
+    private List<GameObject> emoticonChatList = new List<GameObject>();
 
     public PhotonView PV;
 
@@ -50,6 +53,7 @@ public class ChatManager : MonoBehaviourPunCallbacks
         // 이모티콘 변수 초기화
         emoticonContainer.SetActive(false);
         isEmoticonContainer = false;
+        for (int i = 0; i < emoticonChatList.Count; i++) if (emoticonChatList[i]) emoticonChatList[i].SetActive(false);
     }
 
     #region  채팅
@@ -133,15 +137,41 @@ public class ChatManager : MonoBehaviourPunCallbacks
         else
         {
             emoticonContainer.GetComponent<Animator>().SetTrigger("off");
-            /*
-            if(!emoticonContainer.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Anim_EmoticonsUnscroll"))
-            {
-                emoticonContainer.SetActive(false);
-            }
-            */
         }
 
         isEmoticonContainer = !isEmoticonContainer;
+    }
+
+    // 이모티콘을 누르면 해당 플레이어의 이모챗 활성화
+    public void OnClcikEmoticonChatButton(GameObject emoticon)
+    {
+        // 보낼 이모티콘 정보 찾기
+        string emoticonMsg = emoticon.transform.GetChild(0).GetComponent<Text>().text;
+
+        // 플레이어의 인덱스 구하기
+        int index = IN.MyPlayer.GetPlayerSequence();
+
+        PV.RPC("SendEmoticonchatRPC", RpcTarget.AllBuffered, emoticonMsg, index);
+
+        emoticonContainer.GetComponent<Animator>().SetTrigger("off");
+        isEmoticonContainer = !isEmoticonContainer;
+    }
+
+    [PunRPC]
+    private void SendEmoticonchatRPC(string emoticonMsg, int index)
+    {
+        StartCoroutine(SendEmoticonCourutine(emoticonMsg, index));
+    }
+
+    IEnumerator SendEmoticonCourutine(string emoticonMsg, int index)
+    {
+
+        emoticonChatList[index].SetActive(true);
+        emoticonChatList[index].transform.GetChild(1).GetComponent<Text>().text = emoticonMsg + "ㄱ";
+
+        yield return new WaitForSeconds(2f);
+
+        emoticonChatList[index].SetActive(false);
     }
 
     #endregion

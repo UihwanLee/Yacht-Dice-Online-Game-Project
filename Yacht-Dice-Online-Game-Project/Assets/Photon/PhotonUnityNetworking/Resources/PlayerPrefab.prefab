@@ -232,6 +232,7 @@ MonoBehaviour:
   playerIcon: {fileID: 6995746190248548332}
   playerIconIndex: 0
   playerSequence: 0
+  rerollCount: 0
   normalScoreList: 
   challengeSocreList: 
   bonusScore: 0

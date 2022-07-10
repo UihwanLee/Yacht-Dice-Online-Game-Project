@@ -168,7 +168,7 @@ public class DiceController : MonoBehaviourPunCallbacks
     // 주사위 콜라이더 켜기(주사위 눈 확인 함수)
     IEnumerator AcitveDiceColiderCourutine()
     {
-        yield return new WaitForSeconds(8f);
+        yield return new WaitForSeconds(5f);
         for (int i = 0; i < Dices.Count; i++)
         {
             if (!Dices[i].isSelect) Dices[i].SetSidesColider(true);
@@ -211,6 +211,16 @@ public class DiceController : MonoBehaviourPunCallbacks
 
             scoreBoardManager.PV.RPC("SetActiveCurrentPlayerScoreBoard", RpcTarget.AllBuffered, true);
             scoreBoardManager.PV.RPC("UpdateCurrentPlayerScoreBoardRPC", RpcTarget.AllBuffered);
+
+            IN.SetRerollCountUI(true);
+
+            // 플레이어 리롤 카운트가 끝났을 시, 더이상 리롤을 하지 못하며 점수를 바로 선택하게 한다.
+            // 올려진 주사위들은 모두 ReturnZone으로 보냄 
+            if (IN.Players[IN.currentPlayerSequence].rerollCount == 0)
+            {
+                yield return new WaitForSeconds(2f);
+                diceSelectManager.MoveAllDicesReturnZone();
+            }
 
         }
     }

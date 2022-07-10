@@ -66,6 +66,9 @@ MonoBehaviour:
   - SetSelectScoreUIRPC
   - UpdateCurrentSelectScoreRPC
   - ChangeColorSelectScoreRPC
+  - SendEmoticonchatRPC
+  - ChangeSelectScoreRPC
+  - SetRerollCountUIRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
