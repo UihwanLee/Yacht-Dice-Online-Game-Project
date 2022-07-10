@@ -63,6 +63,9 @@ MonoBehaviour:
   - SetScoreRPC
   - SetReturnZoneSelectUIRPC
   - SetSelectZoneSelectUIRPC
+  - SetSelectScoreUIRPC
+  - UpdateCurrentSelectScoreRPC
+  - ChangeColorSelectScoreRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

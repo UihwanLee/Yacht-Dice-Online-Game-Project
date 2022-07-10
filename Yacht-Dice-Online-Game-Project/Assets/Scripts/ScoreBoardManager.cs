@@ -26,6 +26,13 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
     private List<int> currentNormalScores = new List<int>();
     private List<int> curretnChallengeScores = new List<int>();
 
+    // 플레이어가 현재 선택한 Score 버튼
+    private SelectScore currentSelectScore;
+
+    // Select UI
+    [Header("Select UI")]
+    public GameObject selectScoreUI;
+
     [Header("Scirpts")]
     [SerializeField]
     private DiceController diceController;
@@ -37,6 +44,12 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
         PV = photonView;
 
         currentPlayerScoreBoard.SetActive(false);
+
+        // Select UI 비활성화
+        selectScoreUI.SetActive(false);
+
+        // 현재 선택된 점수 정보 초기화
+        currentSelectScore = null;
     }
 
     [PunRPC]
@@ -121,7 +134,40 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
                 index++;
             }
         }
+    }
 
-        Debug.Log("스코어 보드 업데이트!");
+    // Select Score UI 활성화/비활성화
+    public void SetSelectScoreUI(bool isActive)
+    {
+        PV.RPC("SetSelectScoreUIRPC", RpcTarget.AllBuffered, isActive);
+    }
+
+    [PunRPC]
+    // Select UI 활성화/비활성화
+    private void SetSelectScoreUIRPC(bool isActive)
+    {
+        selectScoreUI.SetActive(isActive);
+    }
+
+    // 플레이어가 선택한 SelectScore 업데이트
+    public void ChangeColorSelectScore(int index)
+    {
+        PV.RPC("ChangeColorSelectScoreRPC", RpcTarget.AllBuffered, index);
+    }
+
+    [PunRPC]
+    // RPC로 SelectScore 스크립트를 받을 수 없으므로 index로 찾을 수 있도록 한다.
+    private void ChangeColorSelectScoreRPC(int index)
+    {
+        // 모든 SelectUI Color 초기화
+        foreach (var normalScore in normalScoreList) normalScore.transform.GetChild(0).GetComponent<Image>().color = Color.white;
+        foreach (var challengeScore in challengeScoreList) challengeScore.transform.GetChild(0).GetComponent<Image>().color = Color.white;
+
+
+        // index 값에 따라 맞는 Select Score 색깔 변화 : index = -1 일 시 제와
+        if (index == -1) return;
+        if (index < 6) normalScoreList[index].transform.GetChild(0).GetComponent<Image>().color = Color.yellow;
+        else challengeScoreList[(index % 6)].transform.GetChild(0).GetComponent<Image>().color = Color.yellow;
+    
     }
 }

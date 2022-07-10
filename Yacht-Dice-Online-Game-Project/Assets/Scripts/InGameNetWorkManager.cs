@@ -222,6 +222,8 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
             // Select UI 비활성화
             diceSelectManager.SetSelectZoneSelectUI(false);
             diceSelectManager.SetReturnZoneSelectUI(false);
+            scoreBoardManager.SetSelectScoreUI(false);
+            scoreBoardManager.ChangeColorSelectScore(-1);
 
             // 다이스 Bottle Set
             PV.RPC("SetDiceRPC", RpcTarget.All);

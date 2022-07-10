@@ -5,7 +5,6 @@ ScriptsOnlyBuild:
     - Dice
     - DiceCheckZone
     - DiceController
-    - DiceSelect
     - DiceSelectManager
     - FixedDisplay
     - InGameNetWorkManager
@@ -13,6 +12,8 @@ ScriptsOnlyBuild:
     - PlayerController
     - ScoreBoardManager
     - ScoreLogic
+    - SelectDice
+    - SelectScore
     - TitlePanel
     PhotonUnityNetworking.Demos.dll:
     - Photon.Pun.Demo.Asteroids.Asteroid
@@ -192,6 +193,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 4482}
     - Class: 114
       Script: {instanceID: 4672}
+    - Class: 114
+      Script: {instanceID: 69794}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -551,10 +554,10 @@ ScriptsOnlyBuild:
     className: SplineWalker
   - hash:
       serializedVersion: 2
-      Hash: 4a63993246ef4a68c7d563fc345f09ac
+      Hash: 5bd46e02b390d30eefa419586f47cf76
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: DiceSelect
+    className: SelectDice
   - hash:
       serializedVersion: 2
       Hash: c380fc5ce39348202e0a58fe3e243a74
@@ -695,7 +698,7 @@ ScriptsOnlyBuild:
     className: PhotonRigidbody2DView
   - hash:
       serializedVersion: 2
-      Hash: 7cca73c753439e458430380921ede07a
+      Hash: 7808f2e68733f4d1e42b5622c317bdfe
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: DiceSelectManager
@@ -1499,7 +1502,7 @@ ScriptsOnlyBuild:
     className: ServerAddressProperty
   - hash:
       serializedVersion: 2
-      Hash: 9f0db7ba0e14ec1b21b251094aecc42c
+      Hash: 0ef4c6228796b5a6a0f892f62eb0d4ae
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Dice
@@ -1517,7 +1520,7 @@ ScriptsOnlyBuild:
     className: ThirdPersonUserControl
   - hash:
       serializedVersion: 2
-      Hash: 81054c4be1f9a715954a2d972096ddf3
+      Hash: 4326c289f25b3d3017866a9237f7dbd0
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ScoreBoardManager
@@ -1611,6 +1614,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Cockpit.Forms
     className: UserIdUiForm
+  - hash:
+      serializedVersion: 2
+      Hash: d13c372a491f078af3ffe8c9f3cc98cf
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: SelectScore
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainMenu.unity

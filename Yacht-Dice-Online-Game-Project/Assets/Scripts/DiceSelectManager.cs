@@ -202,7 +202,7 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
         {
             if(!dice.isSelect)
             {
-                currentSelectZoneList[index].GetComponent<DiceSelect>().score = dice.score;
+                currentSelectZoneList[index].GetComponent<SelectDice>().score = dice.score;
                 index++;
             }
         }
@@ -253,7 +253,7 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
 
     // 주사위가 선택되어 Return Zone으로 돌아가고 SelectZone을 정렬하는 함수
     // index : 선택된 주사위 인덱스
-    public void SelectDice(DiceSelect diceInfo)
+    public void SelectDiceUI(SelectDice diceInfo)
     {
         List<Dice> dices = new List<Dice>();
         dices = diceController.Dices;
@@ -290,14 +290,14 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
     }
 
     // Return Zone 매치 인덱스
-    private int FindReturnZoneIndex(Dice dice,DiceSelect diceInfo)
+    private int FindReturnZoneIndex(Dice dice, SelectDice diceInfo)
     {
         for(int i=0; i<returnZoneDice.Count; i++)
         {
             // 맞는 인덱스를 찾았을 시, 점수를 집어넣고 인덱스 반환
-            if(returnZoneDice[i].GetComponent<DiceSelect>().score == 0)
+            if(returnZoneDice[i].GetComponent<SelectDice>().score == 0)
             {
-                returnZoneDice[i].GetComponent<DiceSelect>().score = diceInfo.score;
+                returnZoneDice[i].GetComponent<SelectDice>().score = diceInfo.score;
                 diceController.remainDiceCount--; // 남아있는 주사위 개수 감소
                 dice.returnZoneIndex = i;
                 dice.isSelect = true; // isSelect 업데이트
@@ -341,7 +341,7 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
     // Select Zone으로 이동한 후 Return Zone이 아닌 Select Zone만 정렬한다.
     // 따라서 Select Zone과 반대로 정렬 후 -> 이동
     // index : 선택된 주사위 인덱스
-    public void ReturnDice(DiceSelect diceInfo)
+    public void ReturnDiceUI(SelectDice diceInfo)
     {
         List<Dice> dices = new List<Dice>();
         dices = diceController.Dices;
@@ -357,16 +357,18 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
 
         if (index == -1) return;
 
-        // 인덱스를 찾은 후 그 인덱스 자리를 빼고 이동시켜준다.
-        TeleportDiceinSelectZoneButReturnZoneIndex(index);
+        dice.isMoving = false;
 
-        // 정렬 후 이동 시작
+        // 이동 시작
         StartCoroutine(TeleportDice(dice, index, 0.25f, true));
+
+        // 이동 후 정렬
+        TeleportDiceinSelectZoneButReturnZoneIndex(index);
     }
 
     // Return Zone 주사위 매치 함수
     // Dice가 갖고 있는 returnZoneIndex를 이용하여 일치하는 주사위를 찾는다.
-    private Dice TryFindDiceinReturnZone(List<Dice> dices, int findIndex, DiceSelect diceinfo)
+    private Dice TryFindDiceinReturnZone(List<Dice> dices, int findIndex, SelectDice diceinfo)
     {
         int currentIndex = 0;
         foreach (var dice in dices)
@@ -378,10 +380,11 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
                     diceController.remainDiceCount++;
 
                     // Dice Select 정보 초기화
+                    dice.isSelect = false;
+                    dice.isMoving = true;
                     diceinfo.score = 0;
 
                     // dice returnZone  정보 초기화
-                    dice.isSelect = false;
                     dice.returnZoneIndex = -1;
 
                     return dice;
@@ -394,17 +397,21 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
 
     // Select Zone 매치 인덱스
     // Select UI 업데이트 이후 찾아갈 인덱스를 찾는다.
-    private int FindSelectZoneIndex(Dice dice, DiceSelect diceInfo)
+    private int FindSelectZoneIndex(Dice movingDice, SelectDice diceInfo)
     {
-        for (int i = 0; i < currentSelectZoneList.Count; i++)
+        List<Dice> dices = new List<Dice>();
+        dices = diceController.Dices;
+
+        int index = 0;
+        foreach (var dice in dices)
         {
-            // 자기 자신과 맞는 주사위 눈을 찾으면 그 인덱스를 반환
-            if(currentSelectZoneList[i].GetComponent<DiceSelect>().score == dice.score)
+            if (!dice.isSelect)
             {
-                Debug.Log(i);
-                return i;
+                if (dice.isMoving) return index;
+                index++;
             }
         }
+
         return -1;
     }
 
@@ -420,11 +427,8 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
         {
             if (!dice.isSelect)
             {
-                if(index != avoidIndex)
-                {
-                    dice.transform.localPosition = currentSelectPosList[index];
-                    dice.transform.rotation = Quaternion.Euler(dice.GetRot(dice.score) + selectZoneRot);
-                }
+                dice.transform.localPosition = currentSelectPosList[index];
+                dice.transform.rotation = Quaternion.Euler(dice.GetRot(dice.score) + selectZoneRot);
                 index++;
             }
         }
