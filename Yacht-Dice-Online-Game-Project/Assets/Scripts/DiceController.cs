@@ -181,8 +181,8 @@ public class DiceController : MonoBehaviourPunCallbacks
         // '낙' 된 주사위가 / 주사위 눈이 배정이 안된 주사위 있을 시 다시 던지기
         if (CheckDicePos())
         {
-            Debug.Log("낙");
-            IN.SetDice();
+            IN.StartFailThrowDiceAnim();
+            //IN.SetDice();
         }
         else
         {
@@ -247,12 +247,10 @@ public class DiceController : MonoBehaviourPunCallbacks
             {
                 if (Dices[i].transform.localPosition.y < 1.6f || Dices[i].transform.localPosition.y > 1.9f)
                 {
-                    Debug.Log("낙: 거리가 멀리 떨어짐");
                     return true;
                 }
                 else if (Dices[i].score == 0)
                 {
-                    Debug.Log("낙: 점수가 집계가 안됨");
                     return true;
                 }
             }

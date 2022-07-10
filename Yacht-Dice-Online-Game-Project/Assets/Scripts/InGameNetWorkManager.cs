@@ -53,6 +53,17 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField]
     private Camera mainCamera;
 
+    // 애니메이션 관련 변수
+    [Header("Animation UI")]
+    [SerializeField]
+    private GameObject showRoundUI;
+    [SerializeField]
+    private GameObject showCurrentPlayerSequenceUI;
+    [SerializeField]
+    private GameObject failThrowDiceUI;
+    [SerializeField]
+    private GameObject rerollCountDicreaseUI;
+
     [Header("PV")]
     public PhotonView PV;
 
@@ -89,8 +100,15 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         // rerollCountUI 비활성화
         rerollCountUI.SetActive(false);
 
+        // Animation UI 비활성화
+        showRoundUI.SetActive(false);
+        showCurrentPlayerSequenceUI.SetActive(false);
+        failThrowDiceUI.SetActive(false);
+        rerollCountDicreaseUI.SetActive(false);
+
         // 패널 정리
         inGamePanel.SetActive(false);
+
 
         Players.Clear();
         currentPlayerSequence = 0;
@@ -153,7 +171,6 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         // 인게임 플레이아 세팅
         for (int i = 0; i < Players.Count; i++)
         {
-            Debug.Log(i + "번째 플레이어 배치! 플레이어 닉네임 : " + Players[i].GetPlayerNickName());
             inGamePlayers[i].SetActive(true);
             inGamePlayers[i].transform.GetChild(0).GetComponent<Image>().sprite = Players[i].GetPlayerIcon();
             inGamePlayers[i].transform.GetChild(1).GetComponent<Text>().text = Players[i].GetPlayerNickName();
@@ -236,6 +253,9 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         // 모든 플레이어가 턴을 마치면 라운드를 증가시키고 다시 첫 플레이어부터 진행
         CheckRound();
+
+        // 애니메이션 플레이
+        PV.RPC("ShowInGameAnimationRPC", RpcTarget.AllBuffered);
         
         // 첫번째 플레이어 소개하는 애니메이션 이후 첫번째 플레이어 순서를 설정한다.
         PV.RPC("SetPlayerPlayingRPC", RpcTarget.All);
@@ -318,6 +338,8 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
             scoreBoardManager.SetSelectScoreUI(false);
             scoreBoardManager.ChangeSelectScore(-1, false);
 
+            diceSelectManager.SortReturnZoneDice();
+
 
             // 리롤 할 시, 돌릴 다이스가 없을 시 동작하지 않게 한다.
             if (rollDiceButton.transform.GetChild(0).GetComponent<Text>().text == REROLL)
@@ -369,6 +391,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         else
         {
             Debug.Log("리롤 or 이미 생성됨");
+            StartRerollCountDicreaseAnim();
             DC.RerollYachtDices();
         }
     }
@@ -421,6 +444,82 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         rollDiceButton.transform.GetChild(0).GetComponent<Text>().text = REROLL;
     }
 
+
+    #endregion
+
+    #region 애니메이션 UI
+
+    [PunRPC]
+    // 라운드 공개 애니메이션
+    private void ShowInGameAnimationRPC()
+    {
+        StartCoroutine(ShowInGameAnimationRPCCoroutine());
+    }
+
+    IEnumerator ShowInGameAnimationRPCCoroutine()
+    {
+        // 첫번째 플레이어일 경우 현재 라운드 공개
+        if (currentPlayerSequence == 0)
+        {
+            showRoundUI.SetActive(true);
+            showRoundUI.transform.GetChild(2).GetComponent<Text>().text = currentRound.ToString();
+            yield return new WaitForSeconds(5f);
+            showRoundUI.SetActive(false);
+        }
+
+        // 플레이어 공개
+        showCurrentPlayerSequenceUI.SetActive(true);
+        showCurrentPlayerSequenceUI.transform.GetChild(2).GetComponent<Image>().sprite = inGamePlayers[currentPlayerSequence].GetComponent<Image>().sprite;
+        showCurrentPlayerSequenceUI.transform.GetChild(3).GetComponent<Image>().sprite = Players[currentPlayerSequence].GetPlayerIcon();
+        showCurrentPlayerSequenceUI.transform.GetChild(4).GetComponent<Text>().text = (Players[currentPlayerSequence].GetPlayerNickName() + " Turn");
+
+        yield return new WaitForSeconds(6f);
+
+        showCurrentPlayerSequenceUI.SetActive(false);
+    }
+
+    // "낙" 애니메이션
+    public void StartFailThrowDiceAnim()
+    {
+        PV.RPC("StartFailThrowDiceAnimRPC", RpcTarget.AllBuffered);
+    }
+
+    [PunRPC]
+    private void StartFailThrowDiceAnimRPC()
+    {
+        StartCoroutine(StartFailThrowDiceAnimRPCCoroutine());
+    }
+
+    IEnumerator StartFailThrowDiceAnimRPCCoroutine()
+    {
+        failThrowDiceUI.SetActive(true);
+        yield return new WaitForSeconds(2.5f);
+
+        // 낙이 될 경우 리롤 횟수가 줄어드는 버그 예외처리
+        Players[currentPlayerSequence].rerollCount++;
+        failThrowDiceUI.SetActive(false);
+
+        SetDice();
+    }
+
+    // 리롤 횟수 감소 애니메이션
+    public void StartRerollCountDicreaseAnim()
+    {
+        PV.RPC("StartRerollCountDicreaseAnimRPC", RpcTarget.AllBuffered);
+    }
+
+    [PunRPC]
+    private void StartRerollCountDicreaseAnimRPC()
+    {
+        StartCoroutine(StartRerollCountDicreaseAnimRPCCoroutine());
+    }
+
+    IEnumerator StartRerollCountDicreaseAnimRPCCoroutine()
+    {
+        rerollCountDicreaseUI.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        rerollCountDicreaseUI.SetActive(false);
+    }
 
     #endregion
 

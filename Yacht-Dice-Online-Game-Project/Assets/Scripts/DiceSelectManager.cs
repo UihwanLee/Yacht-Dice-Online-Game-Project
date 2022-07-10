@@ -481,6 +481,31 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
         dice.isMoving = false;
     }
 
+    // 리롤 시, 기존에 남아있는 Return Zone의 주사위를 정렬한다.
+    public void SortReturnZoneDice()
+    {
+        List<Dice> dices = new List<Dice>();
+        dices = diceController.Dices;
+
+        int index = 0;
+        foreach (var dice in dices)
+        {
+            if(dice.isSelect)
+            {
+                returnZoneDice[index].GetComponent<SelectDice>().score = dice.score;
+                dice.returnZoneIndex = index;
+                dice.transform.localPosition = returnZonePos[index];
+                index++;
+            }
+        }
+
+        // 남은 ReturnZone SelectDice의 score는 0으로 초기화 해준다.
+        for(int i=index; i<returnZoneDice.Count; i++)
+        {
+            returnZoneDice[i].GetComponent<SelectDice>().score = 0;
+        }
+    }
+
     // 플레이어 리롤턴 이 모두 끝날 시 : 남은 주사위들을 모두 ReturnZone에 보낸다.
     // Return Zone에 모든 주사위가 모일 시 점수를 꼭 적게 만든다.
     public void MoveAllDicesReturnZone()
