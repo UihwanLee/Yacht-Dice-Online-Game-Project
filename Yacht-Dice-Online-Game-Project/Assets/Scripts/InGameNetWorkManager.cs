@@ -534,6 +534,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void StartFailThrowDiceAnimRPC()
     {
+        SetDice();
         StartCoroutine(StartFailThrowDiceAnimRPCCoroutine());
     }
 
@@ -545,8 +546,6 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         // 낙이 될 경우 리롤 횟수가 줄어드는 버그 예외처리
         Players[currentPlayerSequence].rerollCount++;
         failThrowDiceUI.SetActive(false);
-
-        IN.SetDice();
     }
 
     // 리롤 횟수 감소 애니메이션

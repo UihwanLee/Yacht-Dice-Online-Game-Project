@@ -203,7 +203,6 @@ public class DiceController : MonoBehaviourPunCallbacks
         if (CheckDicePos())
         {
             IN.StartFailThrowDiceAnim();
-            IN.SetDice();
         }
         else
         {
