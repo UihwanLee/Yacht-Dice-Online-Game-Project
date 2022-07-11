@@ -550,5 +550,31 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
 
     #endregion
 
-  
+    #region SelectDice PunRPC ÇÔ¼ö
+
+    public void ToClickOneSelectDice(int index)
+    {
+        PV.RPC("ToClickOneSelectDiceSelectZoneRPC", RpcTarget.All, index);
+    }
+
+    [PunRPC]
+    private void ToClickOneSelectDiceSelectZoneRPC(int index)
+    {
+        currentSelectZoneList[index].GetComponent<SelectDice>().ClickOneSelectDice();
+    }
+
+    public void ToClickTwiceSelectDice(int index)
+    {
+        PV.RPC("ToClickTwiceSelectDiceRPC", RpcTarget.All, index);
+    }
+
+    [PunRPC]
+    private void ToClickTwiceSelectDiceRPC(int index)
+    {
+        currentSelectZoneList[index].GetComponent<SelectDice>().TwiceClickSelectDice();
+    }
+
+    #endregion
+
+
 }

@@ -75,6 +75,17 @@ MonoBehaviour:
   - IncreaseCurrentPlayerSequenceRPC
   - SetCurrentPlayerSequenceRPC
   - CheckRound
+  - GetDicesRPC
+  - SetAllDiceKinematicRPC
+  - ReBottlePlayingPosRPC
+  - SetBottleInitPosRPC
+  - SetBottlePlayingPosRPC
+  - ShakingBottleRPC
+  - ThrowBottleRPC
+  - RerollYachtDicesRPC
+  - SetActiveCurrentPlayerScoreBoardRPC
+  - ToClickOneSelectDiceSelectZoneRPC
+  - ToClickTwiceSelectDiceRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

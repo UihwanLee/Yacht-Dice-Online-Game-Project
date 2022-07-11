@@ -65,9 +65,9 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 903
+    x: 928
     y: 0
-    width: 464
+    width: 439
     height: 271
   m_MinSize: {x: 232, y: 271}
   m_MaxSize: {x: 10002, y: 10021}
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_MinSize: {x: 333, y: 271}
   m_MaxSize: {x: 14003, y: 10021}
   vertical: 0
-  controlID: 148
+  controlID: 110
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_MinSize: {x: 880, y: 492}
   m_MaxSize: {x: 18003, y: 14042}
   vertical: 0
-  controlID: 200
+  controlID: 195
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -195,10 +195,10 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 903
+    width: 928
     height: 271
-  m_MinSize: {x: 100, y: 100}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 101, y: 121}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 21}
   m_Panes:
   - {fileID: 21}
@@ -302,7 +302,7 @@ MonoBehaviour:
   m_MinSize: {x: 605, y: 492}
   m_MaxSize: {x: 14003, y: 14042}
   vertical: 1
-  controlID: 62
+  controlID: 61
 --- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -328,7 +328,7 @@ MonoBehaviour:
   m_MinSize: {x: 605, y: 221}
   m_MaxSize: {x: 12005, y: 4021}
   vertical: 0
-  controlID: 63
+  controlID: 62
 --- !u!114 &14
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -450,7 +450,7 @@ MonoBehaviour:
       e10: 0
       e11: 0.65860873
       e12: 0
-      e13: 22.177032
+      e13: 23.535645
       e20: 0
       e21: 0
       e22: 1
@@ -607,9 +607,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 903
+    x: 928
     y: 749
-    width: 462
+    width: 437
     height: 250
   m_ViewDataDictionary: {fileID: 0}
   m_SearchFilter:
@@ -625,36 +625,36 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Panels/InGame Panel
+    - Assets/Scripts
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 78
   m_LastFolders:
-  - Assets/Panels/InGame Panel
+  - Assets/Scripts
   m_LastFoldersGridSize: 78
   m_LastProjectPath: C:\Users\user\Documents\Yacht-Dice-Online-Game-Project
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: e64d0000
-    m_LastClickedID: 19942
-    m_ExpandedIDs: 00000000cc4d0000ce4d0000d04d0000d24d0000d44d0000d64d0000d84d0000da4d0000dc4d0000de4d0000e04d0000e24d0000e44d0000e64d0000e84d0000ea4d0000ec4d0000
+    scrollPos: {x: 0, y: 334}
+    m_SelectedIDs: 7a580000
+    m_LastClickedID: 22650
+    m_ExpandedIDs: 000000002458000026580000285800002a5800002c5800002e58000030580000325800003458000036580000385800003a5800003c5800003e580000405800004258000044580000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: Player Icon
-      m_OriginalName: Player Icon
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 20014
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 3}
     m_SearchString: 
@@ -668,7 +668,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000cc4d0000ce4d0000d04d0000d24d0000d44d0000d64d0000d84d0000da4d0000dc4d0000de4d0000e04d0000e24d0000e44d0000e64d0000e84d0000ea4d0000ec4d0000
+    m_ExpandedIDs: 000000002458000026580000285800002a5800002c5800002e58000030580000325800003458000036580000385800003a5800003c5800003e580000405800004258000044580000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -720,7 +720,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 0}
+    m_ScrollPosition: {x: 0, y: 317}
     m_GridSize: 78
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 147
@@ -789,9 +789,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 0251fdff
-      m_LastClickedID: -175870
-      m_ExpandedIDs: 5855fdff7e55fdff2a57fdff025ffdff265ffdffd260fdff9e66fdffc266fdff6e68fdffd86efdfffc6efdffa870fdff7080fdff9480fdff4082fdff8e89fdffb489fdff608bfdffcc95fdffec95fdff9a97fdff2c9ffdff4e9ffdfffaa0fdff80a9fdffa0a9fdff4cabfdff8eb2fdffaeb2fdff5ab4fdffa8bcfdffccbcfdff78befdffcec4fdfff2c4fdff9ec6fdffe2cffdff08d0fdffb4d1fdff3ad9fdff5ad9fdff06dbfdff8edcfdffaedcfdff5cdefdff00ebfdff24ebfdffd0ecfdff42f0fdff5cf0fdffe0f2fdff04f3fdffb0f4fdff6a04feff9004feff3c06feff3019feff162afeff3c2afeffe82bfeff5c39feff8039feff2c3bfeff5249feff7649feff224bfeff3a9cfeff609cfeff0c9efeff2ec3feff80c5feffd6c7feffb2fdfeff9415ffff246effff74d9ffff12dcfffff4f8ffff4cfbffffec3f0000704200002c430000c04700008e480000244900001c4a0000c0db02003ce9020018af0400fc120500ce1e0500d81f050064220500d0230500d424050056250500d4f9050018090600880b06004c9b0600b4a4060090aa06004aab060000ad0600b8fb060020a8070090aa0700cac808004e9709008cf30900ca4f0a00bc190b005c1f0b00e65d0c00ee5d0c0086660c00506d0c00766e0c00c06f0c00ca710c00
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: 5e42ffff8242ffff2e44ffff364bffff5a4bffff064dffffe054ffff0655ffffb256ffff065effff285effffd45fffff0866ffff2866ffffd467ffffb06dffffd06dffff7c6fffff007affff207affffcc7bfffffc7fffff1c80ffffc881ffff2688ffff4688fffff289ffff1692ffff3692ffffe293ffff2e9bffff4e9bfffffa9cffff4eabffff6eabffff1aadffff12b8ffff32b8ffffdeb9ffff0ac1ffff2ac1ffffd6c2ffff16c8ffff36c8ffffe2c9ffff64deffff88deffff34e0ffffbaf1ffffdef1ffff8af3ffffcef6ffff4cfbfffff4ffffffa60401003ebc0100aa74020010140300c61c0300205d0600725d0600485e06009a5f0600a4610600
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -853,7 +853,7 @@ MonoBehaviour:
   m_Position:
     m_Target: {x: -181.44406, y: 3.515859, z: 3.0657213}
     speed: 2
-    m_Value: {x: -182.41508, y: 3.5159285, z: 3.042807}
+    m_Value: {x: -181.44406, y: 3.515859, z: 3.0657213}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -906,7 +906,7 @@ MonoBehaviour:
   m_Size:
     m_Target: 0.5459383
     speed: 2
-    m_Value: 0.5597362
+    m_Value: 0.5459383
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1042,7 +1042,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 749
-    width: 902
+    width: 927
     height: 250
   m_ViewDataDictionary: {fileID: 0}
 --- !u!114 &22

@@ -412,7 +412,7 @@ ScriptsOnlyBuild:
     className: TMP_FontAsset
   - hash:
       serializedVersion: 2
-      Hash: 4dd24adb4f3eb2c4ddb91721a7118de5
+      Hash: 449f81f5762ae528c82f330663a2645f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: InGameNetWorkManager

@@ -88,6 +88,17 @@ public class DiceController : MonoBehaviourPunCallbacks
 
     #region Dice Manager
 
+    public void GetDices()
+    {
+        PV.RPC("GetDicesRPC", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void GetDicesRPC()
+    {
+        this.Dices = IN.newDices;
+    }
+
     // 주사위 떨어지는 이펙트 실행 / 중단
     public void FallingDice(bool _isThrown)
     {
@@ -143,8 +154,14 @@ public class DiceController : MonoBehaviourPunCallbacks
         }
     }
 
-    // 인게임 다이스 리롤
     public void RerollYachtDices()
+    {
+        PV.RPC("RerollYachtDicesRPC", RpcTarget.All);
+    }
+
+    [PunRPC]
+    // 인게임 다이스 리롤
+    private void RerollYachtDicesRPC()
     {
         // 돌릴 주사위 개수 업데이트
         UpdateRemainDiceCount();
@@ -161,8 +178,6 @@ public class DiceController : MonoBehaviourPunCallbacks
                 Dices[i].Teleport(spawnPos + (new Vector3(Mathf.Cos(radian), Mathf.Sin(radian), 0f) * _spawnDistance));
             }
         }
-
-        Debug.Log("02. 플레이어 리롤 다이스 성공!");
     }
 
     // 주사위 눈 순서대로 정렬
@@ -215,8 +230,8 @@ public class DiceController : MonoBehaviourPunCallbacks
             diceSelectManager.UpdateSelectZone();
             diceSelectManager.SetAllDicesToBeSelectMode();
 
-            scoreBoardManager.PV.RPC("SetActiveCurrentPlayerScoreBoard", RpcTarget.All, true);
-            scoreBoardManager.PV.RPC("UpdateCurrentPlayerScoreBoardRPC", RpcTarget.All);
+            scoreBoardManager.SetActiveCurrentPlayerScoreBoard(true);
+            scoreBoardManager.UpdateCurrentPlayerScoreBoard();
 
             IN.SetRerollCountUI(true);
 
@@ -305,11 +320,23 @@ public class DiceController : MonoBehaviourPunCallbacks
 
     public void SetBottleInitPos()
     {
+        PV.RPC("SetBottleInitPosRPC", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void SetBottleInitPosRPC()
+    {
         // Init Bottle Anim으로 초기화
         diceBottle.GetComponent<Animator>().SetTrigger("init");
     }
 
     public void SetBottlePlayingPos()
+    {
+        PV.RPC("SetBottlePlayingPosRPC", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void SetBottlePlayingPosRPC()
     {
         // set Bottle Anim으로 초기화
         diceBottle.GetComponent<Animator>().SetTrigger("set");
@@ -319,11 +346,25 @@ public class DiceController : MonoBehaviourPunCallbacks
     // 다이스 Bottle 흔들기
     public void ShakingBottle()
     {
+        PV.RPC("ShakingBottleRPC", RpcTarget.All);
+    }
+
+    [PunRPC]
+    // 다이스 Bottle 흔들기
+    private void ShakingBottleRPC()
+    {
         diceBottle.GetComponent<Animator>().SetBool("isShake", true);
     }
 
     // 다이스 Bottle 던지기
     public void ThrowBottle()
+    {
+        PV.RPC("ThrowBottleRPC", RpcTarget.All);
+    }
+
+    [PunRPC]
+    // 다이스 Bottle 던지기
+    private void ThrowBottleRPC()
     {
         diceBottle.GetComponent<Animator>().SetBool("isShake", false);
         StartCoroutine(AcitveDiceColiderCourutine());
@@ -331,6 +372,14 @@ public class DiceController : MonoBehaviourPunCallbacks
 
     // 다이스 Bottle 다시 세팅(Reroll)
     public void ReBottlePlayingPos()
+    {
+        PV.RPC("ReBottlePlayingPosRPC", RpcTarget.All);
+    }
+
+
+    [PunRPC]
+    // 다이스 Bottle 다시 세팅(Reroll)
+    private void ReBottlePlayingPosRPC()
     {
         diceBottle.GetComponent<Animator>().SetTrigger("reroll");
     }

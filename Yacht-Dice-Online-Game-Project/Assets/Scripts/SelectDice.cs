@@ -41,47 +41,11 @@ public class SelectDice : MonoBehaviour, IPointerClickHandler
 
         if (click == 1)
         {
-
-            if (isSelectZone)
-            {
-                // Select UI 이동
-                diceSelectManager.SetSelectZoneSelectUI(true);
-                diceSelectManager.SetReturnZoneSelectUI(false);
-                scoreBoardManager.SetSelectScoreUI(false);
-                scoreBoardManager.ChangeSelectScore(-1, false);
-                diceSelectManager.selectZoneSelectUI.transform.localPosition = new Vector3(this.transform.localPosition.x, 0f, 0f);
-            }
-            else
-            {
-                // ReturnZone 안에 주사위가 있을 경우만 활성화
-                if(score != 0)
-                {
-                    // Select UI 이동
-                    diceSelectManager.SetSelectZoneSelectUI(false);
-                    diceSelectManager.SetReturnZoneSelectUI(true);
-                    scoreBoardManager.SetSelectScoreUI(false);
-                    scoreBoardManager.ChangeSelectScore(-1, false);
-                    diceSelectManager.returnZoneSelectUI.transform.localPosition = new Vector3(this.transform.localPosition.x, 272f, 0f);
-                }
-            }
+            diceSelectManager.ToClickOneSelectDice(this.index);
         }
         else if (click >= 2)
         {
-            if (isSelectZone)
-            {
-                diceSelectManager.SetSelectZoneSelectUI(false);
-                diceSelectManager.SetReturnZoneSelectUI(false);
-                scoreBoardManager.SetSelectScoreUI(false);
-                diceSelectManager.SelectDiceUI(this);
-            }
-            else
-            {
-                diceSelectManager.SetSelectZoneSelectUI(false);
-                diceSelectManager.SetReturnZoneSelectUI(false);
-                scoreBoardManager.SetSelectScoreUI(false);
-                scoreBoardManager.ChangeSelectScore(-1, false);
-                diceSelectManager.ReturnDiceUI(this);
-            }
+            diceSelectManager.ToClickOneSelectDice(this.index);
         }
     }
 
@@ -93,4 +57,53 @@ public class SelectDice : MonoBehaviour, IPointerClickHandler
         else if (this.score == 0) return false;
         else return true;
     }
+
+    #region 클릭 함수
+
+    public void ClickOneSelectDice()
+    {
+        if (isSelectZone)
+        {
+            // Select UI 이동
+            diceSelectManager.SetSelectZoneSelectUI(true);
+            diceSelectManager.SetReturnZoneSelectUI(false);
+            scoreBoardManager.SetSelectScoreUI(false);
+            scoreBoardManager.ChangeSelectScore(-1, false);
+            diceSelectManager.selectZoneSelectUI.transform.localPosition = new Vector3(this.transform.localPosition.x, 0f, 0f);
+        }
+        else
+        {
+            // ReturnZone 안에 주사위가 있을 경우만 활성화
+            if (score != 0)
+            {
+                // Select UI 이동
+                diceSelectManager.SetSelectZoneSelectUI(false);
+                diceSelectManager.SetReturnZoneSelectUI(true);
+                scoreBoardManager.SetSelectScoreUI(false);
+                scoreBoardManager.ChangeSelectScore(-1, false);
+                diceSelectManager.returnZoneSelectUI.transform.localPosition = new Vector3(this.transform.localPosition.x, 272f, 0f);
+            }
+        }
+    }
+
+    public void TwiceClickSelectDice()
+    {
+        if (isSelectZone)
+        {
+            diceSelectManager.SetSelectZoneSelectUI(false);
+            diceSelectManager.SetReturnZoneSelectUI(false);
+            scoreBoardManager.SetSelectScoreUI(false);
+            diceSelectManager.SelectDiceUI(this);
+        }
+        else
+        {
+            diceSelectManager.SetSelectZoneSelectUI(false);
+            diceSelectManager.SetReturnZoneSelectUI(false);
+            scoreBoardManager.SetSelectScoreUI(false);
+            scoreBoardManager.ChangeSelectScore(-1, false);
+            diceSelectManager.ReturnDiceUI(this);
+        }
+    }
+
+    #endregion
 }

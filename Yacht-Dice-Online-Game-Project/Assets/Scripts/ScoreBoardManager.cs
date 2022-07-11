@@ -78,17 +78,27 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
 
     #region CurrentPlayerScoreBoard
 
-    [PunRPC]
-    // CurrentPlayerScoreBoard 활성화/비활성화
     public void SetActiveCurrentPlayerScoreBoard(bool isActive)
     {
+        PV.RPC("SetActiveCurrentPlayerScoreBoardRPC", RpcTarget.All, isActive);
+    }
+
+    [PunRPC]
+    // CurrentPlayerScoreBoard 활성화/비활성화
+    private void SetActiveCurrentPlayerScoreBoardRPC(bool isActive)
+    {
         currentPlayerScoreBoard.SetActive(isActive);
+    }
+
+    public void SetCurrentPlayerScoreBoard()
+    {
+        PV.RPC("SetCurrentPlayerScoreBoardRPC", RpcTarget.All);
     }
 
 
     [PunRPC]
     // 현재 플레이어의 정보를 가져와 스코어 보드 세팅
-    public void SetCurrentPlayerScoreBoardRPC()
+    private void SetCurrentPlayerScoreBoardRPC()
     {
         // 현재 플레이어 불러오기
         PlayerController currentPlayer = IN.Players[IN.currentPlayerSequence];
@@ -129,9 +139,14 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
 
     }
 
+    public void UpdateCurrentPlayerScoreBoard()
+    {
+        PV.RPC("UpdateCurrentPlayerScoreBoardRPC", RpcTarget.All);
+    }
+
     [PunRPC]
     // 현재 스코어 상황 업데이트
-    public void UpdateCurrentPlayerScoreBoardRPC()
+    private void UpdateCurrentPlayerScoreBoardRPC()
     {
         currentNormalScores = scoreLogic.CalculateNormalScoreByDiceObject(diceController.Dices);
         curretnChallengeScores = scoreLogic.CalculateChallengeByDiceObject(diceController.Dices);
