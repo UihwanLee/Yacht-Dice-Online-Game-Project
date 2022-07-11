@@ -134,7 +134,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     {
         int bonus = 0; int total = 0;
         foreach(var score in normalScoreList) { bonus += score; total += score; }
-        foreach (var score in challengeSocreList) total += score;
+        foreach (var score in challengeSocreList)
+        {
+            total += (score==-1) ? 0 : score;
+        }
 
         this.bonusScore = bonus; this.totalScore = total;
     }

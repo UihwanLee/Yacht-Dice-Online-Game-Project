@@ -92,7 +92,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             if (inGamePlayers[i]) inGamePlayers[i].SetActive(false);
         }
-        DC.SetBottleInitPos();
+        DC.SetBottleInitPosByTransform();
 
         emoticonContainer.SetActive(false);
         isEmoticonContainer = false;
@@ -168,6 +168,9 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         // 플레이어 컨테이너 위치 세팅
         SetPlayerContainerPos(Players.Count);
 
+        // 플레이어 스코어 보드 초기 세팅
+        scoreBoardManager.InitAllPlayerScoreBoard(Players.Count);
+
         // 인게임 플레이아 세팅
         for (int i = 0; i < Players.Count; i++)
         {
@@ -190,7 +193,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     }
 
     // Player Container 포지션 설정
-    public void SetPlayerContainerPos(int count)
+    private void SetPlayerContainerPos(int count)
     {
         // 플레이어 수에 따라 적절한 위치로 이동시킨다.
         switch(count)
@@ -220,8 +223,23 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     // 플레이어 턴이 끝날 시, 다음 플레이어 진행
     public void NextPlayer()
     {
-        currentPlayerSequence++;
+        PV.RPC("SetCurrentPlayerSequenceRPC", RpcTarget.All, currentPlayerSequence);
         StartCoroutine(NextPlayerCoroutine());
+    }
+
+    // 다음 플레이어 진행에 맞춰 초기화 해줘야하는 변수들을 모두 초기화 해줄 수 있도록 한다.
+    [PunRPC]
+    private void SetCurrentPlayerSequenceRPC(int currentSeqiemce)
+    {
+        // isSelect 초기화
+        DC.ResetDiceSelect();
+
+        // Dice 설정 : Dice Bottle 위치 초기화, Dice 위치 초기화(주사위는 Dice Container 위에 isKinetic으로 존재
+        DC.SetBottleInitPos();
+        DC.SetBottleInitPosByTransform();
+
+        currentSeqiemce++;
+        this.currentPlayerSequence = currentSeqiemce;
     }
 
     // 몇 초 대기 후 시작
@@ -230,41 +248,37 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         SetInterctableRollButton(false);
         SetRerollCountUI(false);
 
-
         yield return new WaitForSeconds(3f);
 
         // 세팅 초기화 : 대기 시간 동안 애니메이션 틀기
-        // 플레이어 인게임 세팅 리셋
-        ResetPlayerInGameSetting();
-        // Dice 설정 : Dice Bottle 위치 초기화, Dice 위치 초기화
+
         // ScoreBoard 비활성화
+        scoreBoardManager.PV.RPC("SetActiveCurrentPlayerScoreBoard", RpcTarget.All, false);
 
         SetPlayerPlaying();
-    }
-
-    // 플레이어 인게임 세팅 리셋
-    private void ResetPlayerInGameSetting()
-    {
-        Players[currentPlayerSequence].ResetInGameSetting();
     }
 
     // 플레이어 플레이 설정
     public void SetPlayerPlaying()
     {
         // 모든 플레이어가 턴을 마치면 라운드를 증가시키고 다시 첫 플레이어부터 진행
-        CheckRound();
+        PV.RPC("CheckRound", RpcTarget.All);
+
+        // 플레이어 인게임 세팅 리셋
+        ResetPlayerInGameSetting();
 
         // 애니메이션 플레이
-        PV.RPC("ShowInGameAnimationRPC", RpcTarget.AllBuffered);
+        PV.RPC("ShowInGameAnimationRPC", RpcTarget.All);
         
         // 첫번째 플레이어 소개하는 애니메이션 이후 첫번째 플레이어 순서를 설정한다.
         PV.RPC("SetPlayerPlayingRPC", RpcTarget.All);
 
         // 플레이어 스코어 보드 생성
-        scoreBoardManager.PV.RPC("SetCurrentPlayerScoreBoardRPC", RpcTarget.AllBuffered);
-        scoreBoardManager.PV.RPC("SetActiveCurrentPlayerScoreBoard", RpcTarget.AllBuffered, false); // 잠시 끄기
+        scoreBoardManager.PV.RPC("SetCurrentPlayerScoreBoardRPC", RpcTarget.All);
+        scoreBoardManager.PV.RPC("SetActiveCurrentPlayerScoreBoard", RpcTarget.All, false); // 잠시 끄기
     }
-
+    
+    [PunRPC]
     private void CheckRound()
     {
         if (currentPlayerSequence == Players.Count)
@@ -282,14 +296,21 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
+    // 플레이어 인게임 세팅 리셋
+    private void ResetPlayerInGameSetting()
+    {
+        Players[currentPlayerSequence].ResetInGameSetting();
+    }
+
     [PunRPC]
     // 플레이어 순서대로 진행
     public void SetPlayerPlayingRPC()
     {
-        // 현재 플레이어 아이콘 수정(localPosition이 아닌 position으로 수정)
-        Vector3 movePos = inGamePlayers[currentPlayerSequence].transform.localPosition;
-        movePos.y = 740f;
-        inGamePlayers[currentPlayerSequence].transform.localPosition = movePos;
+        // 현재 플레이어들 아이콘 수정
+        Vector3 movePos = inGamePlayers[MyPlayer.GetPlayerSequence()].transform.localPosition;
+        movePos.y = (Players[currentPlayerSequence].GetPlayerNickName() == MyPlayer.GetPlayerNickName()) ? 690f : 740f;
+        inGamePlayers[MyPlayer.GetPlayerSequence()].transform.localPosition = movePos;
+        Debug.Log(MyPlayer.GetPlayerSequence() + " / " + movePos.y);
 
         // 모든 플레이어 Roll Button interactable 비활성화 / 현재 플레이어만 Roll Button Interactable 활성화
         bool isCurrentPlayer = (Players[currentPlayerSequence].GetPlayerNickName() == MyPlayer.GetPlayerNickName()) ? true : false;
@@ -300,15 +321,16 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
 
     }
 
+
     // 롤 버튼 활성화/비활성화
-    public void SetInterctableRollButton(bool isInteractable)
+    private void SetInterctableRollButton(bool isInteractable)
     {
         rollDiceButton.GetComponent<Button>().interactable = isInteractable;
     }
 
     public void SetRerollCountUI(bool isActive)
     {
-        PV.RPC("SetRerollCountUIRPC", RpcTarget.AllBuffered, isActive);
+        PV.RPC("SetRerollCountUIRPC", RpcTarget.All, isActive);
     }
 
     [PunRPC]
@@ -327,10 +349,21 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public void SetDice()
     {
+        // 현재 진행중인 플레이어와 클릭을 시도한 플레이가 맞지 않을 경우 리턴
+        if (Players[currentPlayerSequence].GetPlayerNickName() != MyPlayer.GetPlayerNickName())
+        {
+            Debug.Log("[ERROR]현재 진행중인 플레이어와 클릭을 시도한 플레이가 맞지 않음!");
+            return;
+        }
+
         if(rollDiceButton.transform.GetChild(0).GetComponent<Text>().text == SET || rollDiceButton.transform.GetChild(0).GetComponent<Text>().text == REROLL)
         {
+            Debug.Log("Roll Burron 누름!");
             // 플레이어가 다이스 처음 돌릴 경우 isSelect 초기화
-            if (rollDiceButton.transform.GetChild(0).GetComponent<Text>().text == SET) DC.ResetDiceSelect();
+            if (rollDiceButton.transform.GetChild(0).GetComponent<Text>().text == SET)
+            {
+                DC.ResetDiceSelect();
+            }
 
             // 각종 UI 비활성화
             diceSelectManager.SetSelectZoneSelectUI(false);
@@ -353,7 +386,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
             SetRerollCountUI(false);
 
             // 스코어 보드 비활성화
-            scoreBoardManager.PV.RPC("SetActiveCurrentPlayerScoreBoard", RpcTarget.AllBuffered, false);
+            scoreBoardManager.PV.RPC("SetActiveCurrentPlayerScoreBoard", RpcTarget.All, false);
 
             // 다이스 Bottle Set
             PV.RPC("SetDiceRPC", RpcTarget.All);
@@ -361,6 +394,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
             // 다이스 소환
             StartCoroutine(SpawnDiceInGameCorutine());
         }
+        else Debug.Log("[ERROR]RollButton 상태가 SET이나 REROLL이 아님!");
     }
     
 
@@ -390,8 +424,8 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         if (DC.Dices.Count == 0) DC.SpawnYachtDicesInGame(1);
         else
         {
-            Debug.Log("리롤 or 이미 생성됨");
-            StartRerollCountDicreaseAnim();
+            Debug.Log("01. 이미 주사위가 존재해서 다시돌림!");
+            if(Players[currentPlayerSequence].rerollCount!=2) StartRerollCountDicreaseAnim();
             DC.RerollYachtDices();
         }
     }
@@ -463,7 +497,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             showRoundUI.SetActive(true);
             showRoundUI.transform.GetChild(2).GetComponent<Text>().text = currentRound.ToString();
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(4f);
             showRoundUI.SetActive(false);
         }
 
@@ -473,7 +507,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         showCurrentPlayerSequenceUI.transform.GetChild(3).GetComponent<Image>().sprite = Players[currentPlayerSequence].GetPlayerIcon();
         showCurrentPlayerSequenceUI.transform.GetChild(4).GetComponent<Text>().text = (Players[currentPlayerSequence].GetPlayerNickName() + " Turn");
 
-        yield return new WaitForSeconds(6f);
+        yield return new WaitForSeconds(4f);
 
         showCurrentPlayerSequenceUI.SetActive(false);
     }
@@ -481,7 +515,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     // "낙" 애니메이션
     public void StartFailThrowDiceAnim()
     {
-        PV.RPC("StartFailThrowDiceAnimRPC", RpcTarget.AllBuffered);
+        PV.RPC("StartFailThrowDiceAnimRPC", RpcTarget.All);
     }
 
     [PunRPC]
@@ -498,14 +532,12 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         // 낙이 될 경우 리롤 횟수가 줄어드는 버그 예외처리
         Players[currentPlayerSequence].rerollCount++;
         failThrowDiceUI.SetActive(false);
-
-        SetDice();
     }
 
     // 리롤 횟수 감소 애니메이션
     public void StartRerollCountDicreaseAnim()
     {
-        PV.RPC("StartRerollCountDicreaseAnimRPC", RpcTarget.AllBuffered);
+        PV.RPC("StartRerollCountDicreaseAnimRPC", RpcTarget.All);
     }
 
     [PunRPC]

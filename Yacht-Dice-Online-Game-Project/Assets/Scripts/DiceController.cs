@@ -48,6 +48,9 @@ public class DiceController : MonoBehaviourPunCallbacks
     [SerializeField]
     private float shakeAmt;
 
+    [Header("PV")]
+    public PhotonView PV;
+
     [Header("Scripts")]
 
     public static DiceController DC;
@@ -65,6 +68,8 @@ public class DiceController : MonoBehaviourPunCallbacks
     {
         isThrown = true;
         remainDiceCount = 0;
+
+        PV = photonView;
     }
 
     private void Update()
@@ -144,7 +149,6 @@ public class DiceController : MonoBehaviourPunCallbacks
         // 돌릴 주사위 개수 업데이트
         UpdateRemainDiceCount();
 
-
         for (int i=0; i<Dices.Count; i++)
         {
             // 선택되지 않은 주사위들로만 리롤
@@ -157,6 +161,8 @@ public class DiceController : MonoBehaviourPunCallbacks
                 Dices[i].Teleport(spawnPos + (new Vector3(Mathf.Cos(radian), Mathf.Sin(radian), 0f) * _spawnDistance));
             }
         }
+
+        Debug.Log("02. 플레이어 리롤 다이스 성공!");
     }
 
     // 주사위 눈 순서대로 정렬
@@ -182,7 +188,7 @@ public class DiceController : MonoBehaviourPunCallbacks
         if (CheckDicePos())
         {
             IN.StartFailThrowDiceAnim();
-            //IN.SetDice();
+            IN.SetDice();
         }
         else
         {
@@ -209,8 +215,8 @@ public class DiceController : MonoBehaviourPunCallbacks
             diceSelectManager.UpdateSelectZone();
             diceSelectManager.SetAllDicesToBeSelectMode();
 
-            scoreBoardManager.PV.RPC("SetActiveCurrentPlayerScoreBoard", RpcTarget.AllBuffered, true);
-            scoreBoardManager.PV.RPC("UpdateCurrentPlayerScoreBoardRPC", RpcTarget.AllBuffered);
+            scoreBoardManager.PV.RPC("SetActiveCurrentPlayerScoreBoard", RpcTarget.All, true);
+            scoreBoardManager.PV.RPC("UpdateCurrentPlayerScoreBoardRPC", RpcTarget.All);
 
             IN.SetRerollCountUI(true);
 
@@ -218,7 +224,7 @@ public class DiceController : MonoBehaviourPunCallbacks
             // 올려진 주사위들은 모두 ReturnZone으로 보냄 
             if (IN.Players[IN.currentPlayerSequence].rerollCount == 0)
             {
-                yield return new WaitForSeconds(2f);
+                yield return new WaitForSeconds(1.5f);
                 diceSelectManager.MoveAllDicesReturnZone();
             }
 
@@ -291,10 +297,16 @@ public class DiceController : MonoBehaviourPunCallbacks
 
     #region Dice Bottle Manager
 
+    public void SetBottleInitPosByTransform()
+    {
+        // transform으로 위치 초기화
+        diceBottle.transform.localPosition = new Vector3(-178.39f, 1.51f, 5.8f);
+    }
+
     public void SetBottleInitPos()
     {
         // Init Bottle Anim으로 초기화
-        diceBottle.transform.localPosition = new Vector3(-178.39f, 1.51f, 5.8f);
+        diceBottle.GetComponent<Animator>().SetTrigger("init");
     }
 
     public void SetBottlePlayingPos()

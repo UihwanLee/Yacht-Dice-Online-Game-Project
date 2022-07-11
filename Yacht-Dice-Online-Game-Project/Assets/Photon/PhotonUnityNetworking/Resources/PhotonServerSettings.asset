@@ -72,6 +72,9 @@ MonoBehaviour:
   - ShowInGameAnimationRPC
   - StartFailThrowDiceAnimRPC
   - StartRerollCountDicreaseAnimRPC
+  - IncreaseCurrentPlayerSequenceRPC
+  - SetCurrentPlayerSequenceRPC
+  - CheckRound
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

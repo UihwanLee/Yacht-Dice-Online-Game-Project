@@ -104,7 +104,7 @@ public class Dice : MonoBehaviourPunCallbacks
     // socre 세팅
     public void SetScore(int _score)
     {
-        PV.RPC("SetScoreRPC", RpcTarget.AllBuffered, _score);
+        PV.RPC("SetScoreRPC", RpcTarget.All, _score);
     }
 
     [PunRPC]
@@ -117,7 +117,7 @@ public class Dice : MonoBehaviourPunCallbacks
     // 주사위 충돌 해제 
     public void SetDiceKinematic(bool isActive)
     {
-        PV.RPC("SetDiceKinematicRPC", RpcTarget.AllBuffered, isActive);
+        PV.RPC("SetDiceKinematicRPC", RpcTarget.All, isActive);
     }
 
     [PunRPC]

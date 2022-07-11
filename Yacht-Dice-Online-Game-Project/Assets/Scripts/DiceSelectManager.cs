@@ -484,6 +484,8 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
     // 리롤 시, 기존에 남아있는 Return Zone의 주사위를 정렬한다.
     public void SortReturnZoneDice()
     {
+        Debug.Log("주사위가 ReturnZone으로 정렬됨");
+
         List<Dice> dices = new List<Dice>();
         dices = diceController.Dices;
 
@@ -510,7 +512,8 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
     // Return Zone에 모든 주사위가 모일 시 점수를 꼭 적게 만든다.
     public void MoveAllDicesReturnZone()
     {
-       while(true)
+        Debug.Log("MoveAllDicesReturnZone 호출!");
+        while (true)
        {
             if (currentSelectZoneList == null) break;
             SelectDice dice = currentSelectZoneList[0].GetComponent<SelectDice>();
@@ -523,7 +526,7 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
 
     public void SetSelectZoneSelectUI(bool isActive)
     {
-        PV.RPC("SetSelectZoneSelectUIRPC", RpcTarget.AllBuffered, isActive);
+        PV.RPC("SetSelectZoneSelectUIRPC", RpcTarget.All, isActive);
     }
 
     [PunRPC]
@@ -535,7 +538,7 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
 
     public void SetReturnZoneSelectUI(bool isActive)
     {
-        PV.RPC("SetReturnZoneSelectUIRPC", RpcTarget.AllBuffered, isActive);
+        PV.RPC("SetReturnZoneSelectUIRPC", RpcTarget.All, isActive);
     }
 
     [PunRPC]

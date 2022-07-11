@@ -274,7 +274,7 @@ ScriptsOnlyBuild:
     className: GameVersionProperty
   - hash:
       serializedVersion: 2
-      Hash: 5323bff2d502d9c93ff2f39f04399e34
+      Hash: 2bee2fbe3d76ac3bc075c191a2f89b47
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: DiceController
@@ -412,7 +412,7 @@ ScriptsOnlyBuild:
     className: TMP_FontAsset
   - hash:
       serializedVersion: 2
-      Hash: c706b9bead3bc9b9f8a3fa410e96d936
+      Hash: 4dd24adb4f3eb2c4ddb91721a7118de5
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: InGameNetWorkManager
@@ -1078,7 +1078,7 @@ ScriptsOnlyBuild:
     className: AudioPlayableAsset
   - hash:
       serializedVersion: 2
-      Hash: 64cac515901acf26fe7d7dd93960afbf
+      Hash: d64b056cc6d23d5563ccd5d124a7be6a
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController
@@ -1528,7 +1528,7 @@ ScriptsOnlyBuild:
     className: ThirdPersonUserControl
   - hash:
       serializedVersion: 2
-      Hash: 4326c289f25b3d3017866a9237f7dbd0
+      Hash: 1c3ac48d69c7bc4fd39d0f1356a6ca2b
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ScoreBoardManager
