@@ -506,8 +506,12 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
     // 리롤 시, 기존에 남아있는 Return Zone의 주사위를 정렬한다.
     public void SortReturnZoneDice()
     {
-        Debug.Log("주사위가 ReturnZone으로 정렬됨");
+        PV.RPC("SortReturnZoneDiceRPC", RpcTarget.All);
+    }
 
+    [PunRPC]
+    private void SortReturnZoneDiceRPC()
+    {
         List<Dice> dices = new List<Dice>();
         dices = diceController.Dices;
 

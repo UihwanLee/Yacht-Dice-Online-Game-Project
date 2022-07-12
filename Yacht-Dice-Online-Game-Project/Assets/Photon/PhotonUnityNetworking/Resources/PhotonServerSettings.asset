@@ -94,6 +94,8 @@ MonoBehaviour:
   - MovingSelectUITransformRPC
   - SendError
   - ResetInGameSettingRPC
+  - SortReturnZoneDiceRPC
+  - RestartGameRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -17,6 +17,10 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
      * 
     */
 
+    [Header("TitlePanel")]
+    [SerializeField]
+    private GameObject titlePanel;
+
     [Header("RoomPanel")]
     [SerializeField]
     private GameObject roomPanel;
@@ -36,6 +40,8 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     private GameObject rollDiceButton;
     [SerializeField]
     private GameObject rerollCountUI;
+    [SerializeField]
+    private GameObject restartORExitUI;
 
     // DiceButton 3가지 설정버튼
     private string SET = "Set";
@@ -65,6 +71,10 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     private GameObject failThrowDiceUI;
     [SerializeField]
     private GameObject rerollCountDicreaseUI;
+    [SerializeField]
+    private GameObject showPlayerRankingUI;
+    [SerializeField]
+    private List<GameObject> playerRankingList = new List<GameObject>();
 
     [Header("PV")]
     public PhotonView PV;
@@ -88,6 +98,14 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         // 인스턴스 초기화
         IN = this;
 
+        InitGame();
+
+        // 게임 Reset 필요 변수
+        InitGameSetting();
+    }
+
+    private void InitGame()
+    {
         //  오브젝트 초기화
         inGamePanel.SetActive(true);
         for (int i = 0; i < inGamePlayers.Count; i++)
@@ -108,20 +126,27 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         failThrowDiceUI.SetActive(false);
         rerollCountDicreaseUI.SetActive(false);
 
+        // restartORExitUI 비활성화
+        restartORExitUI.SetActive(false);
+
         // 패널 정리
         inGamePanel.SetActive(false);
 
 
         Players.Clear();
+    }
+
+    private void InitGameSetting()
+    {
         currentPlayerSequence = 0;
         currentRound = 1;
+        inGamePlayerIndex = 0;
     }
+
 
     private void Start()
     {
         PV = photonView;
-
-        inGamePlayerIndex = 0;
     }
 
     #region Room 설정
@@ -256,21 +281,20 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
 
         yield return new WaitForSeconds(3f);
 
-
-
         // 세팅 초기화 : 대기 시간 동안 애니메이션 틀기
 
         // ScoreBoard 비활성화
         scoreBoardManager.SetActiveCurrentPlayerScoreBoard(false);
 
-        SetPlayerPlaying();
+        // 모든 플레이어가 턴을 마치면 라운드를 증가시키고 다시 첫 플레이어부터 진행
+        PV.RPC("CheckRound", RpcTarget.All);
+
+        if(currentRound<=12) SetPlayerPlaying();
     }
 
     // 플레이어 플레이 설정
     public void SetPlayerPlaying()
     {
-        // 모든 플레이어가 턴을 마치면 라운드를 증가시키고 다시 첫 플레이어부터 진행
-        PV.RPC("CheckRound", RpcTarget.All);
 
         // 플레이어 인게임 세팅 리셋
         ResetPlayerInGameSetting();
@@ -298,9 +322,27 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
             // 12라운드가 끝났을 시, 플레이어 점수 집계 -> 순위 발표 후 게임 종료
             if (currentRound > 12)
             {
-                Debug.Log("게임 종료!");
+                StartCoroutine(StartShowPlayersRankingCoroutine());
             }
         }
+    }
+
+
+    // 플레이어 등수 공개
+    IEnumerator StartShowPlayersRankingCoroutine()
+    {
+        scoreBoardManager.isOpenPlayersScoreBoard = false;
+        scoreBoardManager.OnClickScoreBoardButton();
+
+        yield return new WaitForSeconds(2f);
+
+        // 플레이어 등수 보여주는 애니메이션 추가
+        StartShowPlayersRankingAnim();
+
+        yield return new WaitForSeconds(8f);
+
+        // 다시 시작 or 나가는 UI 활성화
+        restartORExitUI.SetActive(true);
     }
 
     // 플레이어 인게임 세팅 리셋
@@ -313,11 +355,8 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     // 플레이어 순서대로 진행
     public void SetPlayerPlayingRPC()
     {
-        // 현재 플레이어들 아이콘 수정
-        Vector3 movePos = inGamePlayers[MyPlayer.GetPlayerSequence()].transform.localPosition;
-        movePos.y = (Players[currentPlayerSequence].GetPlayerNickName() == MyPlayer.GetPlayerNickName()) ? 690f : 740f;
-        inGamePlayers[MyPlayer.GetPlayerSequence()].transform.localPosition = movePos;
-        Debug.Log(MyPlayer.GetPlayerSequence() + " / " + movePos.y);
+        // 현재 플레이어 아이콘 이동
+        MoveIconCurrentPlayer();
 
         // 모든 플레이어 Roll Button interactable 비활성화 / 현재 플레이어만 Roll Button Interactable 활성화
         bool isCurrentPlayer = (Players[currentPlayerSequence].GetPlayerNickName() == MyPlayer.GetPlayerNickName()) ? true : false;
@@ -325,6 +364,19 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
 
         // Roll -> Set 으로 설정
         rollDiceButton.transform.GetChild(0).GetComponent<Text>().text = SET;
+
+    }
+
+    private void MoveIconCurrentPlayer()
+    {
+        // 솔로 플레이 일때는 retrun
+        if (Players.Count == 1) return;
+
+        for(int i=0; i < Players.Count; i++)
+        {
+            if (i == currentPlayerSequence) inGamePlayers[i].transform.localPosition = new Vector3(inGamePlayers[i].transform.localPosition.x, 750f, 0f);
+            else inGamePlayers[i].transform.localPosition = new Vector3(inGamePlayers[i].transform.localPosition.x, 790f, 0f);
+        }
 
     }
 
@@ -568,6 +620,80 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         rerollCountDicreaseUI.SetActive(true);
         yield return new WaitForSeconds(1f);
         rerollCountDicreaseUI.SetActive(false);
+    }
+
+    // 모든 라운드가 끝나고 플레이어 등수 보여주는 애니메이션
+    private void StartShowPlayersRankingAnim()
+    {
+        showPlayerRankingUI.SetActive(true);
+
+        // 플레이어 등수 정렬
+        SortPlayersByTotalScore();
+
+        // 플레이어 수에 따라 UI 개수 세팅
+        for(int i=0; i < playerRankingList.Count; i++)
+        {
+            if(i<Players.Count)
+            {
+                int index = Players.Count - i - 1;
+                playerRankingList[i].SetActive(true);
+                playerRankingList[i].transform.GetChild(1).GetComponent<Image>().sprite = inGamePlayers[Players[index].GetPlayerSequence()].GetComponent<Image>().sprite;
+                playerRankingList[i].transform.GetChild(2).GetComponent<Image>().sprite = Players[index].GetPlayerIcon();
+                playerRankingList[i].transform.GetChild(3).GetComponent<Text>().text = Players[index].GetPlayerNickName();
+                playerRankingList[i].transform.GetChild(5).GetComponent<Text>().text = "총점 : " + Players[index].totalScore + "점";
+            }
+            else
+            {
+                playerRankingList[i].SetActive(false);
+            }
+        }
+
+        // 플레이어 수에 따라 적절한 애니메이션 발동
+        showPlayerRankingUI.GetComponent<Animator>().SetTrigger(Players.Count.ToString());
+    }
+
+    // 플레이어 리스트 정렬(플레이어 총합 기준)
+    private void SortPlayersByTotalScore()
+    {
+        Players.Sort((p1, p2) => p1.totalScore.CompareTo(p2.totalScore));
+    }
+
+    #endregion
+
+    #region 게임이 끝나면 기능하는 함수
+
+
+
+    // 게임 다시 시작
+    public void RestartGame()
+    {
+        PV.RPC("RestartGameRPC", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void RestartGameRPC()
+    {
+        InitGameSetting();
+        foreach (var player in Players)
+        {
+            player.InitPlayerSetting();
+        }
+
+        NextPlayer();
+    }
+
+    // 게임 종료 (서버 나가기)
+    public void ExitGame()
+    {
+        // 게임 초기화
+        InitGame();
+
+        // 카메라 설정 초기화
+        mainCamera.transform.position = new Vector3(2.52f, 4.65f, -13.53f);
+        mainCamera.transform.rotation = Quaternion.Euler(new Vector3(-19f, 0f, 0f));
+
+        // 서버나가기
+        NM.Disconnect();
     }
 
     #endregion

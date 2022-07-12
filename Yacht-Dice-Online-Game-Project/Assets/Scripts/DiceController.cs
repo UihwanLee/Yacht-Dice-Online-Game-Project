@@ -267,7 +267,7 @@ public class DiceController : MonoBehaviourPunCallbacks
             // 선택된 주사위는 제외
             if(!Dices[i].isSelect)
             {
-                if (Dices[i].transform.localPosition.y < 1.6f || Dices[i].transform.localPosition.y > 1.9f)
+                if (Dices[i].transform.localPosition.y < 1.6f || Dices[i].transform.localPosition.y > 2f)
                 {
                     PV.RPC("SendError", RpcTarget.All, ("낙: 거리가 멀리 떨어져있음 주사위 y좌표 : " + (Dices[i].transform.localPosition.y).ToString()));
                     return true;

@@ -46,7 +46,7 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
     private GameObject player4;
 
     // 스코어 보드 열었는지 닫았는지 확인해주는 변수
-    private bool isOpenPlayersScoreBoard; 
+    public bool isOpenPlayersScoreBoard; 
 
     // Select UI
     [Header("Select UI")]
@@ -57,9 +57,6 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
     private DiceController diceController;
     [SerializeField]
     private ScoreLogic scoreLogic;
-
-    [SerializeField]
-    private Text text;
 
     private void Start()
     {
@@ -116,7 +113,7 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
         // Normal Score Board 세팅
         for(int i=0; i<normalScoreList.Count; i++)
         {
-            score = (currentPlayerNormalSocreList[i] == 0) ? "" : currentPlayerNormalSocreList[i].ToString();
+            score = (currentPlayerNormalSocreList[i] == -1) ? "" : currentPlayerNormalSocreList[i].ToString();
             color = Color.black; color.a = (score == "") ? 0.3f : 1f; // 알파값 설정
             normalScoreList[i].transform.GetChild(2).GetComponent<Text>().text = score;
             normalScoreList[i].transform.GetChild(2).GetComponent<Text>().color = color;
@@ -156,12 +153,6 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
 
         currentPlayerScoreBoard.SetActive(true);
 
-        text.text = "";
-        for (int i=0; i<diceController.Dices.Count; i++)
-        {
-            text.text += diceController.Dices[i].GetComponent<Dice>().score.ToString();
-        }
-
         int index = 0;
         // Normal Score Board 업데이트 : 이미 적힌 score는 참조하지 않는다.
         foreach (var normalScore in normalScoreList)
@@ -169,8 +160,8 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
             if(normalScore.transform.GetChild(2).GetComponent<Text>().text == "" || normalScore.transform.GetChild(2).GetComponent<Text>().color.a == 0.3f)
             {
                 normalScore.transform.GetChild(2).GetComponent<Text>().text = currentNormalScores[index].ToString();
-                index++;
             }
+            index++;
         }
 
 
@@ -181,8 +172,8 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
             if (challengeScore.transform.GetChild(2).GetComponent<Text>().text == "" || challengeScore.transform.GetChild(2).GetComponent<Text>().color.a == 0.3f)
             {
                 challengeScore.transform.GetChild(2).GetComponent<Text>().text = curretnChallengeScores[index].ToString();
-                index++;
             }
+            index++;
         }
     }
 
@@ -352,7 +343,7 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
         // 일반 점수 할당
         for (int i=0; i<playerNormalSocreList.Count; i++)
         {
-            score = (playerNormalSocreList[i] == 0) ? "" : playerNormalSocreList[i].ToString();
+            score = (playerNormalSocreList[i] == -1) ? "" : playerNormalSocreList[i].ToString();
             normalScore[i].transform.GetChild(2).GetComponent<Text>().text = score;
             normalScore[i].transform.GetChild(2).GetComponent<Text>().color = Color.black;
 

@@ -38,8 +38,10 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -410,7 +412,7 @@ ScriptsOnlyBuild:
     className: TMP_FontAsset
   - hash:
       serializedVersion: 2
-      Hash: 449f81f5762ae528c82f330663a2645f
+      Hash: ca53290b87951a980168fb3538d57a26
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: InGameNetWorkManager
@@ -704,7 +706,7 @@ ScriptsOnlyBuild:
     className: DiceSelectManager
   - hash:
       serializedVersion: 2
-      Hash: bebd52ec8bf47084a1bde99ec2c3842b
+      Hash: 5e6b6da105e3521e839577b63b3d3bc7
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: NetworkManager
@@ -1526,7 +1528,7 @@ ScriptsOnlyBuild:
     className: ThirdPersonUserControl
   - hash:
       serializedVersion: 2
-      Hash: 55f58a32795b7955c1681db87bf9fef6
+      Hash: 83045a0b8092c8377bcaedc8ffdacaf1
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ScoreBoardManager

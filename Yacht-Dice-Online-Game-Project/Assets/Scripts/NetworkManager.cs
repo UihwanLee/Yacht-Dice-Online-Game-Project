@@ -74,7 +74,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     [Header("ETC")]
     [SerializeField]
-    private Text statusText;
+    private GameObject statusText;
     public PhotonView PV;
 
     [Header("List")]
@@ -129,7 +129,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        statusText.text = PhotonNetwork.NetworkClientState.ToString();
+        if(statusText.activeSelf) statusText.GetComponent<Text>().text = PhotonNetwork.NetworkClientState.ToString();
         lobbyInfoText.text = (PhotonNetwork.CountOfPlayers - PhotonNetwork.CountOfPlayersInRooms) + "로비 / " + PhotonNetwork.CountOfPlayers + "접속";
     }
 
@@ -168,10 +168,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         if (inGamePanel)
         {
+            if(Players.Count!=0) Players.Clear();
+            isChat = false;
             inGamePanel.SetActive(false);
         }
         if(roomPanel)
         {
+            if (Players.Count != 0) Players.Clear();
             isChat = false;
             ResetRoom();
             roomPanel.SetActive(false);
@@ -413,6 +416,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void OnClickGameStartButton()
     {
+        // 서버 상태 Text 비활성화
+        statusText.SetActive(false);
 
         // 인게임 플레이어 세팅
         IN.SetSetAllInGamePlayer();
