@@ -24,8 +24,66 @@ public class SelectScore : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     private DiceSelectManager diceSelectManager;
 
+    // 모바일 변수
+    public float m_DoubleClickSecond = 0.25f;
+    private bool m_IsOneClick = false;
+    private double m_Timer = 0;
+
+    private void Update()
+    {
+        if (m_IsOneClick && ((Time.time - m_Timer) > m_DoubleClickSecond))
+        {
+            m_IsOneClick = false;
+        }
+    }
+
+    public void OnClick()
+    {
+        if (!TryClick()) return;
+
+        // Select UI 이동
+        diceSelectManager.SetSelectZoneSelectUI(false);
+        diceSelectManager.SetReturnZoneSelectUI(false);
+        scoreBoardManager.SetSelectScoreUI(true);
+        scoreBoardManager.MovingSelectUITransform(isChallengeScore, this.transform.localPosition.x); // RPC
+
+        // 색깔 변화 : (ScoreBoardManager)를 이용하여 index를 통해 색깔을 변화시킨다.
+        scoreBoardManager.ChangeSelectScore(this.index, false);
+
+        if (!m_IsOneClick)
+        {
+            m_Timer = Time.time;
+            m_IsOneClick = true;
+        }
+        else if (m_IsOneClick && ((Time.time - m_Timer) < m_DoubleClickSecond))
+        {
+            m_IsOneClick = false;
+            //아래에 더블클릭에서 처리하고싶은 이벤트 작성
+
+            // Select UI 이동
+            diceSelectManager.SetSelectZoneSelectUI(false);
+            diceSelectManager.SetReturnZoneSelectUI(false);
+            scoreBoardManager.SetSelectScoreUI(false);
+            diceSelectManager.selectZoneSelectUI.transform.localPosition = new Vector3(this.transform.localPosition.x, 0f, 0f);
+
+            // 점수 ScoreBoardManager 스크립트를 통해서 불러오기
+            this.score = scoreBoardManager.GetCurrentPlayerScoreBoardScore(this.index, this.isChallengeScore);
+
+            // 점수가 확정이 되며 해당 플레이어에게 정보 전달 후, 다음 플레이어 개시
+            scoreBoardManager.ChangeSelectScore(this.index, true);
+            IN.Players[IN.currentPlayerSequence].SetScore(this.score, this.index, this.isChallengeScore);
+
+            // 모든 주사위가 ReturnZone에 있지 않을 시, 모든 주사위를 ReturnZone으로 보내기
+            if (DC.remainDiceCount != 0) diceSelectManager.MoveAllDicesReturnZone();
+
+            // 다음 플레이어/라운드 진행
+            IN.NextPlayer();
+        }
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
+        /*
         // 예외처리
         if (!TryClick()) return;
 
@@ -64,6 +122,7 @@ public class SelectScore : MonoBehaviour, IPointerClickHandler
             // 다음 플레이어/라운드 진행
             IN.NextPlayer();
         }
+        */
     }
 
     private bool TryClick()

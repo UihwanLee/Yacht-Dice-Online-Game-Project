@@ -25,15 +25,84 @@ public class SelectDice : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     private ScoreBoardManager scoreBoardManager;
 
+    // 모바일 변수
+    public float m_DoubleClickSecond = 0.25f;
+    private bool m_IsOneClick = false;
+    private double m_Timer = 0;
+
     // 활성화 될때마다 score 초기화 : score가 0일 경우 오브젝트가 담겨있지 않는 뜻이기에 클릭해도 반응을 안하는 예외처리 가능
     private void OnEnable()
     {
         this.score = 0;
     }
 
+    private void Update()
+    {
+        if (m_IsOneClick && ((Time.time - m_Timer) > m_DoubleClickSecond))
+        {
+            m_IsOneClick = false;
+        }
+    }
+
+    public void OnClick()
+    {
+        if (!TryClick()) return;
+
+        if (isSelectZone)
+        {
+            // Select UI 이동
+            diceSelectManager.SetSelectZoneSelectUI(true);
+            diceSelectManager.SetReturnZoneSelectUI(false);
+            scoreBoardManager.SetSelectScoreUI(false);
+            scoreBoardManager.ChangeSelectScore(-1, false);
+            diceSelectManager.ToMovingOnSelectDiceUI(isSelectZone, this.transform.localPosition.x);
+        }
+        else
+        {
+            // ReturnZone 안에 주사위가 있을 경우만 활성화
+            if (score != 0)
+            {
+                // Select UI 이동
+                diceSelectManager.SetSelectZoneSelectUI(false);
+                diceSelectManager.SetReturnZoneSelectUI(true);
+                scoreBoardManager.SetSelectScoreUI(false);
+                scoreBoardManager.ChangeSelectScore(-1, false);
+                diceSelectManager.ToMovingOnSelectDiceUI(isSelectZone, this.transform.localPosition.x);
+            }
+        }
+
+        if (!m_IsOneClick)
+        {
+            m_Timer = Time.time;
+            m_IsOneClick = true;
+        }
+        else if (m_IsOneClick && ((Time.time - m_Timer) < m_DoubleClickSecond))
+        {
+            m_IsOneClick = false;
+            //아래에 더블클릭에서 처리하고싶은 이벤트 작성
+
+            if (isSelectZone)
+            {
+                diceSelectManager.SetSelectZoneSelectUI(false);
+                diceSelectManager.SetReturnZoneSelectUI(false);
+                scoreBoardManager.SetSelectScoreUI(false);
+                diceSelectManager.SelectDiceUI(this.index); // RPC
+            }
+            else
+            {
+                diceSelectManager.SetSelectZoneSelectUI(false);
+                diceSelectManager.SetReturnZoneSelectUI(false);
+                scoreBoardManager.SetSelectScoreUI(false);
+                scoreBoardManager.ChangeSelectScore(-1, false);
+                diceSelectManager.ReturnDiceUI(this.index); // RPC
+            }
+        }
+    }
+
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        /*
         // 예외처리
         if (!TryClick()) return;
 
@@ -84,7 +153,9 @@ public class SelectDice : MonoBehaviour, IPointerClickHandler
                 diceSelectManager.ReturnDiceUI(this.index); // RPC
             }
         }
+        */
     }
+
 
     public bool TryClick()
     {

@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 997
   m_ShowMode: 4
-  m_Title: Hierarchy
+  m_Title: Inspector
   m_RootView: {fileID: 9}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -642,21 +642,21 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets
+    - Assets/Scripts
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 78
   m_LastFolders:
-  - Assets
+  - Assets/Scripts
   m_LastFoldersGridSize: 78
   m_LastProjectPath: C:\Users\user\Documents\Yacht-Dice-Online-Game-Project
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 31}
-    m_SelectedIDs: be590000
-    m_LastClickedID: 22974
+    scrollPos: {x: 0, y: 350}
+    m_SelectedIDs: 165a0000
+    m_LastClickedID: 23062
     m_ExpandedIDs: 00000000be590000c0590000c2590000c4590000c6590000c8590000ca590000cc590000ce590000d0590000d2590000d4590000d6590000d8590000da590000dc590000de590000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -737,7 +737,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 289}
+    m_ScrollPosition: {x: 0, y: 420}
     m_GridSize: 78
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 147
@@ -806,9 +806,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
-      m_LastClickedID: 0
-      m_ExpandedIDs: 4cfbffff58500000
+      m_SelectedIDs: 7ee30200
+      m_LastClickedID: 189310
+      m_ExpandedIDs: 0e8fffff2c8fffffd890ffffa492ffffc892ffff7494ffff5ed6ffff84d6ffff34d8ffff46ddffff64ddffff10dfffff5af3ffff4cfbffffa6400000ca4000007847000058500000be5000004a550000dcaa000000fc0000f4fc0000f4ff0000c8010100c8030100240501001c060100c6080100180901006a0c01007c0c0100ce0c01000c0f0100460f0100d60f0100ac100100641101005a12010030de02007ee30200
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -868,9 +868,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 540, y: 1176, z: 0}
+    m_Target: {x: 336.25, y: 712.5, z: 0}
     speed: 2
-    m_Value: {x: 540, y: 1176, z: 0}
+    m_Value: {x: 336.25, y: 712.5, z: 0}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -921,9 +921,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 1321.7444
+    m_Target: 266.8245
     speed: 2
-    m_Value: 1321.7444
+    m_Value: 266.8245
   m_Ortho:
     m_Target: 1
     speed: 2

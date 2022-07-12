@@ -267,7 +267,7 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
 
     public void SelectDiceUI(int index)
     {
-        PV.RPC("SelectDiceUIRPC", RpcTarget.All, index);
+        PV.RPC("SelectDiceUIRPC", RpcTarget.AllBuffered, index);
     }
 
     [PunRPC]
@@ -367,7 +367,7 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
 
     public void ReturnDiceUI(int index)
     {
-        PV.RPC("ReturnDiceUIRPC", RpcTarget.All, index);
+        PV.RPC("ReturnDiceUIRPC", RpcTarget.AllBuffered, index);
     }
 
     [PunRPC]
@@ -506,7 +506,7 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
     // 리롤 시, 기존에 남아있는 Return Zone의 주사위를 정렬한다.
     public void SortReturnZoneDice()
     {
-        PV.RPC("SortReturnZoneDiceRPC", RpcTarget.All);
+        PV.RPC("SortReturnZoneDiceRPC", RpcTarget.AllBuffered);
     }
 
     [PunRPC]
@@ -550,7 +550,7 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
 
     public void ResetReturnZoneSelectUIScore()
     {
-        PV.RPC("ResetReturnZoneSelectUIScoreRPC", RpcTarget.All);
+        PV.RPC("ResetReturnZoneSelectUIScoreRPC", RpcTarget.AllBuffered);
     }
 
     [PunRPC]
@@ -567,7 +567,7 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
 
     public void SetSelectZoneSelectUI(bool isActive)
     {
-        PV.RPC("SetSelectZoneSelectUIRPC", RpcTarget.All, isActive);
+        PV.RPC("SetSelectZoneSelectUIRPC", RpcTarget.AllBuffered, isActive);
     }
 
     [PunRPC]
@@ -579,7 +579,7 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
 
     public void SetReturnZoneSelectUI(bool isActive)
     {
-        PV.RPC("SetReturnZoneSelectUIRPC", RpcTarget.All, isActive);
+        PV.RPC("SetReturnZoneSelectUIRPC", RpcTarget.AllBuffered, isActive);
     }
 
     [PunRPC]
@@ -595,7 +595,7 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
 
     public void ToMovingOnSelectDiceUI(bool isSelectZone, float movePosX)
     {
-        PV.RPC("ToMovingOnSelectDiceUIRPC", RpcTarget.All, isSelectZone, movePosX);
+        PV.RPC("ToMovingOnSelectDiceUIRPC", RpcTarget.AllBuffered, isSelectZone, movePosX);
     }
 
     [PunRPC]

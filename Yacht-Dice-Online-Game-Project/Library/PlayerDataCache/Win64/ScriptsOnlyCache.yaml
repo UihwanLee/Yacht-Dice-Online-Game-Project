@@ -38,10 +38,8 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -412,7 +410,7 @@ ScriptsOnlyBuild:
     className: TMP_FontAsset
   - hash:
       serializedVersion: 2
-      Hash: ca53290b87951a980168fb3538d57a26
+      Hash: 46ad320961ae4d755510acf7ffa4476a
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: InGameNetWorkManager
@@ -556,7 +554,7 @@ ScriptsOnlyBuild:
     className: SplineWalker
   - hash:
       serializedVersion: 2
-      Hash: 5bd46e02b390d30eefa419586f47cf76
+      Hash: 5524fa4d5ad7d2c577d319616b815c19
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: SelectDice
@@ -1312,7 +1310,7 @@ ScriptsOnlyBuild:
     className: PlayerListView
   - hash:
       serializedVersion: 2
-      Hash: d13c372a491f078af3ffe8c9f3cc98cf
+      Hash: 39cdfeedee7974838c2658c6f5e0bff4
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: SelectScore

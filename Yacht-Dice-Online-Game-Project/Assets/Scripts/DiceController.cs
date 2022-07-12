@@ -90,7 +90,7 @@ public class DiceController : MonoBehaviourPunCallbacks
 
     public void GetDices()
     {
-        PV.RPC("GetDicesRPC", RpcTarget.All);
+        PV.RPC("GetDicesRPC", RpcTarget.AllBuffered);
     }
 
     [PunRPC]
@@ -156,7 +156,7 @@ public class DiceController : MonoBehaviourPunCallbacks
 
     public void RerollYachtDices()
     {
-        PV.RPC("RerollYachtDicesRPC", RpcTarget.All);
+        PV.RPC("RerollYachtDicesRPC", RpcTarget.AllBuffered);
     }
 
     [PunRPC]
@@ -269,12 +269,12 @@ public class DiceController : MonoBehaviourPunCallbacks
             {
                 if (Dices[i].transform.localPosition.y < 1.6f || Dices[i].transform.localPosition.y > 2f)
                 {
-                    PV.RPC("SendError", RpcTarget.All, ("낙: 거리가 멀리 떨어져있음 주사위 y좌표 : " + (Dices[i].transform.localPosition.y).ToString()));
+                    PV.RPC("SendError", RpcTarget.AllBuffered, ("낙: 거리가 멀리 떨어져있음 주사위 y좌표 : " + (Dices[i].transform.localPosition.y).ToString()));
                     return true;
                 }
                 else if (Dices[i].score == 0)
                 {
-                    PV.RPC("SendError", RpcTarget.All, ("낙: 주사위 점수가 집계되지 않음"));
+                    PV.RPC("SendError", RpcTarget.AllBuffered, ("낙: 주사위 점수가 집계되지 않음"));
                     return true;
                 }
             }
@@ -335,7 +335,7 @@ public class DiceController : MonoBehaviourPunCallbacks
 
     public void SetBottleInitPos()
     {
-        PV.RPC("SetBottleInitPosRPC", RpcTarget.All);
+        PV.RPC("SetBottleInitPosRPC", RpcTarget.AllBuffered);
     }
 
     [PunRPC]
@@ -347,7 +347,7 @@ public class DiceController : MonoBehaviourPunCallbacks
 
     public void SetBottlePlayingPos()
     {
-        PV.RPC("SetBottlePlayingPosRPC", RpcTarget.All);
+        PV.RPC("SetBottlePlayingPosRPC", RpcTarget.AllBuffered);
     }
 
     [PunRPC]
@@ -361,7 +361,7 @@ public class DiceController : MonoBehaviourPunCallbacks
     // 다이스 Bottle 흔들기
     public void ShakingBottle()
     {
-        PV.RPC("ShakingBottleRPC", RpcTarget.All);
+        PV.RPC("ShakingBottleRPC", RpcTarget.AllBuffered);
     }
 
     [PunRPC]
@@ -374,7 +374,7 @@ public class DiceController : MonoBehaviourPunCallbacks
     // 다이스 Bottle 던지기
     public void ThrowBottle()
     {
-        PV.RPC("ThrowBottleRPC", RpcTarget.All);
+        PV.RPC("ThrowBottleRPC", RpcTarget.AllBuffered);
     }
 
     [PunRPC]
@@ -388,7 +388,7 @@ public class DiceController : MonoBehaviourPunCallbacks
     // 다이스 Bottle 다시 세팅(Reroll)
     public void ReBottlePlayingPos()
     {
-        PV.RPC("ReBottlePlayingPosRPC", RpcTarget.All);
+        PV.RPC("ReBottlePlayingPosRPC", RpcTarget.AllBuffered);
     }
 
 

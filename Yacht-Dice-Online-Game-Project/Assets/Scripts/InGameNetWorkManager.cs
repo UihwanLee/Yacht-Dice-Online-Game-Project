@@ -164,7 +164,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     // 인게임 플레이어 세팅
     public void SetSetAllInGamePlayer()
     {
-        PV.RPC("SetAllInGamePlayerRPC", RpcTarget.All);
+        PV.RPC("SetAllInGamePlayerRPC", RpcTarget.AllBuffered);
 
         // 첫번째 플레이어 바로 플레이
         SetPlayerPlaying();
@@ -250,7 +250,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     // 플레이어 턴이 끝날 시, 다음 플레이어 진행
     public void NextPlayer()
     {
-        PV.RPC("SetCurrentPlayerSequenceRPC", RpcTarget.All, currentPlayerSequence);
+        PV.RPC("SetCurrentPlayerSequenceRPC", RpcTarget.AllBuffered, currentPlayerSequence);
         DC.GetDices();
         DC.SetBottleInitPos();
         StartCoroutine(NextPlayerCoroutine());
@@ -287,7 +287,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         scoreBoardManager.SetActiveCurrentPlayerScoreBoard(false);
 
         // 모든 플레이어가 턴을 마치면 라운드를 증가시키고 다시 첫 플레이어부터 진행
-        PV.RPC("CheckRound", RpcTarget.All);
+        PV.RPC("CheckRound", RpcTarget.AllBuffered);
 
         if(currentRound<=12) SetPlayerPlaying();
     }
@@ -300,10 +300,10 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         ResetPlayerInGameSetting();
 
         // 애니메이션 플레이
-        PV.RPC("ShowInGameAnimationRPC", RpcTarget.All);
+        PV.RPC("ShowInGameAnimationRPC", RpcTarget.AllBuffered);
         
         // 첫번째 플레이어 소개하는 애니메이션 이후 첫번째 플레이어 순서를 설정한다.
-        PV.RPC("SetPlayerPlayingRPC", RpcTarget.All);
+        PV.RPC("SetPlayerPlayingRPC", RpcTarget.AllBuffered);
 
         // 플레이어 스코어 보드 생성
         scoreBoardManager.SetCurrentPlayerScoreBoard();
@@ -389,7 +389,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public void SetRerollCountUI(bool isActive)
     {
-        PV.RPC("SetRerollCountUIRPC", RpcTarget.All, isActive);
+        PV.RPC("SetRerollCountUIRPC", RpcTarget.AllBuffered, isActive);
     }
 
     [PunRPC]
@@ -455,7 +455,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
             }
 
             // 다이스 Bottle Set
-            PV.RPC("SetDiceRPC", RpcTarget.All);
+            PV.RPC("SetDiceRPC", RpcTarget.AllBuffered);
 
             // 다이스 소환
             StartCoroutine(SpawnDiceInGameCorutine());
@@ -481,7 +481,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         yield return new WaitForSeconds(1f);
         // 다이스 isKinematic 초기화
-        PV.RPC("SetAllDiceKinematicRPC", RpcTarget.All);
+        PV.RPC("SetAllDiceKinematicRPC", RpcTarget.AllBuffered);
         // 이미 DicePrefab이 생성되어 있는 경우 Reroll만 작업
         if (DC.Dices.Count == 0) DC.SpawnYachtDicesInGame(1);
         else
@@ -583,7 +583,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     // "낙" 애니메이션
     public void StartFailThrowDiceAnim()
     {
-        PV.RPC("StartFailThrowDiceAnimRPC", RpcTarget.All);
+        PV.RPC("StartFailThrowDiceAnimRPC", RpcTarget.AllBuffered);
     }
 
     [PunRPC]
@@ -606,7 +606,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     // 리롤 횟수 감소 애니메이션
     public void StartRerollCountDicreaseAnim()
     {
-        PV.RPC("StartRerollCountDicreaseAnimRPC", RpcTarget.All);
+        PV.RPC("StartRerollCountDicreaseAnimRPC", RpcTarget.AllBuffered);
     }
 
     [PunRPC]
@@ -667,7 +667,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     // 게임 다시 시작
     public void RestartGame()
     {
-        PV.RPC("RestartGameRPC", RpcTarget.All);
+        PV.RPC("RestartGameRPC", RpcTarget.AllBuffered);
     }
 
     [PunRPC]

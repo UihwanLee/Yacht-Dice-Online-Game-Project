@@ -80,7 +80,7 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
 
     public void SetActiveCurrentPlayerScoreBoard(bool isActive)
     {
-        PV.RPC("SetActiveCurrentPlayerScoreBoardRPC", RpcTarget.All, isActive);
+        PV.RPC("SetActiveCurrentPlayerScoreBoardRPC", RpcTarget.AllBuffered, isActive);
     }
 
     [PunRPC]
@@ -92,7 +92,7 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
 
     public void SetCurrentPlayerScoreBoard()
     {
-        PV.RPC("SetCurrentPlayerScoreBoardRPC", RpcTarget.All);
+        PV.RPC("SetCurrentPlayerScoreBoardRPC", RpcTarget.AllBuffered);
     }
 
 
@@ -141,7 +141,7 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
 
     public void UpdateCurrentPlayerScoreBoard()
     {
-        PV.RPC("UpdateCurrentPlayerScoreBoardRPC", RpcTarget.All);
+        PV.RPC("UpdateCurrentPlayerScoreBoardRPC", RpcTarget.AllBuffered);
     }
 
     [PunRPC]
@@ -389,7 +389,7 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
     // Selcet UI Transform 이동
     public void MovingSelectUITransform(bool isChallenge, float movePosX)
     {
-        PV.RPC("MovingSelectUITransformRPC", RpcTarget.All, isChallenge, movePosX);
+        PV.RPC("MovingSelectUITransformRPC", RpcTarget.AllBuffered, isChallenge, movePosX);
     }
 
     [PunRPC]
@@ -401,7 +401,7 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
     // 플레이어가 선택한 SelectScore 업데이트
     public void ChangeSelectScore(int index, bool isSelect)
     {
-        PV.RPC("ChangeSelectScoreRPC", RpcTarget.All, index, isSelect);
+        PV.RPC("ChangeSelectScoreRPC", RpcTarget.AllBuffered, index, isSelect);
     }
 
     [PunRPC]

@@ -110,7 +110,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     // 플레이어 세팅 리셋 : 리셋해야 하는 변수들을 리셋할 수 있도록 한다.
     public void ResetInGameSetting()
     {
-        PV.RPC("ResetInGameSettingRPC", RpcTarget.All);
+        PV.RPC("ResetInGameSettingRPC", RpcTarget.AllBuffered);
     }
 
     [PunRPC]
