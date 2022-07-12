@@ -67,7 +67,7 @@ public class DiceController : MonoBehaviourPunCallbacks
     private void Start()
     {
         isThrown = true;
-        remainDiceCount = 0;
+        remainDiceCount = 5;
 
         PV = photonView;
     }
@@ -232,6 +232,8 @@ public class DiceController : MonoBehaviourPunCallbacks
             scoreBoardManager.SetActiveCurrentPlayerScoreBoard(true);
             scoreBoardManager.UpdateCurrentPlayerScoreBoard();
 
+            if (remainDiceCount == 5) diceSelectManager.ResetReturnZoneSelectUIScore();
+
             IN.SetRerollCountUI(true);
 
             // 플레이어 리롤 카운트가 끝났을 시, 더이상 리롤을 하지 못하며 점수를 바로 선택하게 한다.
@@ -267,15 +269,29 @@ public class DiceController : MonoBehaviourPunCallbacks
             {
                 if (Dices[i].transform.localPosition.y < 1.6f || Dices[i].transform.localPosition.y > 1.9f)
                 {
+                    PV.RPC("SendError", RpcTarget.All, ("낙: 거리가 멀리 떨어져있음 주사위 y좌표 : " + (Dices[i].transform.localPosition.y).ToString()));
                     return true;
                 }
                 else if (Dices[i].score == 0)
                 {
+                    PV.RPC("SendError", RpcTarget.All, ("낙: 주사위 점수가 집계되지 않음"));
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    [PunRPC]
+    private void SendError(string errorMsg)
+    {
+        Debug.Log(errorMsg);
+    }
+
+
+    public void ResetRemainDiceCount()
+    {
+        remainDiceCount = 5;
     }
 
     // 돌릴 주사위 개수 업데이트

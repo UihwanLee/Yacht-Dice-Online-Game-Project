@@ -110,8 +110,14 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     // 플레이어 세팅 리셋 : 리셋해야 하는 변수들을 리셋할 수 있도록 한다.
     public void ResetInGameSetting()
     {
+        PV.RPC("ResetInGameSettingRPC", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void ResetInGameSettingRPC()
+    {
         // 리롤 횟수 채우기
-        rerollCount = 2;
+        this.rerollCount = 2;
     }
 
     // 점수 세팅
@@ -139,7 +145,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             total += (score==-1) ? 0 : score;
         }
 
-        this.bonusScore = bonus; this.totalScore = total;
+        if (bonusScore >= 63) totalScore += 35; // 보너스 점수 채우면 35점 추가
+
+        this.bonusScore = bonus;  this.totalScore = total;
     }
 
 

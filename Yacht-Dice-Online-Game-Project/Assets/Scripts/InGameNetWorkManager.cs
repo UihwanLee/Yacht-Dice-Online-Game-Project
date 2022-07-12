@@ -166,13 +166,13 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
 
         // 플레이어 인게임 세팅
         InitPlayersInGameSetting();
-
+       
         // 플레이어 컨테이너 위치 세팅
         SetPlayerContainerPos(Players.Count);
 
         // 플레이어 스코어 보드 초기 세팅
         scoreBoardManager.InitAllPlayerScoreBoard(Players.Count);
-
+       
         // 인게임 플레이아 세팅
         for (int i = 0; i < Players.Count; i++)
         {
@@ -180,7 +180,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
             inGamePlayers[i].transform.GetChild(0).GetComponent<Image>().sprite = Players[i].GetPlayerIcon();
             inGamePlayers[i].transform.GetChild(1).GetComponent<Text>().text = Players[i].GetPlayerNickName();
         }
-
+       
     }
 
     // 플레이어 인게임 세팅 초기화
@@ -237,7 +237,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         // isSelect 초기화
         DC.ResetDiceSelect();
-
+        DC.ResetRemainDiceCount();
         // Dices 모두 넘겨주기
         this.newDices = DC.Dices;
 
@@ -294,7 +294,6 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
             // 라운드 증가 후, 첫 플레이어부터 다시 시작
             currentRound++;
             currentPlayerSequence = 0;
-            Debug.Log("라운드 증가!");
 
             // 12라운드가 끝났을 시, 플레이어 점수 집계 -> 순위 발표 후 게임 종료
             if (currentRound > 12)
@@ -372,13 +371,17 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
             scoreBoardManager.SetSelectScoreUI(false);
             scoreBoardManager.ChangeSelectScore(-1, false);
 
-            diceSelectManager.SortReturnZoneDice();
-
 
             // 리롤 할 시, 돌릴 다이스가 없을 시 동작하지 않게 한다.
             if (rollDiceButton.transform.GetChild(0).GetComponent<Text>().text == REROLL)
             {
-                if (DC.remainDiceCount == 0) return;
+                DC.UpdateRemainDiceCount();
+                if (DC.remainDiceCount == 0)
+                {
+                    Debug.Log("돌릴 주사위가 없음");
+                    return;
+                }
+                diceSelectManager.SortReturnZoneDice();
 
                 // 리롤 횟수 감소: 리롤 횟수가 모두 차감 시, Reroll을 못하며 점수를 선택해야함
                 Players[currentPlayerSequence].rerollCount--;

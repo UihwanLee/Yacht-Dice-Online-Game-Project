@@ -37,7 +37,7 @@ public class SelectScore : MonoBehaviour, IPointerClickHandler
             diceSelectManager.SetSelectZoneSelectUI(false);
             diceSelectManager.SetReturnZoneSelectUI(false);
             scoreBoardManager.SetSelectScoreUI(true);
-            scoreBoardManager.selectScoreUI.transform.localPosition = (isChallengeScore) ? new Vector3(this.transform.localPosition.x, -450f, 0f) : new Vector3(this.transform.localPosition.x, -280f, 0f);
+            scoreBoardManager.MovingSelectUITransform(isChallengeScore, this.transform.localPosition.x); // RPC
 
             // 색깔 변화 : (ScoreBoardManager)를 이용하여 index를 통해 색깔을 변화시킨다.
             scoreBoardManager.ChangeSelectScore(this.index, false);

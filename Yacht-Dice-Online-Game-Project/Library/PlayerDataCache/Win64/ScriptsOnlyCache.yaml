@@ -1526,7 +1526,7 @@ ScriptsOnlyBuild:
     className: ThirdPersonUserControl
   - hash:
       serializedVersion: 2
-      Hash: 1c3ac48d69c7bc4fd39d0f1356a6ca2b
+      Hash: 55f58a32795b7955c1681db87bf9fef6
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ScoreBoardManager

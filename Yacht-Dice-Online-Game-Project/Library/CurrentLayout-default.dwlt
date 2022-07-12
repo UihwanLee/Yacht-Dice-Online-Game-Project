@@ -19,9 +19,9 @@ MonoBehaviour:
     width: 1920
     height: 997
   m_ShowMode: 4
-  m_Title: Hierarchy
+  m_Title: Inspector
   m_RootView: {fileID: 9}
-  m_MinSize: {x: 875, y: 542}
+  m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
   m_Maximized: 1
 --- !u!114 &2
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_MinSize: {x: 333, y: 271}
   m_MaxSize: {x: 14003, y: 10021}
   vertical: 0
-  controlID: 110
+  controlID: 147
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -148,8 +148,8 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 947
-  m_MinSize: {x: 880, y: 492}
-  m_MaxSize: {x: 18003, y: 14042}
+  m_MinSize: {x: 881, y: 492}
+  m_MaxSize: {x: 18004, y: 14042}
   vertical: 0
   controlID: 190
 --- !u!114 &7
@@ -226,7 +226,7 @@ MonoBehaviour:
     y: 0
     width: 1920
     height: 997
-  m_MinSize: {x: 875, y: 542}
+  m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
   m_UseTopView: 1
   m_TopViewHeight: 30
@@ -302,7 +302,7 @@ MonoBehaviour:
   m_MinSize: {x: 605, y: 492}
   m_MaxSize: {x: 14003, y: 14042}
   vertical: 1
-  controlID: 87
+  controlID: 61
 --- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -328,7 +328,7 @@ MonoBehaviour:
   m_MinSize: {x: 605, y: 221}
   m_MaxSize: {x: 12005, y: 4021}
   vertical: 0
-  controlID: 88
+  controlID: 62
 --- !u!114 &14
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -625,22 +625,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts
+    - Assets
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 78
   m_LastFolders:
-  - Assets/Scripts
+  - Assets
   m_LastFoldersGridSize: 78
   m_LastProjectPath: C:\Users\user\Documents\Yacht-Dice-Online-Game-Project
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 274}
-    m_SelectedIDs: 78580000
-    m_LastClickedID: 22648
-    m_ExpandedIDs: 00000000225800002458000026580000285800002a5800002c5800002e58000030580000325800003458000036580000385800003a5800003c5800003e5800004058000042580000
+    scrollPos: {x: 0, y: 31}
+    m_SelectedIDs: 2e580000
+    m_LastClickedID: 22574
+    m_ExpandedIDs: 000000002e58000030580000325800003458000036580000385800003a5800003c5800003e58000040580000425800004458000046580000485800004a5800004c5800004e580000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -668,7 +668,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000225800002458000026580000285800002a5800002c5800002e58000030580000325800003458000036580000385800003a5800003c5800003e5800004058000042580000
+    m_ExpandedIDs: 000000002e58000030580000325800003458000036580000385800003a5800003c5800003e58000040580000425800004458000046580000485800004a5800004c5800004e580000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -720,7 +720,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 176.5}
+    m_ScrollPosition: {x: 0, y: 353}
     m_GridSize: 78
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 147
@@ -791,18 +791,18 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 0644ffff2a44ffffd645ffff484effff6c4effff1850ffff705cffff945cffff405effffbe69ffffe269ffff8e6bffff5475ffff7875ffff2477ffff1c80ffff4080ffffec81ffff269cffff4a9cfffff69dffff46b4ffff6ab4ffff16b6ffff40ecffff64ecffff10eeffff3af6ffff60f6ffff10f8ffff4cfbfffff4ffffff22e9000070f80000c2f80000a0f90000f2fa000064fb0000fcfc000036170200acb702003aba02005ebd0200be6e0300187e0300487f03009a800300a4820300
+      m_ExpandedIDs: 2a21ffff4e21fffffa22ffff2e44ffff5244fffffe45ffff9490ffffb890ffff6492ffff8c98ffffb098ffff5c9affff52a3ffff76a3ffff22a5ffffa0b4ffffc4b4ffff70b6ffff9aedffffbeedffff6aefffffd6f5fffffcf5ffffacf7ffff4cfbffff56d20000b0e1000002e20000e0e2000032e400003ce60000d8e7010084f0010032f70100b4f90100befb01006442030068420300d6420300c8490300f84c0300c65103009a5203007853030048540300aafa0400f8090500960a05007a0c0500e80e0500
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 'Dice: 1'
-        m_OriginalName: 'Dice: 1'
+        m_Name: Text
+        m_OriginalName: Text
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 226224
+        m_UserData: -49526
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
         m_OriginalEventType: 0
@@ -851,9 +851,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -136, y: -5, z: 0}
+    m_Target: {x: 540, y: 960, z: 0}
     speed: 2
-    m_Value: {x: -136, y: -5, z: 0}
+    m_Value: {x: 540, y: 960, z: 0}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -904,9 +904,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 185.56761
+    m_Target: 529.98145
     speed: 2
-    m_Value: 185.56761
+    m_Value: 529.98145
   m_Ortho:
     m_Target: 1
     speed: 2

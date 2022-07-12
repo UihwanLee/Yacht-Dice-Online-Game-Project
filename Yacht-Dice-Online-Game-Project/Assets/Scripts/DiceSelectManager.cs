@@ -265,24 +265,26 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
     #region SelectZone에서 Dice 선택 시
 
 
-    // 주사위가 선택되어 Return Zone으로 돌아가고 SelectZone을 정렬하는 함수
-    // index : 선택된 주사위 인덱스
-
-    public void SelectDiceUI(int diceInfoIndex, int diceInfoScore)
+    public void SelectDiceUI(int index)
     {
-        PV.RPC("SelectDiceUIRPC", RpcTarget.All, diceInfoIndex, diceInfoScore);
+        PV.RPC("SelectDiceUIRPC", RpcTarget.All, index);
     }
 
     [PunRPC]
-    public void SelectDiceUIRPC(int diceInfoIndex, int diceInfoScore)
+    // 주사위가 선택되어 Return Zone으로 돌아가고 SelectZone을 정렬하는 함수
+    // index : 선택된 주사위 인덱스
+    public void SelectDiceUIRPC(int newindex)
     {
+        UpdateSelectZone();
+        if (currentSelectZoneList == null) { return; }
+        SelectDice diceInfo = currentSelectZoneList[newindex].GetComponent<SelectDice>();
         List<Dice> dices = new List<Dice>();
         dices = diceController.Dices;
 
-        Dice dice = TryFindDiceinSelectZone(dices, diceInfoIndex);
+        Dice dice = TryFindDiceinSelectZone(dices, diceInfo.index);
         if (dice == null) return;
 
-        int index = FindReturnZoneIndex(dice, diceInfoIndex, diceInfoScore);
+        int index = FindReturnZoneIndex(dice, diceInfo);
 
         if (index == -1) return;
 
@@ -311,18 +313,18 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
     }
 
     // Return Zone 매치 인덱스
-    private int FindReturnZoneIndex(Dice dice, int diceInfoIndex, int diceInfoScore)
+    private int FindReturnZoneIndex(Dice dice, SelectDice diceInfo)
     {
         for(int i=0; i<returnZoneDice.Count; i++)
         {
             // 맞는 인덱스를 찾았을 시, 점수를 집어넣고 인덱스 반환
             if(returnZoneDice[i].GetComponent<SelectDice>().score == 0)
             {
-                returnZoneDice[i].GetComponent<SelectDice>().score = diceInfoScore;
+                returnZoneDice[i].GetComponent<SelectDice>().score = diceInfo.score;
                 diceController.remainDiceCount--; // 남아있는 주사위 개수 감소
                 dice.returnZoneIndex = i;
                 dice.isSelect = true; // isSelect 업데이트
-                currentSelectZoneList[diceInfoIndex].GetComponent<SelectDice>().score = 0;
+                diceInfo.score = 0;
                 return i;
             }
         }
@@ -363,10 +365,18 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
     // 따라서 Select Zone과 반대로 정렬 후 -> 이동
     // index : 선택된 주사위 인덱스
 
-
-
-    public void ReturnDiceUI(SelectDice diceInfo)
+    public void ReturnDiceUI(int index)
     {
+        PV.RPC("ReturnDiceUIRPC", RpcTarget.All, index);
+    }
+
+    [PunRPC]
+    public void ReturnDiceUIRPC(int newindex)
+    {
+        UpdateSelectZone();
+        if (returnZoneDice == null) { return; }
+        SelectDice diceInfo = returnZoneDice[newindex].GetComponent<SelectDice>();
+
         List<Dice> dices = new List<Dice>();
         dices = diceController.Dices;
 
@@ -389,6 +399,7 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
         // 이동 후 정렬
         TeleportDiceinSelectZoneButReturnZoneIndex(index);
     }
+
 
     // Return Zone 주사위 매치 함수
     // Dice가 갖고 있는 returnZoneIndex를 이용하여 일치하는 주사위를 찾는다.
@@ -529,8 +540,23 @@ public class DiceSelectManager : MonoBehaviourPunCallbacks
             if (currentSelectZoneList == null) break;
             SelectDice dice = currentSelectZoneList[0].GetComponent<SelectDice>();
             if (dice == null) break;
-            SelectDiceUI(dice.index, dice.score);
+            SelectDiceUI(dice.index);
        }
+    }
+
+    public void ResetReturnZoneSelectUIScore()
+    {
+        PV.RPC("ResetReturnZoneSelectUIScoreRPC", RpcTarget.All);
+    }
+
+    [PunRPC]
+    // ReturnZone에 있는 모든 Select UI의 score를 0으로 초기화한다.
+    private void ResetReturnZoneSelectUIScoreRPC()
+    {
+        for(int i=0; i<returnZoneDice.Count; i++)
+        {
+            returnZoneDice[i].GetComponent<SelectDice>().score = 0;
+        }
     }
 
     #region Select UI 관련 함수

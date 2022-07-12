@@ -73,7 +73,7 @@ public class SelectDice : MonoBehaviour, IPointerClickHandler
                 diceSelectManager.SetSelectZoneSelectUI(false);
                 diceSelectManager.SetReturnZoneSelectUI(false);
                 scoreBoardManager.SetSelectScoreUI(false);
-                diceSelectManager.SelectDiceUI(this.index, this.score); // RPC
+                diceSelectManager.SelectDiceUI(this.index); // RPC
             }
             else
             {
@@ -81,7 +81,7 @@ public class SelectDice : MonoBehaviour, IPointerClickHandler
                 diceSelectManager.SetReturnZoneSelectUI(false);
                 scoreBoardManager.SetSelectScoreUI(false);
                 scoreBoardManager.ChangeSelectScore(-1, false);
-                diceSelectManager.ReturnDiceUI(this); // RPC
+                diceSelectManager.ReturnDiceUI(this.index); // RPC
             }
         }
     }

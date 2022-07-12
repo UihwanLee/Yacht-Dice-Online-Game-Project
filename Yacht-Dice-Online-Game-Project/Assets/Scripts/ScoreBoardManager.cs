@@ -58,6 +58,9 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
     [SerializeField]
     private ScoreLogic scoreLogic;
 
+    [SerializeField]
+    private Text text;
+
     private void Start()
     {
         PV = photonView;
@@ -153,6 +156,12 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
 
         currentPlayerScoreBoard.SetActive(true);
 
+        text.text = "";
+        for (int i=0; i<diceController.Dices.Count; i++)
+        {
+            text.text += diceController.Dices[i].GetComponent<Dice>().score.ToString();
+        }
+
         int index = 0;
         // Normal Score Board 업데이트 : 이미 적힌 score는 참조하지 않는다.
         foreach (var normalScore in normalScoreList)
@@ -221,6 +230,7 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
         isOpenPlayersScoreBoard = !isOpenPlayersScoreBoard;
 
         allPlayersScoreBoard.SetActive(isOpenPlayersScoreBoard);
+        SetScoreBoardPlayersScore();
     }
 
     // 플레이어 수에 맞춰 AllPlayerScoreBoard 초기화
@@ -232,7 +242,10 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
         allPlayersScoreBoard.SetActive(false);
     }
 
-    // PlayersScoreBoard 포지션 설정
+    /// <summary>
+    /// PlayersScoreBoard 포지션 설정
+    /// </summary>
+    /// <param name="count"></param>
     private void InitPlayerScoreBoardActive(int count)
     {
         // 플레이어 수에 따라 playerScoreBoard 활성화/비활성화
@@ -256,7 +269,10 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
         }
     }
 
-    // PlayersScoreBoard 포지션 설정
+    /// <summary>
+    /// PlayersScoreBoard 포지션 설정
+    /// </summary>
+    /// <param name="count"></param>
     private void InitAllPlayerScoreBoardPos(int count)
     {
         // 플레이어 수에 따라 적절한 위치로 이동시킨다.
@@ -284,6 +300,87 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// 플레이어가 스코어보드를 눌렀을 때 플레이어 스코어보드 정보 불러오는 함수
+    /// </summary>
+    // 플레이어 점수 정보는 플레이어 각각의 PlayerController 스크립트에 저장되어 있으므르 
+    // PlayerController 스크립트에서 불러올 수 있도록 한다.
+    // 버튼을 누르때마다 호출하면 비효율적이므로 한 플레이어가 턴이 끝날때마다 갱신할 수 있도록 한다.(선택)
+    public void SetScoreBoardPlayersScore()
+    {
+        List<GameObject> playerScoreBoardList = new List<GameObject>();
+        playerScoreBoardList.Add(player1); playerScoreBoardList.Add(player2); playerScoreBoardList.Add(player3); playerScoreBoardList.Add(player4);
+
+        for(int i=0; i<IN.Players.Count; i++)
+        {
+            SetScoreBoardPlayerScore(i, playerScoreBoardList[i]);
+        }
+    }
+
+    private void SetScoreBoardPlayerScore(int index, GameObject playerScoreBoard)
+    {
+        // 변수 할당
+        Text roundInfo = scoreInfo.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        Image playerIcon = playerScoreBoard.transform.GetChild(0).transform.GetChild(1).GetComponent<Image>();
+        List<Transform> normalScore = new List<Transform>(); List<Transform> challengeScore = new List<Transform>();
+        for(int i=0; i<6; i++) 
+        { 
+            normalScore.Add(playerScoreBoard.transform.GetChild(1).transform.GetChild(i)); 
+            challengeScore.Add(playerScoreBoard.transform.GetChild(2).transform.GetChild(i)); 
+        }
+
+        List<int> playerNormalSocreList = IN.Players[index].GetNormalScoreList(); 
+        List<int> playerChallengeSocreList = IN.Players[index].GetChallangeScoreList();
+        if (playerNormalSocreList == null || playerChallengeSocreList == null) return; // 예외처리
+
+        Transform bonus = playerScoreBoard.transform.GetChild(3).transform.GetChild(0);
+        Transform bonusGet = playerScoreBoard.transform.GetChild(3).transform.GetChild(1);
+        Transform total = playerScoreBoard.transform.GetChild(4).transform.GetChild(0);
+
+
+        // 라운드 정보 할당
+        roundInfo.text = IN.currentRound.ToString();
+
+        // 플레이어 정보 할당
+        playerIcon.sprite = IN.Players[index].GetPlayerIcon();
+
+        // 점수 할당
+
+        string score;
+
+
+        // 일반 점수 할당
+        for (int i=0; i<playerNormalSocreList.Count; i++)
+        {
+            score = (playerNormalSocreList[i] == 0) ? "" : playerNormalSocreList[i].ToString();
+            normalScore[i].transform.GetChild(2).GetComponent<Text>().text = score;
+            normalScore[i].transform.GetChild(2).GetComponent<Text>().color = Color.black;
+
+            // 자기 자신의 스코어 보드면 배경 노란색 처리
+            if (IN.MyPlayer.GetPlayerSequence() == index) normalScore[i].transform.GetChild(0).GetComponent<Image>().color = Color.yellow;
+        }
+
+        // 도전 점수 할당
+        for (int i = 0; i < playerChallengeSocreList.Count; i++)
+        {
+            score = (playerChallengeSocreList[i] == -1) ? "" : playerChallengeSocreList[i].ToString();
+            challengeScore[i].transform.GetChild(2).GetComponent<Text>().text = score;
+            challengeScore[i].transform.GetChild(2).GetComponent<Text>().color = Color.black;
+
+            // 자기 자신의 스코어 보드면 배경 노란색 처리
+            if (IN.MyPlayer.GetPlayerSequence() == index) challengeScore[i].transform.GetChild(0).GetComponent<Image>().color = Color.yellow;
+        }
+
+        // Bonus  세팅(63점 이상이면 35점으로 갱신)
+        score = IN.Players[index].bonusScore.ToString();
+        bonus.transform.GetChild(2).GetComponent<Text>().text = (score + "/63");
+        bonusGet.transform.GetChild(2).GetComponent<Text>().text = (int.Parse(score) >= 63) ? "35" : "";
+
+        // Total 세팅
+        if (IN.MyPlayer.GetPlayerSequence() == index) total.transform.GetChild(0).GetComponent<Image>().color = Color.yellow;
+        total.transform.GetChild(2).GetComponent<Text>().text = IN.Players[index].totalScore.ToString();
+    }
+
     #endregion
 
     #region 점수 선택
@@ -296,6 +393,18 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
         // Challenge Score Board : SelectScore 업데이트
         foreach (var challengeScore in challengeScoreList) challengeScore.GetComponent<SelectDice>().score = int.Parse(challengeScore.transform.GetChild(2).GetComponent<Text>().text);
 
+    }
+
+    // Selcet UI Transform 이동
+    public void MovingSelectUITransform(bool isChallenge, float movePosX)
+    {
+        PV.RPC("MovingSelectUITransformRPC", RpcTarget.All, isChallenge, movePosX);
+    }
+
+    [PunRPC]
+    private void MovingSelectUITransformRPC(bool isChallenge, float movePosX)
+    {
+        this.selectScoreUI.transform.localPosition = (isChallenge) ? new Vector3(movePosX, -450f, 0f) : new Vector3(movePosX, -280f, 0f);
     }
 
     // 플레이어가 선택한 SelectScore 업데이트

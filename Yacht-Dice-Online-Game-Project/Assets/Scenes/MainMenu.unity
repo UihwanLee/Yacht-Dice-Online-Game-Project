@@ -8108,6 +8108,117 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 289071042}
   m_CullTransparentMesh: 1
+--- !u!1 &294989634
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 294989635}
+  - component: {fileID: 294989639}
+  - component: {fileID: 294989638}
+  - component: {fileID: 294989637}
+  - component: {fileID: 294989636}
+  m_Layer: 5
+  m_Name: Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &294989635
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294989634}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1782929284}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 507}
+  m_SizeDelta: {x: 800, y: 150}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &294989636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294989634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 0.5}
+  m_EffectDistance: {x: 0, y: 4}
+  m_UseGraphicAlpha: 1
+--- !u!114 &294989637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294989634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 0.5}
+  m_EffectDistance: {x: 4, y: 0}
+  m_UseGraphicAlpha: 1
+--- !u!114 &294989638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294989634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 106
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 106
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 
+--- !u!222 &294989639
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294989634}
+  m_CullTransparentMesh: 1
 --- !u!1 &299363459
 GameObject:
   m_ObjectHideFlags: 0
@@ -15755,7 +15866,6 @@ GameObject:
   - component: {fileID: 541622819}
   - component: {fileID: 541622822}
   - component: {fileID: 541622821}
-  - component: {fileID: 541622820}
   m_Layer: 5
   m_Name: Fours
   m_TagString: Untagged
@@ -15785,23 +15895,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -170}
   m_SizeDelta: {x: 150, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &541622820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 541622818}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d2b47a647b2c894ea2d811ebdb1411c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
-  score: 0
-  isChallengeScore: 0
-  scoreBoardManager: {fileID: 825628109}
-  diceSelectManager: {fileID: 2040479970}
 --- !u!114 &541622821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16469,7 +16562,6 @@ GameObject:
   - component: {fileID: 587474378}
   - component: {fileID: 587474381}
   - component: {fileID: 587474380}
-  - component: {fileID: 587474379}
   m_Layer: 5
   m_Name: Aces
   m_TagString: Untagged
@@ -16499,23 +16591,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 10}
   m_SizeDelta: {x: 150, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &587474379
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 587474377}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d2b47a647b2c894ea2d811ebdb1411c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
-  score: 0
-  isChallengeScore: 0
-  scoreBoardManager: {fileID: 825628109}
-  diceSelectManager: {fileID: 2040479970}
 --- !u!114 &587474380
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19343,7 +19418,6 @@ GameObject:
   - component: {fileID: 681858779}
   - component: {fileID: 681858782}
   - component: {fileID: 681858781}
-  - component: {fileID: 681858780}
   m_Layer: 5
   m_Name: Fives
   m_TagString: Untagged
@@ -19373,23 +19447,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -230}
   m_SizeDelta: {x: 150, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &681858780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 681858778}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d2b47a647b2c894ea2d811ebdb1411c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
-  score: 0
-  isChallengeScore: 0
-  scoreBoardManager: {fileID: 825628109}
-  diceSelectManager: {fileID: 2040479970}
 --- !u!114 &681858781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19714,7 +19771,6 @@ GameObject:
   - component: {fileID: 693594991}
   - component: {fileID: 693594994}
   - component: {fileID: 693594993}
-  - component: {fileID: 693594992}
   m_Layer: 5
   m_Name: Threes
   m_TagString: Untagged
@@ -19744,23 +19800,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -110}
   m_SizeDelta: {x: 150, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &693594992
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 693594990}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d2b47a647b2c894ea2d811ebdb1411c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
-  score: 0
-  isChallengeScore: 0
-  scoreBoardManager: {fileID: 825628109}
-  diceSelectManager: {fileID: 2040479970}
 --- !u!114 &693594993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23015,6 +23054,7 @@ MonoBehaviour:
   selectScoreUI: {fileID: 1739931147}
   diceController: {fileID: 181031642}
   scoreLogic: {fileID: 1198578851}
+  text: {fileID: 294989638}
 --- !u!4 &825628110
 Transform:
   m_ObjectHideFlags: 0
@@ -25894,7 +25934,6 @@ GameObject:
   - component: {fileID: 972804855}
   - component: {fileID: 972804858}
   - component: {fileID: 972804857}
-  - component: {fileID: 972804856}
   m_Layer: 5
   m_Name: 4 of a Kind
   m_TagString: Untagged
@@ -25924,23 +25963,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -50}
   m_SizeDelta: {x: 150, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &972804856
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 972804854}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d2b47a647b2c894ea2d811ebdb1411c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
-  score: 0
-  isChallengeScore: 0
-  scoreBoardManager: {fileID: 825628109}
-  diceSelectManager: {fileID: 2040479970}
 --- !u!114 &972804857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29832,7 +29854,6 @@ GameObject:
   - component: {fileID: 1151349380}
   - component: {fileID: 1151349383}
   - component: {fileID: 1151349382}
-  - component: {fileID: 1151349381}
   m_Layer: 5
   m_Name: Full House
   m_TagString: Untagged
@@ -29862,23 +29883,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -110}
   m_SizeDelta: {x: 150, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1151349381
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1151349379}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d2b47a647b2c894ea2d811ebdb1411c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
-  score: 0
-  isChallengeScore: 0
-  scoreBoardManager: {fileID: 825628109}
-  diceSelectManager: {fileID: 2040479970}
 --- !u!114 &1151349382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32245,7 +32249,6 @@ GameObject:
   - component: {fileID: 1230144448}
   - component: {fileID: 1230144451}
   - component: {fileID: 1230144450}
-  - component: {fileID: 1230144449}
   m_Layer: 5
   m_Name: Deuces
   m_TagString: Untagged
@@ -32275,23 +32278,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -50}
   m_SizeDelta: {x: 150, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1230144449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1230144447}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d2b47a647b2c894ea2d811ebdb1411c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
-  score: 0
-  isChallengeScore: 0
-  scoreBoardManager: {fileID: 825628109}
-  diceSelectManager: {fileID: 2040479970}
 --- !u!114 &1230144450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32737,7 +32723,6 @@ GameObject:
   - component: {fileID: 1244622224}
   - component: {fileID: 1244622227}
   - component: {fileID: 1244622226}
-  - component: {fileID: 1244622225}
   m_Layer: 5
   m_Name: Yacht
   m_TagString: Untagged
@@ -32767,23 +32752,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -290}
   m_SizeDelta: {x: 150, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1244622225
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1244622223}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d2b47a647b2c894ea2d811ebdb1411c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
-  score: 0
-  isChallengeScore: 0
-  scoreBoardManager: {fileID: 825628109}
-  diceSelectManager: {fileID: 2040479970}
 --- !u!114 &1244622226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33887,7 +33855,6 @@ GameObject:
   - component: {fileID: 1292213172}
   - component: {fileID: 1292213175}
   - component: {fileID: 1292213174}
-  - component: {fileID: 1292213173}
   m_Layer: 5
   m_Name: Sixes
   m_TagString: Untagged
@@ -33917,23 +33884,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -290}
   m_SizeDelta: {x: 150, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1292213173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1292213171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d2b47a647b2c894ea2d811ebdb1411c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
-  score: 0
-  isChallengeScore: 0
-  scoreBoardManager: {fileID: 825628109}
-  diceSelectManager: {fileID: 2040479970}
 --- !u!114 &1292213174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37463,7 +37413,6 @@ GameObject:
   - component: {fileID: 1389200723}
   - component: {fileID: 1389200726}
   - component: {fileID: 1389200725}
-  - component: {fileID: 1389200724}
   m_Layer: 5
   m_Name: Choice
   m_TagString: Untagged
@@ -37493,23 +37442,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 10}
   m_SizeDelta: {x: 150, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1389200724
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1389200722}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d2b47a647b2c894ea2d811ebdb1411c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
-  score: 0
-  isChallengeScore: 0
-  scoreBoardManager: {fileID: 825628109}
-  diceSelectManager: {fileID: 2040479970}
 --- !u!114 &1389200725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46080,6 +46012,7 @@ RectTransform:
   - {fileID: 1638260750}
   - {fileID: 1956347880}
   - {fileID: 114024501}
+  - {fileID: 294989635}
   m_Father: {fileID: 1510147824}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -46267,7 +46200,6 @@ GameObject:
   - component: {fileID: 1787839685}
   - component: {fileID: 1787839688}
   - component: {fileID: 1787839687}
-  - component: {fileID: 1787839686}
   m_Layer: 5
   m_Name: S. Straight
   m_TagString: Untagged
@@ -46297,23 +46229,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -170}
   m_SizeDelta: {x: 150, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1787839686
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1787839684}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d2b47a647b2c894ea2d811ebdb1411c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
-  score: 0
-  isChallengeScore: 0
-  scoreBoardManager: {fileID: 825628109}
-  diceSelectManager: {fileID: 2040479970}
 --- !u!114 &1787839687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48742,7 +48657,6 @@ GameObject:
   - component: {fileID: 1879678969}
   - component: {fileID: 1879678972}
   - component: {fileID: 1879678971}
-  - component: {fileID: 1879678970}
   m_Layer: 5
   m_Name: L. Straight
   m_TagString: Untagged
@@ -48772,23 +48686,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -230}
   m_SizeDelta: {x: 150, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1879678970
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1879678968}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d2b47a647b2c894ea2d811ebdb1411c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
-  score: 0
-  isChallengeScore: 0
-  scoreBoardManager: {fileID: 825628109}
-  diceSelectManager: {fileID: 2040479970}
 --- !u!114 &1879678971
 MonoBehaviour:
   m_ObjectHideFlags: 0
