@@ -73,6 +73,9 @@ public class ChatManager : MonoBehaviourPunCallbacks
         {
             chatText[i].text = "";
         }
+
+        chatUI.SetActive(false);
+        isChat = false;
     }
 
 

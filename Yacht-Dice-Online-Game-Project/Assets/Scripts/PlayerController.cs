@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField]
     private List<int> challengeSocreList = new List<int>(); // 챌린지 스코어 리스트
     public int bonusScore;
+    public bool bonusScoreSuccess;
     public int totalScore;
 
     private void Start()
@@ -50,6 +51,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
         // 플레이어 인게임 변수
         rerollCount = 2;
+        bonusScoreSuccess = false;
 
         // 스코어 초기화
         for (int i = 0; i < 6; i++) normalScoreList.Add(-1);
@@ -149,7 +151,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             total += (score==-1) ? 0 : score;
         }
 
-        if (bonusScore >= 63) totalScore += 35; // 보너스 점수 채우면 35점 추가
+        // 보너스 점수 채우면 35점 추가
+        if (bonus >= 63)
+        {
+            bonusScoreSuccess = true;
+            totalScore += 35;
+        }
 
         this.bonusScore = bonus;  this.totalScore = total;
     }
@@ -165,6 +172,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         for (int i = 0; i < 6; i++) normalScoreList.Add(-1);
         for (int i = 0; i < 6; i++) challengeSocreList.Add(-1);
         bonusScore = 0;
+        bonusScoreSuccess = false;
         totalScore = 0;
     }
 

@@ -236,6 +236,7 @@ MonoBehaviour:
   normalScoreList: 
   challengeSocreList: 
   bonusScore: 0
+  bonusScoreSuccess: 0
   totalScore: 0
 --- !u!114 &1610335426
 MonoBehaviour:

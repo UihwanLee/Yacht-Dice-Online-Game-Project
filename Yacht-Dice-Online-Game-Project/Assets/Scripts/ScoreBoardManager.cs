@@ -165,16 +165,48 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
         }
 
 
-        index = 0;
+        index = 0; string success = "";
         // Challenge Score Board 업데이트 : 이미 적힌 score는 참조하지 않는다.
         foreach (var challengeScore in challengeScoreList)
         {
             if (challengeScore.transform.GetChild(2).GetComponent<Text>().text == "" || challengeScore.transform.GetChild(2).GetComponent<Text>().color.a == 0.3f)
             {
                 challengeScore.transform.GetChild(2).GetComponent<Text>().text = curretnChallengeScores[index].ToString();
+
+                // Challenge Success 성공 여부 저장 : 순서대로 우선순위 저장
+                if(scoreLogic.GetChallengeSuccess(index, curretnChallengeScores[index]) != "")  success = scoreLogic.GetChallengeSuccess(index, curretnChallengeScores[index]);
             }
             index++;
         }
+
+        //  Challenge Success 성공 시 애니메이션 재생
+        if (success != "") ShowChallengeSuccess(success);
+    }
+
+    // 도전 과제 달성 시 애니메이션 추가
+    public void ShowChallengeSuccess(string success)
+    {
+        StartCoroutine(ShowChallengeSuccessCoroutine(success));
+    }
+
+    IEnumerator ShowChallengeSuccessCoroutine(string success)
+    {
+        IN.challengeSuccess.SetActive(true);
+        IN.challengeSuccess.GetComponent<Text>().text = success;
+
+        // 야추 달성하면 야추 이펙트 파티클 재생!
+        if(success == scoreLogic.YACHTText)
+        {
+            IN.yachtSuccessFireWorks.SetActive(true);
+        }
+
+        yield return new WaitForSeconds(2.5f);
+
+        IN.challengeSuccess.SetActive(false);
+
+        yield return new WaitForSeconds(4f);
+
+        IN.yachtSuccessFireWorks.SetActive(false);
     }
 
     // 점수 클릭 시, 이미 확정된 점수인지 확인하는 함수

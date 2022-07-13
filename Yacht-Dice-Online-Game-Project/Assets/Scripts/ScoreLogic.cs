@@ -11,6 +11,8 @@ public class ScoreLogic : MonoBehaviour
      * Challenge Score는 참값을 판별하여 점수를 반환한다.
     */
 
+    private string FOUROFKIND = "4 of a Kind"; private string FULLHOUSE = "Full House"; private string SMALLSTRAIGHTText = "Small Straight";
+    private string LARGESTRAIGHTText = "Large Straight"; public string YACHTText = "Yacht";
     private int ZERO = 0; private int SMALLSTRAIGHT = 15; private int LARGESTRAIGHT = 30; private int YACHT = 50;
 
     // 인게임 주사위 오브젝트로 Normal Score 리스트 가져오기 
@@ -251,5 +253,36 @@ public class ScoreLogic : MonoBehaviour
 
     #endregion
 
-    // Bonus Score 가져오기
+    // Challenge Success 내용 정보 반환 : 인덱스와 그 인덱스 점수로 판별
+    public string GetChallengeSuccess(int index, int score)
+    {
+        string success = "";
+
+        if(score != 0)
+        {
+            switch (index)
+            {
+                case 1:
+                    success = FOUROFKIND;
+                    break;
+                case 2:
+                    success = FULLHOUSE;
+                    break;
+                case 3:
+                    success = SMALLSTRAIGHTText;
+                    break;
+                case 4:
+                    success = LARGESTRAIGHTText;
+                    break;
+                case 5:
+                    success = YACHTText;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+        return success;
+    }
 }

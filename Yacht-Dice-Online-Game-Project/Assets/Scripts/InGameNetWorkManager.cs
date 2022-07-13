@@ -37,11 +37,10 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     private GameObject emoticonContainer;
     private bool isEmoticonContainer;
     [SerializeField]
-    private GameObject rollDiceButton;
-    [SerializeField]
     private GameObject rerollCountUI;
     [SerializeField]
     private GameObject restartORExitUI;
+    public GameObject rollDiceButton;
 
     // DiceButton 3가지 설정버튼
     private string SET = "Set";
@@ -63,6 +62,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
 
     // 애니메이션 관련 변수
     [Header("Animation UI")]
+    public GameObject challengeSuccess;
     [SerializeField]
     private GameObject showRoundUI;
     [SerializeField]
@@ -75,6 +75,9 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     private GameObject showPlayerRankingUI;
     [SerializeField]
     private List<GameObject> playerRankingList = new List<GameObject>();
+
+    [Header("Particle")]
+    public GameObject yachtSuccessFireWorks;
 
     [Header("PV")]
     public PhotonView PV;
@@ -89,6 +92,8 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     private ScoreBoardManager scoreBoardManager;
     [SerializeField]
     private DiceSelectManager diceSelectManager;
+    [SerializeField]
+    private ChatManager chatManager;
 
 
     public static InGameNetWorkManager IN;
@@ -117,18 +122,6 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         emoticonContainer.SetActive(false);
         isEmoticonContainer = false;
 
-        // rerollCountUI 비활성화
-        rerollCountUI.SetActive(false);
-
-        // Animation UI 비활성화
-        showRoundUI.SetActive(false);
-        showCurrentPlayerSequenceUI.SetActive(false);
-        failThrowDiceUI.SetActive(false);
-        rerollCountDicreaseUI.SetActive(false);
-
-        // restartORExitUI 비활성화
-        restartORExitUI.SetActive(false);
-
         // 패널 정리
         inGamePanel.SetActive(false);
 
@@ -141,6 +134,28 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         currentPlayerSequence = 0;
         currentRound = 1;
         inGamePlayerIndex = 0;
+
+        // rerollCountUI 비활성화
+        rerollCountUI.SetActive(false);
+
+        // Animation UI 비활성화
+        challengeSuccess.SetActive(false);
+        showRoundUI.SetActive(false);
+        showCurrentPlayerSequenceUI.SetActive(false);
+        failThrowDiceUI.SetActive(false);
+        rerollCountDicreaseUI.SetActive(false);
+        showPlayerRankingUI.SetActive(false);
+
+
+        // restartORExitUI 비활성화
+        restartORExitUI.SetActive(false);
+
+        // playerScoreBoard UI 초기화
+        scoreBoardManager.isOpenPlayersScoreBoard = true;
+        scoreBoardManager.OnClickScoreBoardButton();
+
+        // 파티클 오브젝트 초기화
+        yachtSuccessFireWorks.SetActive(false);
     }
 
 
@@ -575,7 +590,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         showCurrentPlayerSequenceUI.transform.GetChild(3).GetComponent<Image>().sprite = Players[currentPlayerSequence].GetPlayerIcon();
         showCurrentPlayerSequenceUI.transform.GetChild(4).GetComponent<Text>().text = (Players[currentPlayerSequence].GetPlayerNickName() + " Turn");
 
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(3f);
 
         showCurrentPlayerSequenceUI.SetActive(false);
     }
@@ -678,6 +693,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             player.InitPlayerSetting();
         }
+        currentRound--; // NextPlayer()에서 라운드 증가하는 처리 제외
 
         NextPlayer();
     }
@@ -687,7 +703,10 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         // 게임 초기화
         InitGame();
+        InitGameSetting();
 
+        // Chat Button 초기화
+        chatManager.ResetChatText();
         // 카메라 설정 초기화
         mainCamera.transform.position = new Vector3(2.52f, 4.65f, -13.53f);
         mainCamera.transform.rotation = Quaternion.Euler(new Vector3(-19f, 0f, 0f));

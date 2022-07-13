@@ -69,12 +69,19 @@ public class SelectScore : MonoBehaviour, IPointerClickHandler
             // 점수 ScoreBoardManager 스크립트를 통해서 불러오기
             this.score = scoreBoardManager.GetCurrentPlayerScoreBoardScore(this.index, this.isChallengeScore);
 
+            // 플레이어가 보너스 점수 아직 달성 못한 상태에서 보너스 63점 이상 달성 할 시 보너스+35 애니메이션 재생
+            if (!isChallengeScore && !IN.Players[IN.currentPlayerSequence].bonusScoreSuccess && (IN.Players[IN.currentPlayerSequence].bonusScore + this.score) >= 63)
+            {
+                string bonusMsg = "Bonus +35";
+                scoreBoardManager.ShowChallengeSuccess(bonusMsg);
+            }
+
             // 점수가 확정이 되며 해당 플레이어에게 정보 전달 후, 다음 플레이어 개시
             scoreBoardManager.ChangeSelectScore(this.index, true);
             IN.Players[IN.currentPlayerSequence].SetScore(this.score, this.index, this.isChallengeScore);
 
             // 모든 주사위가 ReturnZone에 있지 않을 시, 모든 주사위를 ReturnZone으로 보내기
-            if (DC.remainDiceCount != 0) diceSelectManager.MoveAllDicesReturnZone();
+                if (DC.remainDiceCount != 0) diceSelectManager.MoveAllDicesReturnZone();
 
             // 다음 플레이어/라운드 진행
             IN.NextPlayer();

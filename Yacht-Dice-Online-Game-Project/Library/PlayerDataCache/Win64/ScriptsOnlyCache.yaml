@@ -38,8 +38,10 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -410,7 +412,7 @@ ScriptsOnlyBuild:
     className: TMP_FontAsset
   - hash:
       serializedVersion: 2
-      Hash: 46ad320961ae4d755510acf7ffa4476a
+      Hash: daa1e28e450fa654f6d4db1303ec16dd
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: InGameNetWorkManager
@@ -710,7 +712,7 @@ ScriptsOnlyBuild:
     className: NetworkManager
   - hash:
       serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+      Hash: 59bbf8d1cbc7e45f7139f3d72aff8589
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ScoreLogic
@@ -1076,7 +1078,7 @@ ScriptsOnlyBuild:
     className: AudioPlayableAsset
   - hash:
       serializedVersion: 2
-      Hash: d64b056cc6d23d5563ccd5d124a7be6a
+      Hash: d6f01af567ca85146831f1d581ca6cce
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController

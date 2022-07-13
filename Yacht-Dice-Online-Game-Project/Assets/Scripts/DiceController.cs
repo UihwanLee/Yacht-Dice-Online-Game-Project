@@ -240,7 +240,7 @@ public class DiceController : MonoBehaviourPunCallbacks
             // 올려진 주사위들은 모두 ReturnZone으로 보냄 
             if (IN.Players[IN.currentPlayerSequence].rerollCount == 0)
             {
-                yield return new WaitForSeconds(1.5f);
+                yield return new WaitForSeconds(1f);
                 diceSelectManager.MoveAllDicesReturnZone();
             }
 
@@ -347,6 +347,7 @@ public class DiceController : MonoBehaviourPunCallbacks
 
     public void SetBottlePlayingPos()
     {
+        IN.rollDiceButton.GetComponent<Animator>().SetTrigger("down");
         PV.RPC("SetBottlePlayingPosRPC", RpcTarget.AllBuffered);
     }
 
@@ -361,6 +362,7 @@ public class DiceController : MonoBehaviourPunCallbacks
     // 다이스 Bottle 흔들기
     public void ShakingBottle()
     {
+        IN.rollDiceButton.GetComponent<Animator>().SetBool("isDown", true);
         PV.RPC("ShakingBottleRPC", RpcTarget.AllBuffered);
     }
 
@@ -374,6 +376,7 @@ public class DiceController : MonoBehaviourPunCallbacks
     // 다이스 Bottle 던지기
     public void ThrowBottle()
     {
+        IN.rollDiceButton.GetComponent<Animator>().SetBool("isDown", false);
         PV.RPC("ThrowBottleRPC", RpcTarget.AllBuffered);
     }
 
@@ -388,6 +391,7 @@ public class DiceController : MonoBehaviourPunCallbacks
     // 다이스 Bottle 다시 세팅(Reroll)
     public void ReBottlePlayingPos()
     {
+        IN.rollDiceButton.GetComponent<Animator>().SetTrigger("down");
         PV.RPC("ReBottlePlayingPosRPC", RpcTarget.AllBuffered);
     }
 
