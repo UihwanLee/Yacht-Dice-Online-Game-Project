@@ -15,6 +15,7 @@ public class ChatManager : MonoBehaviourPunCallbacks
      *
      * Chatting System 감독
      * Emoticon System 감독
+     * Button UI 애니메이션 감독
      * 
     */
 
@@ -175,6 +176,15 @@ public class ChatManager : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(2f);
 
         emoticonChatList[index].SetActive(false);
+    }
+
+    #endregion
+
+    #region OnClickButton
+
+    public void OnClickButton(GameObject button)
+    {
+        button.GetComponent<Animator>().SetTrigger("click");
     }
 
     #endregion

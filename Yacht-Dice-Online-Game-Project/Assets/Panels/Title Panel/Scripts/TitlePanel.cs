@@ -25,6 +25,8 @@ public class TitlePanel : MonoBehaviour
     private GameObject gameStartUI;
     [SerializeField]
     private GameObject severEnterUI;
+    [SerializeField]
+    private GameObject lobbyEnterUI;
 
     [Header("Main Camera")]
     [SerializeField]
@@ -98,6 +100,8 @@ public class TitlePanel : MonoBehaviour
             yield break;
         }
 
+        yield return new WaitForSeconds(0.25f);
+
         if (gameStartUI != null && severEnterUI != null)
         {
             if (isMoved) severEnterUI.SetActive(false);
@@ -136,6 +140,26 @@ public class TitlePanel : MonoBehaviour
             if (isMoved) severEnterUI.SetActive(true);
             else gameStartUI.SetActive(true);
         }
+    }
+
+    #endregion
+
+    #region 버튼 클릭
+
+    public void OnClickSeverEnterButton()
+    {
+        StartCoroutine(SetEnterLobbyUICoroutine(true));
+    }
+
+    public void OnClickLobbyEnterUICloseButton()
+    {
+        StartCoroutine(SetEnterLobbyUICoroutine(false));
+    }
+
+    IEnumerator SetEnterLobbyUICoroutine(bool isAcive)
+    {
+        yield return new WaitForSeconds(0.25f);
+        lobbyEnterUI.SetActive(isAcive);
     }
 
     #endregion

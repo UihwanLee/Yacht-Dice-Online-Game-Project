@@ -22,6 +22,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField]
     private GameObject titlePanel;
     [SerializeField]
+    private GameObject enterLobbyUI;
+    [SerializeField]
     private InputField nickNameInputField;
 
     [Header("LobbyPanel")]
@@ -37,6 +39,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     private Button previousButton;
     [SerializeField]
     private Button nextButton;
+    [SerializeField]
+    private GameObject createRoomUI;
+    [SerializeField]
+    private List<GameObject> maxPlayersCount = new List<GameObject>();
 
     [Header("RoomPanel")]
     [SerializeField]
@@ -72,9 +78,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField]
     private DiceController diceController;
 
-    [Header("ETC")]
+    [Header("Loading Panel")]
+    [SerializeField]
+    private GameObject loadingUI;
     [SerializeField]
     private GameObject statusText;
+
+    [Header("PV")]
     public PhotonView PV;
 
     [Header("List")]
@@ -110,6 +120,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
            if(roomPlayers[i]) roomPlayers[i].SetActive(false);
         }
 
+        // UI 초기화
+        loadingUI.SetActive(false);
+        enterLobbyUI.SetActive(false);
+        createRoomUI.SetActive(false);
+
         // 패널 초기화 
         titlePanel.SetActive(true);
         lobbyPanel.SetActive(false);
@@ -129,15 +144,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if(statusText.activeSelf) statusText.GetComponent<Text>().text = PhotonNetwork.NetworkClientState.ToString();
+        if(loadingUI.activeSelf) statusText.GetComponent<Text>().text = PhotonNetwork.NetworkClientState.ToString();
         lobbyInfoText.text = (PhotonNetwork.CountOfPlayers - PhotonNetwork.CountOfPlayersInRooms) + "로비 / " + PhotonNetwork.CountOfPlayers + "접속";
     }
 
     public void Connect()
     {
-        if(nickNameInputField.text != "")
+        // 인풋값이 비어있거나 6글자 이상일 시 컷
+        if(nickNameInputField.text != "" && nickNameInputField.text.Length <= 5)
         {
-            PhotonNetwork.ConnectUsingSettings();
+            StartCoroutine(ConnectCoroutine());
         }
         else
         {
@@ -145,10 +161,22 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
+    IEnumerator ConnectCoroutine()
+    {
+        enterLobbyUI.SetActive(false);
+        yield return new WaitForSeconds(0.25f);
+        // 로딩 화면 전개
+        loadingUI.SetActive(true);
+        PhotonNetwork.ConnectUsingSettings();
+    }
+
     public override void OnConnectedToMaster() => PhotonNetwork.JoinLobby();
 
     public override void OnJoinedLobby()
     {
+        // 로딩화면 비활성화
+        loadingUI.SetActive(false);
+
         // Panel 정리
         titlePanel.SetActive(false);
         lobbyPanel.SetActive(true);
@@ -194,10 +222,37 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     #region 방
 
+    // 방 생성 UI
+    public void OpenCreateRoomUI()
+    {
+        StartCoroutine(SetCreateRoomUICoroutine(true));
+    }
+
+    public void CloseCreateRoomUI()
+    {
+        StartCoroutine(SetCreateRoomUICoroutine(false));
+    }
+
+    IEnumerator SetCreateRoomUICoroutine(bool isActive)
+    {
+        yield return new WaitForSeconds(0.25f);
+        createRoomUI.SetActive(isActive);
+    }
+
     // 방 생성 : 방 제목 Input이 비었을 시 랜덤으로 생성
     public void CreateRoom()
     {
-        PhotonNetwork.CreateRoom(roomInput.text == "" ? "Room" + Random.Range(0, 100) : roomInput.text, new RoomOptions { MaxPlayers = 4 });
+        StartCoroutine(CreatRoomCoroutine());
+    }
+
+    IEnumerator CreatRoomCoroutine()
+    {
+        yield return new WaitForSeconds(0.25f);
+
+        int count = -1;
+        for (int i = 0; i < maxPlayersCount.Count; i++) if (maxPlayersCount[i].transform.GetChild(1).gameObject.activeSelf) count = i;
+
+        if (count != -1) PhotonNetwork.CreateRoom(roomInput.text == "" ? "Room" + Random.Range(0, 100) : roomInput.text, new RoomOptions { MaxPlayers = System.Convert.ToByte(count + 1) });
     }
 
     // 방 생성 실패 시 랜덤 방제목으로 방 생성
