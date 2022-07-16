@@ -67,9 +67,12 @@ public class Dice : MonoBehaviourPunCallbacks
 
     public void OnDestroy()
     {
-        if (DC.Dices.Contains(this))
+        if(DC.Dices.Count != 0)
         {
-            DC.Dices.Remove(this);
+            if (DC.Dices.Contains(this))
+            {
+                DC.Dices.Remove(this);
+            }
         }
     }
 

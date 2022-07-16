@@ -143,24 +143,4 @@ public class TitlePanel : MonoBehaviour
     }
 
     #endregion
-
-    #region 버튼 클릭
-
-    public void OnClickSeverEnterButton()
-    {
-        StartCoroutine(SetEnterLobbyUICoroutine(true));
-    }
-
-    public void OnClickLobbyEnterUICloseButton()
-    {
-        StartCoroutine(SetEnterLobbyUICoroutine(false));
-    }
-
-    IEnumerator SetEnterLobbyUICoroutine(bool isAcive)
-    {
-        yield return new WaitForSeconds(0.25f);
-        lobbyEnterUI.SetActive(isAcive);
-    }
-
-    #endregion
 }

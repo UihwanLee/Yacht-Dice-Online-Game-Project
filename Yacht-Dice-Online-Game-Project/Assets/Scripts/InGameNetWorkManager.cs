@@ -76,6 +76,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField]
     private List<GameObject> playerRankingList = new List<GameObject>();
 
+
     [Header("Particle")]
     public GameObject yachtSuccessFireWorks;
 
@@ -94,6 +95,8 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     private DiceSelectManager diceSelectManager;
     [SerializeField]
     private ChatManager chatManager;
+    [SerializeField]
+    private UIManager uiManager;
 
 
     public static InGameNetWorkManager IN;
@@ -201,11 +204,9 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         mainCamera.transform.rotation = Quaternion.Euler(new Vector3(81.464f, 0f, 0f));
 
         // 플레이어 정보 얻기
+        NM.SortPlayersBySequence(); // 플레이어 순서대로 바꾼 후 정보 얻기
         Players = NM.Players;
         MyPlayer = NM.MyPlayer;
-
-        // 플레이어 인게임 세팅
-        InitPlayersInGameSetting();
        
         // 플레이어 컨테이너 위치 세팅
         SetPlayerContainerPos(Players.Count);
@@ -216,22 +217,18 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         // 인게임 플레이아 세팅
         for (int i = 0; i < Players.Count; i++)
         {
-            inGamePlayers[i].SetActive(true);
-            inGamePlayers[i].transform.GetChild(0).GetComponent<Image>().sprite = Players[i].GetPlayerIcon();
-            inGamePlayers[i].transform.GetChild(1).GetComponent<Text>().text = Players[i].GetPlayerNickName();
+            if(i < Players.Count)
+            {
+                inGamePlayers[i].SetActive(true);
+                inGamePlayers[i].transform.GetChild(0).GetComponent<Image>().sprite = Players[i].GetPlayerIcon();
+                inGamePlayers[i].transform.GetChild(1).GetComponent<Text>().text = Players[i].GetPlayerNickName();
+            }
+            else
+            {
+                inGamePlayers[i].SetActive(false);
+            }
         }
        
-    }
-
-    // 플레이어 인게임 세팅 초기화
-    private void InitPlayersInGameSetting()
-    {
-        int index = 0;
-        foreach(var player in Players)
-        {
-            player.SetPlayerSequence(index);
-            index++;
-        }
     }
 
     // Player Container 포지션 설정
@@ -688,6 +685,13 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RestartGameRPC()
     {
+        StartCoroutine(RestartGameRPCCoroutine());
+    }
+
+    IEnumerator RestartGameRPCCoroutine()
+    {
+        yield return new WaitForSeconds(0.25f);
+
         InitGameSetting();
         foreach (var player in Players)
         {
@@ -701,18 +705,29 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     // 게임 종료 (서버 나가기)
     public void ExitGame()
     {
+        StartCoroutine(ExitGameCoroutine());
+    }
+
+    IEnumerator ExitGameCoroutine()
+    {
+        yield return new WaitForSeconds(0.25f);
+
+        // 로딩화면 켜기
+        uiManager.SetLoadingUI(true);
+
         // 게임 초기화
         InitGame();
         InitGameSetting();
 
         // Chat Button 초기화
         chatManager.ResetChatText();
+
+        // 방 나가기
+        NM.LeftRoom();
+
         // 카메라 설정 초기화
         mainCamera.transform.position = new Vector3(2.52f, 4.65f, -13.53f);
         mainCamera.transform.rotation = Quaternion.Euler(new Vector3(-19f, 0f, 0f));
-
-        // 서버나가기
-        NM.Disconnect();
     }
 
     #endregion

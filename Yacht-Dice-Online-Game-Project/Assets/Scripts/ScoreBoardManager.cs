@@ -250,6 +250,13 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
     // 스코어 보드 버튼 눌렀을 시
     public void OnClickScoreBoardButton()
     {
+        StartCoroutine(OnClickScoreBoardButtonCoroutine());
+    }
+
+    IEnumerator OnClickScoreBoardButtonCoroutine()
+    {
+        yield return new WaitForSeconds(0.25f);
+
         isOpenPlayersScoreBoard = !isOpenPlayersScoreBoard;
 
         allPlayersScoreBoard.SetActive(isOpenPlayersScoreBoard);

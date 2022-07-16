@@ -25,6 +25,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField]
     private int playerIconIndex; // 플레이어 아이콘 인덱스
 
+    // 룸 정보
+    public bool isReady = false;
+
     // 인게임 정보
     [SerializeField]
     private int playerSequence; // 플레이어 순서
@@ -93,20 +96,23 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         playerIconIndex = _iconIndex;
     }
 
-
-    // 방에 플레이어 배치
-    [PunRPC]
-    public void SetRoomRPC()
-    {
-        Sprite _playerIcon = playerIcon.sprite;
-        string _playerNickName = playerNickName.text;
-        NM.SetRoomPlayerByRPC(_playerIcon, _playerNickName);
-    }
-
     // 플레이어 순서 배치
     public void SetPlayerSequence(int sequence)
     {
         this.playerSequence = sequence;
+    }
+
+
+    // 플레이어 Ready 세팅
+    public void SetReady(bool _isReady)
+    {
+        PV.RPC("SetReadyRPC", RpcTarget.AllBuffered, _isReady);
+    }
+
+    [PunRPC]
+    private void SetReadyRPC(bool _isReady)
+    {
+        isReady = _isReady;
     }
 
     // 플레이어 세팅 리셋 : 리셋해야 하는 변수들을 리셋할 수 있도록 한다.
