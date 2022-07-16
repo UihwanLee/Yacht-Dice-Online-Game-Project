@@ -270,6 +270,7 @@ public class ScoreBoardManager : MonoBehaviourPunCallbacks
         InitPlayerScoreBoardActive(playerCount);
         InitAllPlayerScoreBoardPos(playerCount);
         allPlayersScoreBoard.SetActive(false);
+        isOpenPlayersScoreBoard = false;
     }
 
     /// <summary>

@@ -40,6 +40,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField]
     private Button nextButton;
     [SerializeField]
+    private Text roomsCountText;
+    [SerializeField]
     private GameObject createRoomUI;
     [SerializeField]
     private List<GameObject> maxPlayersCount = new List<GameObject>();
@@ -99,6 +101,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public string MyPlayerNickName;
     public PlayerController MyPlayer;
     public List<PlayerController> Players = new List<PlayerController>();
+    public int currentBanPlayerIndex = -1;
 
     public static NetworkManager NM;
 
@@ -271,12 +274,22 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         // 방 인원 수가 다 채워져 있으면 못 들어간다.
         if(myList[multiple + num].PlayerCount != myList[multiple + num].MaxPlayers)
         {
-            uiManager.SetLoadingUI(true);
-            PhotonNetwork.JoinRoom(myList[multiple + num].Name);
+            // 게임 중이면 접속 불가
+            if(myList[multiple + num].IsOpen)
+            {
+                uiManager.SetLoadingUI(true);
+                // 플레리어 닉네임이 세팅되지 않았다면 랜덤 플레이어로 활성화
+                if (PhotonNetwork.LocalPlayer.NickName == "") PhotonNetwork.LocalPlayer.NickName = "PL" + Random.Range(0, 1000);
+                PhotonNetwork.JoinRoom(myList[multiple + num].Name);
+            }
+            else
+            {
+                uiManager.SetNoticeUI("방이 게임중이라 접속할수 없습니다!");
+            }
         }
         else
         {
-            Debug.Log("방 인원이 다 꽉 차있습니다!");
+            uiManager.SetNoticeUI("방 인원이                        다 꽉 차있습니다!");
         }
     }
 
@@ -293,10 +306,27 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         multiple = (currentPage - 1) * roomList.Length;
         for (int i = 0; i < roomList.Length; i++)
         {
-            roomList[i].interactable = (multiple + i < myList.Count) ? true : false;
-            roomList[i].transform.GetChild(0).GetComponent<Text>().text = (multiple + i < myList.Count) ? myList[multiple + i].Name : "";
-            roomList[i].transform.GetChild(1).GetComponent<Text>().text = (multiple + i < myList.Count) ? myList[multiple + i].PlayerCount + "/" + myList[multiple + i].MaxPlayers : "";
+            if((multiple + i < myList.Count))
+            {
+                roomList[i].interactable = true;
+                roomList[i].transform.GetChild(0).GetComponent<Text>().text = myList[multiple + i].Name;
+
+                // 방이 다 차 있거나 게임 플레이 중이면 빨간색 표시
+                Color newColor = (myList[multiple + i].PlayerCount == myList[multiple + i].MaxPlayers || !myList[multiple + i].IsOpen) ? Color.red : Color.black;
+                roomList[i].transform.GetChild(1).GetComponent<Text>().text = myList[multiple + i].PlayerCount + "/" + myList[multiple + i].MaxPlayers;
+                roomList[i].transform.GetChild(1).GetComponent<Text>().color = newColor;
+                roomList[i].transform.GetChild(2).GetComponent<Text>().text = (myList[multiple + i].IsOpen) ? "" : "Game Playing";
+            }
+            else
+            {
+                roomList[i].interactable = false;
+                roomList[i].transform.GetChild(0).GetComponent<Text>().text = "";
+                roomList[i].transform.GetChild(1).GetComponent<Text>().text = "";
+                roomList[i].transform.GetChild(2).GetComponent<Text>().text = "";
+            }
         }
+
+        roomsCountText.text = "Rooms " + currentPage.ToString() + "/" + (myList.Count / roomList.Length + 1).ToString();
     }
 
     // 룸 리스트 업데이트
@@ -351,6 +381,33 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         CM.PV.RPC("ChatRPC", RpcTarget.AllBuffered, ("<color=yellow>" + newPlayer.NickName + "님이 참가하셨습니다</color>"));
     }
 
+    // 플레이어 방 퇴장
+    public void TryPlayerBan(int index)
+    {
+        currentBanPlayerIndex = index;
+        uiManager.SetConfirmUI("정말로 " + Players[index].GetPlayerNickName() + "(님)을 퇴장시키겠습니까?", "퇴장");
+    }
+
+    public void PlayerBan()
+    {
+        PV.RPC("PlayerBanRPC", RpcTarget.AllBuffered, currentBanPlayerIndex);
+    }
+
+    [PunRPC]
+    private void PlayerBanRPC(int banPlayerIndex)
+    {
+        if (banPlayerIndex == -1) return;
+
+
+        Debug.Log(banPlayerIndex);
+
+        // 해당 플레이어를 찾아가 강제로 강퇴시킨다.
+        if (MyPlayer.GetPlayerActor() == Players[banPlayerIndex].GetPlayerActor())
+        {
+            LeftRoom();
+        }
+    }
+
     // 방 나가기 함수
     public void LeftRoom()
     {
@@ -359,6 +416,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     IEnumerator LeftRoomCoroutine()
     {
+        string nickname = MyPlayer.GetPlayerNickName();
 
         yield return new WaitForSeconds(0.25f);
 
@@ -371,6 +429,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         roomPanel.SetActive(false);
         inGamePanel.SetActive(false);
         lobbyPanel.SetActive(true);
+
+        yield return new WaitForSeconds(0.25f);
+
+        PhotonNetwork.LocalPlayer.NickName = nickname;
     }
 
     // Player가 방 나갈 시 Player 변수 사용 함수
@@ -394,10 +456,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 playerDelete = player;
             }
         }
-        Players.Remove(playerDelete);
+        if(playerDelete != null) Players.Remove(playerDelete);
 
         // 남은 방 정리
         SetRoomPlayer();
+
+        // 남은 세팅 정리
+        SetRoomPlayerMasterClient();
     }
 
     // 방 리뉴얼
@@ -517,6 +582,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                     bool isReady = (Players[i].isReady) ? true : false;
                     roomPlayers[i].transform.GetChild(6).transform.GetChild(0).gameObject.SetActive(isReady);
                 }
+
+                // 방장일 시 게임 퇴장 기능 활성화
+                if (PhotonNetwork.IsMasterClient)
+                { 
+                    if (i != currentRoomMasterindex) roomPlayers[i].transform.GetChild(3).gameObject.SetActive(true);
+                }
+                else
+                {
+                    roomPlayers[i].transform.GetChild(3).gameObject.SetActive(false);
+                }
             }
             else
             {
@@ -532,6 +607,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                     roomPlayers[i].transform.GetChild(3).gameObject.SetActive(false);
                     roomPlayers[i].transform.GetChild(4).gameObject.SetActive(true);
                     roomPlayers[i].transform.GetChild(5).gameObject.SetActive(false);
+                    roomPlayers[i].transform.GetChild(6).gameObject.SetActive(false);
                 }
             }
         }
@@ -586,7 +662,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             }
 
             // 플레이어가 모두 준비 시, 게임 시작 / 아닐 시 알림 UI 뛰우기
-            if (isAllReady == Players.Count - 1) PV.RPC("StartGameRPC", RpcTarget.AllBuffered);
+            if (isAllReady == Players.Count - 1)
+            {
+                PhotonNetwork.CurrentRoom.IsOpen = false;
+                RoomRenewal();
+                PV.RPC("StartGameRPC", RpcTarget.AllBuffered);
+            }
             else
             {
                 uiManager.SetNoticeUI("모든 인원이              준비가 되지 않았습니다!");

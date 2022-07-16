@@ -154,8 +154,7 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         restartORExitUI.SetActive(false);
 
         // playerScoreBoard UI 초기화
-        scoreBoardManager.isOpenPlayersScoreBoard = true;
-        scoreBoardManager.OnClickScoreBoardButton();
+        if(inGamePanel.activeSelf) scoreBoardManager.InitAllPlayerScoreBoard(Players.Count);
 
         // 파티클 오브젝트 초기화
         yachtSuccessFireWorks.SetActive(false);
@@ -213,9 +212,9 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
 
         // 플레이어 스코어 보드 초기 세팅
         scoreBoardManager.InitAllPlayerScoreBoard(Players.Count);
-       
+
         // 인게임 플레이아 세팅
-        for (int i = 0; i < Players.Count; i++)
+        for (int i = 0; i < inGamePlayers.Count; i++)
         {
             if(i < Players.Count)
             {
@@ -705,6 +704,8 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
     // 게임 종료 (서버 나가기)
     public void ExitGame()
     {
+        bool isCurrentSequence = (MyPlayer.GetPlayerSequence() == currentPlayerSequence) ? true : false;
+        PV.RPC("ResetInGamePlayersRPC", RpcTarget.AllBuffered, isCurrentSequence);
         StartCoroutine(ExitGameCoroutine());
     }
 
@@ -728,6 +729,41 @@ public class InGameNetWorkManager : MonoBehaviourPunCallbacks, IPunObservable
         // 카메라 설정 초기화
         mainCamera.transform.position = new Vector3(2.52f, 4.65f, -13.53f);
         mainCamera.transform.rotation = Quaternion.Euler(new Vector3(-19f, 0f, 0f));
+    }
+
+    [PunRPC]
+    private void ResetInGamePlayersRPC(bool isCurrentSequence)
+    {
+        StartCoroutine(ResetInGamePlayersRPCCoroutine(isCurrentSequence));
+    }
+
+    IEnumerator ResetInGamePlayersRPCCoroutine(bool isCurrentSequence)
+    {
+        yield return new WaitForSeconds(1f);
+
+        // 플레이어 컨테이너 위치 세팅
+        SetPlayerContainerPos(Players.Count);
+
+        // 플레이어 스코어 보드 초기 세팅
+        scoreBoardManager.InitAllPlayerScoreBoard(Players.Count);
+
+        for (int i = 0; i < inGamePlayers.Count; i++)
+        {
+            if (i < Players.Count)
+            {
+                inGamePlayers[i].SetActive(true);
+                inGamePlayers[i].transform.GetChild(0).GetComponent<Image>().sprite = Players[i].GetPlayerIcon();
+                inGamePlayers[i].transform.GetChild(1).GetComponent<Text>().text = Players[i].GetPlayerNickName();
+            }
+            else
+            {
+                inGamePlayers[i].SetActive(false);
+            }
+        }
+
+        // 현재 플레이 중이면 다음 플레이어 실행
+        if (isCurrentSequence) NextPlayer();
+
     }
 
     #endregion

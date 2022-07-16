@@ -100,6 +100,9 @@ MonoBehaviour:
   - SetReadyRPC
   - SetPlayerReady
   - StartGameRPC
+  - ResetInGamePlayers
+  - ResetInGamePlayersRPC
+  - PlayerBanRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
