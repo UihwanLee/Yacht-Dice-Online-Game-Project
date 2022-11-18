@@ -14,7 +14,7 @@
   
 > 개발 기간 : 22일 [개발 1차 완료]  (2022-06-25 ~ 2022-07-17)
   
-           : 구글 플레이 스토어 출시 (2022-11-02) [앱 다운받기](https://play.google.com/store/apps/details?id=com.UihwanLee.YachtDiceOnlineGameProject&pli=1)
+> 퍼블리싱 : 구글 플레이 스토어 출시 (2022-11-02) [앱 다운받기](https://play.google.com/store/apps/details?id=com.UihwanLee.YachtDiceOnlineGameProject&pli=1)
   
 > 개발 동기  
 
